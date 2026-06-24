@@ -9,91 +9,63 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --bg:#080A0E;--surface:#0E1117;--surface2:#151B24;--surface3:#1C2433;
-  --border:#1E2A3A;--border2:#243040;--text:#F6F9FF;--muted:#4A6080;--muted2:#6A8090;
-  --accent:#00D9FF;--accent2:#0099CC;--green:#00FF88;--red:#FF3366;--amber:#FFB020;
-  --purple:#8B5CF6;--gold:#D4A84B;--card-glass:rgba(14,17,23,0.70);
-}
-[data-theme="light"] {
-  --bg:#F4F6FB;--surface:#FFFFFF;--surface2:#F0F3F9;--surface3:#E4E9F2;
-  --border:#DCE3EF;--border2:#C9D3E3;--text:#16202E;--muted:#6A7A92;--muted2:#4A5A72;
-  --accent:#0091B5;--accent2:#006C88;--green:#00A35A;--red:#D6224A;--amber:#C77F00;
-  --purple:#6D44C9;--gold:#A9821F;--card-glass:rgba(255,255,255,0.82);
-}
+:root{--bg:#080A0E;--surface:#0E1117;--surface2:#151B24;--surface3:#1C2433;--border:#1E2A3A;--border2:#243040;--text:#F6F9FF;--muted:#4A6080;--muted2:#6A8090;--accent:#00D9FF;--accent2:#0099CC;--green:#00FF88;--red:#FF3366;--amber:#FFB020;--purple:#8B5CF6;--gold:#D4A84B;--card-glass:rgba(14,17,23,0.70)}
+[data-theme="light"]{--bg:#F4F6FB;--surface:#FFFFFF;--surface2:#F0F3F9;--surface3:#E4E9F2;--border:#DCE3EF;--border2:#C9D3E3;--text:#16202E;--muted:#6A7A92;--muted2:#4A5A72;--accent:#0091B5;--accent2:#006C88;--green:#00A35A;--red:#D6224A;--amber:#C77F00;--purple:#6D44C9;--gold:#A9821F;--card-glass:rgba(255,255,255,0.82)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
 body::before{content:'';position:fixed;top:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(0,217,255,.04),transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.04),transparent 70%);pointer-events:none;z-index:0}
-
-/* LOGIN */
 .login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;position:relative;z-index:10}
 .login-card{position:relative;z-index:3;background:var(--card-glass);backdrop-filter:blur(16px);border:1px solid var(--border2);border-radius:24px;padding:48px 48px 56px;text-align:center;max-width:420px;width:90%;box-shadow:0 0 90px rgba(0,217,255,.08),0 40px 80px rgba(0,0,0,.45);animation:loginFade .6s ease}
 @keyframes loginFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .login-logo{width:70px;height:70px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 12px 30px rgba(0,217,255,.3)}
 .login-logo svg{width:36px;height:36px;stroke:#080A0E;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .login-brand{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
-.login-title{font-size:26px;font-weight:300;margin-bottom:8px;letter-spacing:.5px}
+.login-title{font-size:26px;font-weight:300;margin-bottom:8px}
 .login-divider{width:40px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto 24px}
 .login-sub{font-size:14px;color:var(--muted2);margin-bottom:34px;line-height:1.7}
 .login-btn{width:100%;padding:15px;background:rgba(0,217,255,.05);border:1px solid rgba(0,217,255,.2);border-radius:9999px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s}
 .login-btn:hover{background:rgba(0,217,255,.1);border-color:rgba(0,217,255,.45);box-shadow:0 0 24px rgba(0,217,255,.12)}
 [data-theme="light"] .login-logo svg{stroke:#fff}
-
-/* HEADER */
-.header{background:var(--card-glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;transition:background .3s}
+.header{background:var(--card-glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
 .header-left{display:flex;align-items:center;gap:16px}
-.header-brand{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--text);letter-spacing:.5px}
+.header-brand{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.5px}
 .header-sep{width:1px;height:20px;background:var(--border2)}
 .header-sub{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:livePulse 2s infinite;box-shadow:0 0 8px var(--green)}
 @keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.header-right{display:flex;align-items:center;gap:10px}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .user-chip{background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:6px 14px 6px 10px;font-size:12px;color:var(--muted2);display:flex;align-items:center;gap:8px}
 .user-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#080A0E}
 .hdr-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;color:var(--muted2);font-size:12px;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
 .hdr-btn:hover{border-color:var(--accent);color:var(--accent)}
 .hdr-btn.danger:hover{border-color:var(--red);color:var(--red)}
 .ico{width:1em;height:1em;display:inline-block;vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-
-/* NAV */
 .nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;padding:0 28px;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
-.nav-item{padding:14px 18px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:7px;letter-spacing:.3px}
-.nav-item:hover{color:var(--text)}
-.nav-item.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-item{padding:14px 18px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.nav-item:hover{color:var(--text)}.nav-item.active{color:var(--accent);border-bottom-color:var(--accent)}
 .nav-badge{background:var(--surface3);border-radius:10px;padding:1px 7px;font-size:10px;font-family:'Space Mono',monospace;color:var(--muted2)}
 .nav-item.active .nav-badge{background:rgba(0,217,255,.1);color:var(--accent)}
-
-/* MAIN */
 .main{padding:24px 28px;max-width:1500px;margin:0 auto;position:relative;z-index:1}
 .page{display:none}.page.active{display:block;animation:pageIn .2s ease}
 @keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-/* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-.topbar-title{font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px}
 .topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn{padding:8px 16px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;border:none}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#080A0E;box-shadow:0 4px 15px rgba(0,217,255,.2)}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,217,255,.35)}
 .btn-ghost{background:var(--surface2);border:1px solid var(--border2);color:var(--muted2)}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
-
-/* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:20px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;transition:opacity .2s}
-.stat-card.c1::after{background:var(--accent)}.stat-card.c2::after{background:var(--amber)}.stat-card.c3::after{background:var(--purple)}
-.stat-card.c4::after{background:var(--green)}.stat-card.c5::after{background:var(--gold)}.stat-card.c6::after{background:var(--red)}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.stat-card.c1::after{background:var(--accent)}.stat-card.c2::after{background:var(--amber)}.stat-card.c3::after{background:var(--purple)}.stat-card.c4::after{background:var(--green)}.stat-card.c5::after{background:var(--gold)}.stat-card.c6::after{background:var(--red)}
 .stat-card:hover{transform:translateY(-3px);border-color:var(--border2)}
-.stat-icon{font-size:20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.stat-icon{font-size:20px;margin-bottom:14px}
 .stat-num{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;line-height:1;margin-bottom:6px}
-.c1 .stat-num{color:var(--accent)}.c2 .stat-num{color:var(--amber)}.c3 .stat-num{color:var(--purple)}
-.c4 .stat-num{color:var(--green)}.c5 .stat-num{color:var(--gold)}.c6 .stat-num{color:var(--red)}
+.c1 .stat-num{color:var(--accent)}.c2 .stat-num{color:var(--amber)}.c3 .stat-num{color:var(--purple)}.c4 .stat-num{color:var(--green)}.c5 .stat-num{color:var(--gold)}.c6 .stat-num{color:var(--red)}
 .stat-label{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.3px}
-
-/* TABLE */
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px}
 .table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .table-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
@@ -102,12 +74,10 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 table{width:100%;border-collapse:collapse;min-width:600px}
 thead{background:var(--surface2)}
 th{padding:11px 16px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;font-family:'Space Mono',monospace}
-td{padding:13px 16px;font-size:13px;border-top:1px solid var(--border);vertical-align:middle}
-tr{transition:background .1s}tr:hover td{background:rgba(0,217,255,.02)}
-[data-theme="dark"] td{color:#FFFFFF!important;font-weight:700;font-size:14px}
+td{padding:12px 16px;font-size:13px;border-top:1px solid var(--border);vertical-align:middle}
+tr:hover td{background:rgba(0,217,255,.02)}
+[data-theme="dark"] td{color:#FFFFFF!important;font-weight:600}
 [data-theme="dark"] th{color:#AEBED2}
-
-/* BADGES */
 .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Space Mono',monospace}
 .b-dot{width:4px;height:4px;border-radius:50%}
 .b-use{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.2)}.b-use .b-dot{background:var(--green)}
@@ -116,22 +86,18 @@ tr{transition:background .1s}tr:hover td{background:rgba(0,217,255,.02)}
 .b-store{background:rgba(96,165,250,.1);color:#60A5FA;border:1px solid rgba(96,165,250,.2)}.b-store .b-dot{background:#60A5FA}
 .b-def{background:var(--surface3);color:var(--muted);border:1px solid var(--border)}
 .id-tag{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2);background:var(--surface2);padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
-.view-btn{background:transparent;border:1px solid var(--border2);border-radius:7px;padding:4px 10px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Space Grotesk',sans-serif;display:inline-flex;align-items:center;gap:4px}
+.view-btn{background:transparent;border:1px solid var(--border2);border-radius:7px;padding:4px 10px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Space Grotesk',sans-serif}
 .view-btn:hover{border-color:var(--accent);color:var(--accent)}
-
-/* FILTERS */
 .filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end}
 .flt-group{display:flex;flex-direction:column;gap:5px}
 .flt-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-family:'Space Mono',monospace}
 .flt-input,.flt-select{background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:12px;padding:8px 12px;outline:none;min-width:130px;transition:border-color .15s}
 .flt-input:focus,.flt-select:focus{border-color:var(--accent)}
 .flt-select option{background:var(--surface2)}
-
-/* BRANCH CARDS */
 .branch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:20px}
 .branch-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .branch-card:hover{transform:translateY(-4px);border-color:rgba(0,217,255,.4);box-shadow:0 20px 40px rgba(0,0,0,.3)}
-.branch-card .brand-badge{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff}
+.brand-badge{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff;display:inline-block}
 .branch-card h3{font-size:17px;font-weight:700;margin:12px 0 4px}
 .branch-qty{position:absolute;top:16px;right:18px;text-align:right}
 .branch-qty b{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--accent);display:block;line-height:1}
@@ -141,71 +107,54 @@ tr{transition:background .1s}tr:hover td{background:rgba(0,217,255,.02)}
 .cat-chip{font-size:10px;background:var(--surface2);border:1px solid var(--border);color:var(--muted2);padding:2px 8px;border-radius:6px}
 .barcode{display:flex;gap:2px;height:22px;margin:12px 0 10px;opacity:.4}
 .barcode i{display:block;background:var(--text);border-radius:1px}
-
-/* ASSET CARDS */
 .asset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:20px}
-.asset-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
+.asset-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}
 .asset-card:hover{transform:translateY(-3px);border-color:rgba(0,217,255,.4);box-shadow:0 15px 35px rgba(0,0,0,.25)}
-.asset-thumb{height:120px;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative}
-.asset-thumb svg{width:44px;height:44px;stroke:var(--muted);fill:none;stroke-width:1.5}
-.asset-qty-pill{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.6);color:#fff;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;backdrop-filter:blur(4px)}
+.asset-thumb{height:130px;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.asset-thumb img{width:100%;height:100%;object-fit:cover}
+.asset-qty-pill{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.65);color:#fff;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;backdrop-filter:blur(4px);z-index:2}
 .asset-body{padding:12px 14px 14px}
 .asset-body h5{font-size:14px;font-weight:700;margin-bottom:3px}
-.asset-model{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:10px;min-height:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.asset-model{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .asset-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .color-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.2);flex:none}
-
-/* CHARTS */
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px}
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}
 .chart-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;font-family:'Space Mono',monospace}
 .chart-wrap{position:relative;height:200px}
-
-/* KPI */
 .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .kpi-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
 .kpi-val{font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:var(--accent);line-height:1}
-.kpi-lbl{font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.3px}
+.kpi-lbl{font-size:11px;color:var(--muted);margin-top:8px}
 [data-theme="dark"] .kpi-lbl{color:#B7C3D4;font-weight:600}
-
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(8,10,14,.85);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:32px;min-width:380px;max-width:500px;width:90%;animation:modalIn .25s ease;box-shadow:0 40px 80px rgba(0,0,0,.5)}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:32px;min-width:380px;max-width:520px;width:90%;animation:modalIn .25s ease;box-shadow:0 40px 80px rgba(0,0,0,.5);max-height:90vh;overflow-y:auto}
 @keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-title{font-size:18px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
 .modal-info{background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:16px;font-size:12px}
 .modal-info-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
 .modal-info-row:last-child{border:none}
 .modal-info-label{color:var(--muted)}
-.modal-info-val{font-weight:600;font-family:'Space Mono',monospace}
-[data-theme="dark"] .modal-info-val{color:#FFFFFF!important;font-weight:700}
-.modal-footer{display:flex;gap:10px;justify-content:flex-end}
+.modal-info-val{font-weight:600;font-family:'Space Mono',monospace;text-align:right;max-width:60%}
+[data-theme="dark"] .modal-info-val{color:#fff!important}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
 .modal-input,.modal-select,.modal-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;padding:11px 14px;outline:none;margin-bottom:14px;transition:border-color .15s}
 .modal-input:focus,.modal-select:focus,.modal-textarea:focus{border-color:var(--accent)}
 .modal-textarea{resize:none;height:80px}
 .modal-select option{background:var(--surface2)}
 .modal-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:'Space Mono',monospace}
-
-/* LOADING / EMPTY */
-.loading{text-align:center;padding:40px;color:var(--muted)}
 .spin{width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{text-align:center;padding:48px;color:var(--muted)}
-
-/* TOAST */
 .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:300;display:flex;flex-direction:column;gap:8px}
 .toast{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 18px;font-size:13px;min-width:250px;display:flex;align-items:center;gap:10px;animation:toastIn .3s ease;box-shadow:0 8px 30px rgba(0,0,0,.3)}
 @keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 .toast.success{border-color:rgba(0,255,136,.3)}.toast.error{border-color:rgba(255,51,102,.3)}.toast.info{border-color:rgba(0,217,255,.3)}
-
-/* PAGINATION */
 .pagination{display:flex;gap:6px;justify-content:center;margin-top:14px;align-items:center}
 .pg-btn{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--muted);font-size:12px;padding:6px 12px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s}
 .pg-btn.active{background:var(--accent);border-color:var(--accent);color:#080A0E;font-weight:700}
 .pg-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
-
-/* BRANCH DETAIL */
 .bdetail-header{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 24px;margin-bottom:20px;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
 .bdetail-header .l{flex:1;min-width:200px}
 .bdetail-header h2{font-size:22px;font-weight:700;margin:8px 0 4px}
@@ -224,18 +173,15 @@ tr{transition:background .1s}tr:hover td{background:rgba(0,217,255,.02)}
 .cat-bar .meta{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);margin-left:auto}
 .back-btn{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);font-size:13px;font-weight:500;padding:8px 14px;border-radius:10px;cursor:pointer;margin-bottom:16px;transition:all .15s;font-family:'Space Grotesk',sans-serif}
 .back-btn:hover{border-color:var(--accent);color:var(--accent)}
-
-@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.kpi-strip{grid-template-columns:repeat(2,1fr)}.branch-grid{grid-template-columns:1fr}.asset-grid{grid-template-columns:repeat(2,1fr)}}
+.photo-thumb{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--border)}
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.kpi-strip{grid-template-columns:repeat(2,1fr)}.branch-grid{grid-template-columns:1fr}.asset-grid{grid-template-columns:repeat(2,1fr)}.header-right{gap:6px}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen" class="login-screen">
   <div class="login-card">
-    <div class="login-logo">
-      <svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg>
-    </div>
+    <div class="login-logo"><svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg></div>
     <div class="login-brand">Swag Group</div>
     <div class="login-title">Inventory Control Center</div>
     <div class="login-divider"></div>
@@ -244,22 +190,16 @@ tr{transition:background .1s}tr:hover td{background:rgba(0,217,255,.02)}
       <svg width="18" height="18" viewBox="0 0 23 23"><path d="M1 1h10v10H1V1z" fill="#f25022"/><path d="M12 1h10v10H12V1z" fill="#7fba00"/><path d="M1 12h10v10H1V12z" fill="#00a4ef"/><path d="M12 12h10v10H12V12z" fill="#ffb900"/></svg>
       Continue with Microsoft
     </button>
-    <div style="margin-top:16px;display:flex;gap:8px;justify-content:center">
-      <button class="hdr-btn" onclick="toggleTheme()" style="margin-top:0">Toggle Theme</button>
-    </div>
+    <button class="hdr-btn" onclick="toggleTheme()" style="margin:16px auto 0;width:fit-content">Toggle Theme</button>
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" style="display:none">
   <div class="header">
     <div class="header-left">
       <div class="header-brand">INVENTORY</div>
       <div class="header-sep"></div>
-      <div class="header-sub">
-        <div class="live-dot"></div>
-        <span id="live-time">Live</span>
-      </div>
+      <div class="header-sub"><div class="live-dot"></div><span id="live-time">Live</span></div>
     </div>
     <div class="header-right">
       <div class="user-chip">
@@ -267,15 +207,13 @@ tr{transition:background .1s}tr:hover td{background:rgba(0,217,255,.02)}
         <span id="user-name">Loading...</span>
       </div>
       <input id="global-search" class="flt-input" placeholder="Search assets…" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
-      <button class="hdr-btn" onclick="loadAll()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> Refresh</button>
+      <button class="hdr-btn" onclick="loadAll(true)"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> Refresh</button>
       <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
       <button class="hdr-btn" onclick="toggleTheme()">🌙</button>
       <button class="hdr-btn danger" onclick="signOut()">Sign out</button>
     </div>
   </div>
-
   <div class="nav" id="nav-bar"></div>
-
   <div class="main">
     <div class="page active" id="page-overview"></div>
     <div class="page" id="page-branches"></div>
@@ -284,53 +222,45 @@ tr{transition:background .1s}tr:hover td{background:rgba(0,217,255,.02)}
   </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modal-detail">
-  <div class="modal" style="max-width:520px">
+  <div class="modal">
     <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg> Asset Details</div>
-    <div class="modal-body" id="modal-detail-body"></div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Close</button>
-    </div>
+    <div id="modal-detail-body"></div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-detail')">Close</button></div>
   </div>
 </div>
 
-<!-- ADD ASSET MODAL -->
 <div class="modal-overlay" id="modal-add">
   <div class="modal">
     <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add New Asset</div>
-    <div class="modal-body">
-      <div class="modal-label">Branch *</div>
-      <select class="modal-select" id="add-branch">
-        <option value="">Select Branch</option>
-      </select>
-      <div class="modal-label">Asset Name *</div>
-      <input class="modal-input" id="add-name" placeholder="e.g. Cashier Computer"/>
-      <div class="modal-label">Category *</div>
-      <select class="modal-select" id="add-category">
-        <option value="">Select Category</option>
-        <option>كمبيوتر</option><option>لابتوب</option><option>شاشة</option>
-        <option>طابعة</option><option>كاميرات</option><option>كراسي</option>
-        <option>أثاث</option><option>شبكات</option><option>أخرى</option>
-      </select>
-      <div class="modal-label">Model</div>
-      <input class="modal-input" id="add-model" placeholder="Model number / description"/>
-      <div class="modal-label">Quantity *</div>
-      <input class="modal-input" id="add-qty" type="number" min="1" value="1"/>
-      <div class="modal-label">Status</div>
-      <select class="modal-select" id="add-status">
-        <option value="في الاستخدام">في الاستخدام</option>
-        <option value="مخزن">مخزن</option>
-        <option value="صيانة">صيانة</option>
-        <option value="متوقف">متوقف</option>
-      </select>
-      <div class="modal-label">Color</div>
-      <input class="modal-input" id="add-color" placeholder="e.g. أسود، رمادي"/>
-      <div class="modal-label">Purchase Amount (SAR)</div>
-      <input class="modal-input" id="add-amount" type="number" min="0" placeholder="0"/>
-      <div class="modal-label">Notes</div>
-      <textarea class="modal-textarea" id="add-notes" placeholder="Optional notes..."></textarea>
-    </div>
+    <div class="modal-label">Branch *</div>
+    <select class="modal-select" id="add-branch"><option value="">Select Branch</option></select>
+    <div class="modal-label">Asset Name *</div>
+    <input class="modal-input" id="add-name" placeholder="e.g. Cashier Computer"/>
+    <div class="modal-label">Category *</div>
+    <select class="modal-select" id="add-category">
+      <option value="">Select Category</option>
+      <option>كمبيوتر</option><option>لابتوب</option><option>شاشة</option>
+      <option>طابعة</option><option>كاميرات</option><option>كراسي</option>
+      <option>أثاث</option><option>شبكات</option><option>أخرى</option>
+    </select>
+    <div class="modal-label">Model</div>
+    <input class="modal-input" id="add-model" placeholder="Model number"/>
+    <div class="modal-label">Quantity *</div>
+    <input class="modal-input" id="add-qty" type="number" min="1" value="1"/>
+    <div class="modal-label">Status</div>
+    <select class="modal-select" id="add-status">
+      <option value="قيد الاستخدام">قيد الاستخدام</option>
+      <option value="مخزن">مخزن</option>
+      <option value="صيانة">صيانة</option>
+      <option value="متوقف">متوقف</option>
+    </select>
+    <div class="modal-label">Color</div>
+    <input class="modal-input" id="add-color" placeholder="أسود، رمادي..."/>
+    <div class="modal-label">Purchase Amount (SAR)</div>
+    <input class="modal-input" id="add-amount" type="number" min="0" placeholder="0"/>
+    <div class="modal-label">Notes</div>
+    <textarea class="modal-textarea" id="add-notes" placeholder="Optional notes..."></textarea>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-add')">Cancel</button>
       <button class="btn btn-primary" id="add-submit-btn" onclick="submitNewAsset()">
@@ -343,153 +273,201 @@ tr{transition:background .1s}tr:hover td{background:rgba(0,217,255,.02)}
 <div class="toast-wrap" id="toast-wrap"></div>
 
 <script>
-// ===== CONFIG =====
-const TENANT_ID = 'fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
-const CLIENT_ID = 'b459fb3f-d16d-484b-aa16-1e26dc9f2129';
-const SITE      = 'https://netorg20570594.sharepoint.com/sites/-484';
-const LIST_ID   = 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
-const SCOPES    = ['https://netorg20570594.sharepoint.com/AllSites.Read','User.Read'];
+// ============================================================
+// CONFIG — UPDATED VALUES FROM YOUR SETUP
+// ============================================================
+const TENANT_ID  = 'fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
+const CLIENT_ID  = 'b74353f0-ec73-4a69-ac7d-a7dbb9166b95'; // NEW App
+const SITE       = 'https://netorg20570594.sharepoint.com/sites/-484';
+const LIST_ID    = 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
+const BRANCH_KEY = 'OData__x0627__x0644__x0641__x0631__x06'; // CONFIRMED
+const SCOPES     = [
+  'https://netorg20570594.sharepoint.com/AllSites.Read',
+  'https://netorg20570594.sharepoint.com/AllSites.Write',
+  'User.Read'
+];
 
-// ===== COLOR MAPS =====
-const BRAND_COLOR={'سواج':'#d4322c','لاروش':'#2f9aa3','جولد':'#c9a227','اوتفيت':'#7c5cff','أوتفيت':'#7c5cff'};
-const CAT_COLORS={'كمبيوتر':'#3fb9c4','لابتوب':'#60A5FA','شاشة':'#8B5CF6','طابعة':'#FFB020','كاميرات':'#f87171','كراسي':'#D4A84B','أثاث':'#b07a3a','شبكات':'#34d399','أخرى':'#8a97a8'};
-const COLOR_HEX={'أسود':'#1c1c1e','رمادي':'#8a8f98','أبيض':'#f3f4f6','فضي':'#cfd4d9','بني':'#6b4a2b','ذهبي':'#c9a227','أزرق':'#2f6fed','أحمر':'#d6473e','أخضر':'#1f9e6a'};
-function catColor(c){if(CAT_COLORS[c])return CAT_COLORS[c];let h=0;for(const ch of(c||''))h=(h*31+ch.charCodeAt(0))%360;return`hsl(${h} 55% 55%)`}
-function brandColor(b){return BRAND_COLOR[b]||'#3fb9c4'}
+// ============================================================
+const BRAND_COLOR = {
+  'سواج':'#d4322c','swag':'#d4322c',
+  'لاروش':'#2f9aa3','laroche':'#2f9aa3',
+  'جولد':'#c9a227','gold':'#c9a227',
+  'اوتفيت':'#7c5cff','أوتفيت':'#7c5cff','outfit':'#7c5cff'
+};
+const CAT_COLORS = {
+  'كمبيوتر':'#3fb9c4','لابتوب':'#60A5FA','شاشة':'#8B5CF6',
+  'طابعة':'#FFB020','كاميرات':'#f87171','كراسي':'#D4A84B',
+  'أثاث':'#b07a3a','شبكات':'#34d399','أخرى':'#8a97a8'
+};
+const COLOR_HEX = {
+  'أسود':'#1c1c1e','رمادي':'#8a8f98','أبيض':'#f3f4f6',
+  'فضي':'#cfd4d9','بني':'#6b4a2b','ذهبي':'#c9a227',
+  'أزرق':'#2f6fed','أحمر':'#d6473e','أخضر':'#1f9e6a'
+};
+
+function catColor(c){
+  if(CAT_COLORS[c])return CAT_COLORS[c];
+  let h=0;for(const ch of(c||''))h=(h*31+ch.charCodeAt(0))%360;
+  return`hsl(${h} 55% 55%)`;
+}
+function brandColor(b){
+  const bl=(b||'').toLowerCase();
+  for(const[k,v]of Object.entries(BRAND_COLOR)){if(bl.includes(k))return v}
+  return'#3fb9c4';
+}
 function colorHex(c){return COLOR_HEX[c]||'#5a6b7c'}
 
-// ===== MSAL =====
 let msalInstance=null, accessToken=null, currentUser=null;
-let allAssets=[], currentTab='overview', sortState={key:null,dir:1}, currentPage=1;
+let allAssets=[], currentTab='overview';
+let sortState={key:null,dir:1}, currentPage=1;
 let activeBranch=null, activeCat='All', branchSearchQ='', assetSearchQ='';
 let chartInstances={};
 const PAGE_SIZE=30;
 
+// ===== MSAL =====
 async function initMsal(){
-  let tries=0;
-  while(typeof msal==='undefined'&&tries<50){await new Promise(r=>setTimeout(r,100));tries++}
-  if(typeof msal==='undefined')return;
+  let t=0;
+  while(typeof msal==='undefined'&&t<60){await sleep(100);t++}
+  if(typeof msal==='undefined'){toast('Auth library not loaded','error');return}
   msalInstance=new msal.PublicClientApplication({
-    auth:{clientId:CLIENT_ID,authority:`https://login.microsoftonline.com/${TENANT_ID}`,redirectUri:window.location.origin+window.location.pathname},
-    cache:{cacheLocation:'sessionStorage'}
+    auth:{
+      clientId:CLIENT_ID,
+      authority:`https://login.microsoftonline.com/${TENANT_ID}`,
+      redirectUri:window.location.origin+window.location.pathname
+    },
+    cache:{cacheLocation:'sessionStorage',storeAuthStateInCookie:true}
   });
 }
-function doLogin(){msalInstance?.loginRedirect({scopes:SCOPES})}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+function doLogin(){
+  if(!msalInstance){toast('Not ready','error');return}
+  msalInstance.loginRedirect({scopes:SCOPES});
+}
 function signOut(){msalInstance?.logoutRedirect()}
+
 async function getToken(){
+  const accounts=msalInstance.getAllAccounts();
+  if(!accounts.length)throw new Error('No logged-in accounts');
   try{
-    const accounts=msalInstance.getAllAccounts();
-    if(!accounts.length)return;
     const r=await msalInstance.acquireTokenSilent({scopes:SCOPES,account:accounts[0]});
     accessToken=r.accessToken;
     if(!currentUser)setUser(accounts[0]);
-  }catch(e){await msalInstance.acquireTokenRedirect({scopes:SCOPES})}
+  }catch(e){
+    await msalInstance.acquireTokenRedirect({scopes:SCOPES});
+  }
 }
+
 function setUser(acc){
   currentUser={name:acc.name||acc.username,email:acc.username};
   document.getElementById('user-name').textContent=currentUser.name;
   document.getElementById('user-initial').textContent=(currentUser.name||'?').charAt(0).toUpperCase();
 }
-function showDashboard(){document.getElementById('login-screen').style.display='none';document.getElementById('dashboard').style.display='block'}
+function showDashboard(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+}
 
-// ===== DATA FETCH =====
-let BRANCH_KEY='OData__x0627__x0644__x0641__x0631__x0639_';
-
+// ===== DATA =====
 function mapItem(it){
-  let branch=(it[BRANCH_KEY]||'غير محدد').toString().trim();
+  const branch=(it[BRANCH_KEY]||'غير محدد').toString().trim();
   const brand=(branch.split(/[-–]/)[0]||'').trim()||'—';
   let photo='';
-  try{const p=typeof it.DevicePhoto==='string'?JSON.parse(it.DevicePhoto):it.DevicePhoto;if(p&&p.serverRelativeUrl)photo=(p.serverUrl||'https://netorg20570594.sharepoint.com')+p.serverRelativeUrl}catch(_){}
-  const rawQty=it.SerialNumber||it.Quantity||'1';
-  const qn=parseInt(String(rawQty).replace(/[^\d]/g,''),10);
+  try{
+    const p=typeof it.DevicePhoto==='string'?JSON.parse(it.DevicePhoto):it.DevicePhoto;
+    if(p?.serverRelativeUrl) photo=(p.serverUrl||SITE)+p.serverRelativeUrl;
+    // Fallback: try attachment style
+  }catch(_){}
+  const qn=parseInt(String(it.SerialNumber||it.Quantity||'1').replace(/\D/g,''),10);
   return{
-    id:it.ID,branch,brand,name:it.Title||'—',category:it.AssetType||'أخرى',
-    model:it.Model||'',status:it.Status||'',color:it.Color||'',
-    qty:Number.isFinite(qn)&&qn>0?qn:1,notes:it.ConditionNotes||'',
-    purchaseDate:it.PurchaseDate||'',amount:Number(it.PurchasePrice)||0,
-    invoice:it.OrderNumber||'',photo,created:it.Created||''
+    id:it.ID, branch, brand,
+    name:it.Title||'—',
+    category:it.AssetType||'أخرى',
+    model:it.Model||'',
+    status:it.Status||'',
+    color:it.Color||'',
+    qty:Number.isFinite(qn)&&qn>0?qn:1,
+    notes:it.ConditionNotes||'',
+    purchaseDate:it.PurchaseDate||'',
+    amount:Number(it.PurchasePrice)||0,
+    invoice:it.OrderNumber||'',
+    photo,
+    created:it.Created||''
   };
 }
 
 async function spFetch(url){
   await getToken();
-  const r=await fetch(url,{headers:{'Accept':'application/json;odata=nometadata','Authorization':`Bearer ${accessToken}`}});
-  if(!r.ok)throw new Error(`SP ${r.status}`);
-  const d=await r.json();
-  return d.value||[];
+  const r=await fetch(url,{headers:{
+    'Accept':'application/json;odata=nometadata',
+    'Authorization':`Bearer ${accessToken}`
+  }});
+  if(!r.ok){const t=await r.text();throw new Error(`SP ${r.status}: ${t.slice(0,200)}`)}
+  return r.json();
 }
 
 async function loadAll(refresh){
   try{
-    document.getElementById('live-time').textContent='Syncing...';
-    const raw=await spFetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items?$top=2000&$orderby=ID desc`);
-    if(raw[0]){const k=Object.keys(raw[0]).find(k=>k.startsWith('OData__x0627__x0644__x0641__x0631'));if(k)BRANCH_KEY=k}
-    allAssets=raw.map(mapItem);
-    if(refresh)toast(`✓ Loaded ${allAssets.length} assets`,'success');
-    document.getElementById('live-time').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-    renderTab(currentTab);
+    setLive('Syncing...');
+    let items=[], url=`${SITE}/_api/web/lists(guid'${LIST_ID}')/items?$top=500&$orderby=ID desc`;
+    while(url){
+      const d=await spFetch(url);
+      items=[...items,...(d.value||[])];
+      url=d['odata.nextLink']||null;
+    }
+    allAssets=items.map(mapItem);
+    if(refresh)toast(`✓ ${allAssets.length} assets loaded from SharePoint`,'success');
+    setLive(new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}));
     populateBranchSelect();
-  }catch(e){
-    document.getElementById('live-time').textContent='Error';
-    // DEMO MODE — use sample data if SharePoint fails
-    if(!allAssets.length){allAssets=DEMO_DATA;populateBranchSelect()}
-    toast('Using demo data (SP not connected)','info');
     renderTab(currentTab);
+  }catch(e){
+    console.error('loadAll error:',e);
+    setLive('Error');
+    toast('Error loading: '+e.message,'error');
   }
 }
 
-// ===== DEMO DATA =====
-const DEMO_DATA=[
-  {id:1,branch:'سواج - جدة',brand:'سواج',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'Dell OptiPlex 3090',status:'في الاستخدام',color:'أسود',qty:3,notes:'',purchaseDate:'2023-01-15',amount:4500,invoice:'INV-001',photo:'',created:'2023-01-15T10:00:00Z'},
-  {id:2,branch:'سواج - جدة',brand:'سواج',name:'شاشة كاشير',category:'شاشة',model:'Samsung 22"',status:'في الاستخدام',color:'أسود',qty:3,notes:'',purchaseDate:'2023-01-15',amount:800,invoice:'INV-002',photo:'',created:'2023-01-15T10:00:00Z'},
-  {id:3,branch:'سواج - جدة',brand:'سواج',name:'طابعة إيصالات',category:'طابعة',model:'Epson TM-T88',status:'في الاستخدام',color:'أبيض',qty:2,notes:'',purchaseDate:'2023-02-01',amount:1200,invoice:'INV-003',photo:'',created:'2023-02-01T10:00:00Z'},
-  {id:4,branch:'سواج - جدة',brand:'سواج',name:'جهاز جرد باركود',category:'أخرى',model:'Zebra TC21',status:'في الاستخدام',color:'أسود',qty:2,notes:'',purchaseDate:'2023-02-10',amount:2200,invoice:'INV-004',photo:'',created:'2023-02-10T10:00:00Z'},
-  {id:5,branch:'سواج - الرياض',brand:'سواج',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'HP ProDesk 400',status:'في الاستخدام',color:'رمادي',qty:4,notes:'',purchaseDate:'2023-03-01',amount:4200,invoice:'INV-005',photo:'',created:'2023-03-01T10:00:00Z'},
-  {id:6,branch:'سواج - الرياض',brand:'سواج',name:'كاميرا مراقبة',category:'كاميرات',model:'Hikvision 4MP',status:'في الاستخدام',color:'أبيض',qty:6,notes:'',purchaseDate:'2023-03-05',amount:650,invoice:'INV-006',photo:'',created:'2023-03-05T10:00:00Z'},
-  {id:7,branch:'سواج - الدمام',brand:'سواج',name:'لابتوب مكتبي',category:'لابتوب',model:'Dell Latitude 5521',status:'في الاستخدام',color:'رمادي',qty:2,notes:'',purchaseDate:'2023-04-01',amount:6800,invoice:'INV-007',photo:'',created:'2023-04-01T10:00:00Z'},
-  {id:8,branch:'جدة - سوق 7',brand:'لاروش',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'Lenovo ThinkCentre',status:'في الاستخدام',color:'أسود',qty:5,notes:'',purchaseDate:'2023-01-20',amount:3900,invoice:'INV-008',photo:'',created:'2023-01-20T10:00:00Z'},
-  {id:9,branch:'جدة - سوق 7',brand:'لاروش',name:'طابعة ليبل',category:'طابعة',model:'Zebra ZD420',status:'في الاستخدام',color:'أبيض',qty:3,notes:'',purchaseDate:'2023-02-05',amount:1800,invoice:'INV-009',photo:'',created:'2023-02-05T10:00:00Z'},
-  {id:10,branch:'جدة - الكورنيش',brand:'لاروش',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'Dell OptiPlex',status:'في الاستخدام',color:'أسود',qty:4,notes:'',purchaseDate:'2023-03-10',amount:4500,invoice:'INV-010',photo:'',created:'2023-03-10T10:00:00Z'},
-  {id:11,branch:'جدة - الكورنيش',brand:'لاروش',name:'شاشة LED',category:'شاشة',model:'LG 24"',status:'مخزن',color:'أسود',qty:2,notes:'احتياطي',purchaseDate:'2023-03-10',amount:750,invoice:'INV-011',photo:'',created:'2023-03-10T10:00:00Z'},
-  {id:12,branch:'Gold - جدة',brand:'جولد',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'HP Z2 Mini',status:'في الاستخدام',color:'فضي',qty:3,notes:'',purchaseDate:'2023-05-01',amount:7200,invoice:'INV-012',photo:'',created:'2023-05-01T10:00:00Z'},
-  {id:13,branch:'Gold - جدة',brand:'جولد',name:'ميزان ذهب',category:'أخرى',model:'Ohaus Pioneer',status:'في الاستخدام',color:'فضي',qty:2,notes:'',purchaseDate:'2023-05-15',amount:3500,invoice:'INV-013',photo:'',created:'2023-05-15T10:00:00Z'},
-  {id:14,branch:'Gold - الرياض',brand:'جولد',name:'خزنة',category:'أخرى',model:'Yale 900 Series',status:'في الاستخدام',color:'رمادي',qty:1,notes:'',purchaseDate:'2023-06-01',amount:8500,invoice:'INV-014',photo:'',created:'2023-06-01T10:00:00Z'},
-  {id:15,branch:'الرياض - النسيم',brand:'لاروش',name:'كرسي موظف',category:'كراسي',model:'Ergonomic 360',status:'في الاستخدام',color:'أسود',qty:8,notes:'',purchaseDate:'2023-04-20',amount:850,invoice:'INV-015',photo:'',created:'2023-04-20T10:00:00Z'},
-  {id:16,branch:'الرياض - النسيم',brand:'لاروش',name:'طاولة عرض',category:'أثاث',model:'Custom MDF',status:'في الاستخدام',color:'بني',qty:4,notes:'',purchaseDate:'2023-04-20',amount:1200,invoice:'INV-016',photo:'',created:'2023-04-20T10:00:00Z'},
-  {id:17,branch:'الدمام - اوتفيت',brand:'اوتفيت',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'Lenovo M90',status:'في الاستخدام',color:'أسود',qty:3,notes:'',purchaseDate:'2023-07-01',amount:4100,invoice:'INV-017',photo:'',created:'2023-07-01T10:00:00Z'},
-  {id:18,branch:'الدمام - اوتفيت',brand:'اوتفيت',name:'طابعة رايد',category:'طابعة',model:'Brother HL-L2350',status:'صيانة',color:'رمادي',qty:1,notes:'تحتاج صيانة طباعة',purchaseDate:'2023-07-01',amount:900,invoice:'INV-018',photo:'',created:'2023-07-01T10:00:00Z'},
-];
+function setLive(t){const el=document.getElementById('live-time');if(el)el.textContent=t}
 
 // ===== HELPERS =====
 function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
 function fmtMoney(n){return n?fmt(n)+' SAR':'—'}
 function fmtDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(_){return d}}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
 function statusBadge(s){
   const v=(s||'').toLowerCase();
-  if(v.includes('استخدام'))return`<span class="badge b-use"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('استخدام')||v.includes('قيد'))return`<span class="badge b-use"><span class="b-dot"></span>${esc(s)}</span>`;
   if(v.includes('متوقف')||v.includes('تالف'))return`<span class="badge b-stop"><span class="b-dot"></span>${esc(s)}</span>`;
   if(v.includes('صيان'))return`<span class="badge b-fix"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('مخزن')||v.includes('احتياط'))return`<span class="badge b-store"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('مخزن'))return`<span class="badge b-store"><span class="b-dot"></span>${esc(s)}</span>`;
   if(!s)return`<span class="badge b-def">—</span>`;
   return`<span class="badge b-def"><span class="b-dot"></span>${esc(s)}</span>`;
 }
+
 function assetIcon(cat,name){
   const n=(name||'')+(cat||'');
   if(n.includes('كاشير')||n.includes('كمبيوتر'))return'<path d="M3 5h18v11H3z"/><path d="M8 21h8M12 16v5"/>';
   if(n.includes('لابتوب'))return'<path d="M4 5h16v10H4z"/><path d="M2 19h20l-2-2H4z"/>';
   if(n.includes('شاشة'))return'<path d="M3 4h18v12H3z"/><path d="M9 20h6M12 16v4"/>';
   if(n.includes('طابعة'))return'<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>';
-  if(n.includes('جرد')||n.includes('سكانر')||n.includes('باركود'))return'<path d="M3 5v14M7 5v14M11 5v14M15 5v14M19 5v14"/>';
-  if(n.includes('كرسي'))return'<path d="M6 18v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6"/><path d="M6 18v3M18 18v3M4 12h16"/>';
+  if(n.includes('كرسي'))return'<path d="M6 18v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6"/><path d="M6 21v-3M18 21v-3M4 12h16"/>';
   if(n.includes('كاميرا'))return'<path d="M2 7h13l3 3v7H2z"/><circle cx="9" cy="13" r="3"/><path d="M18 9l4-2v9l-4-2"/>';
-  if(n.includes('طاولة')||n.includes('رف')||n.includes('أثاث'))return'<path d="M3 7h18M5 7v13M19 7v13M3 13h18"/>';
-  if(n.includes('ميزان'))return'<path d="M12 3v18M5 7h14"/><path d="M5 7l-2 6h4zM19 7l-2 6h4z"/>';
-  if(n.includes('خزنة'))return'<rect x="3" y="4" width="18" height="16" rx="1"/><circle cx="12" cy="12" r="3"/>';
+  if(n.includes('طاولة')||n.includes('أثاث'))return'<path d="M3 7h18M5 7v13M19 7v13M3 13h18"/>';
   return'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/>';
 }
-function barcode(seed){let h=0;for(const c of String(seed))h=(h*33+c.charCodeAt(0))>>>0;let s='';for(let i=0;i<28;i++){h=(h*1103515245+12345)>>>0;s+=`<i style="flex:${1+(h%3)}"></i>`}return`<div class="barcode">${s}</div>`}
-function animateNum(el,to){const dur=600,st=performance.now(),from=0;function f(t){const p=Math.min(1,(t-st)/dur);el.textContent=fmt(Math.round(from+(to-from)*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)}
+
+function barcode(seed){
+  let h=0;for(const c of String(seed))h=(h*33+c.charCodeAt(0))>>>0;
+  let s='';for(let i=0;i<28;i++){h=(h*1103515245+12345)>>>0;s+=`<i style="flex:${1+(h%3)}"></i>`}
+  return`<div class="barcode">${s}</div>`;
+}
+
+function animateNum(el,to){
+  const dur=600,st=performance.now();
+  function f(t){const p=Math.min(1,(t-st)/dur);el.textContent=fmt(Math.round(to*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(f)}
+  requestAnimationFrame(f);
+}
 
 // ===== AGGREGATES =====
 function getBranchAgg(){
@@ -505,37 +483,45 @@ function getBranchAgg(){
 const NAV=[
   ['overview','Overview','<svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>'],
   ['branches','Branches','<svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg>'],
-  ['all','All Assets','<svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>'],
+  ['all','All Assets','<svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg>'],
   ['analytics','Analytics','<svg class="ico" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>']
 ];
+
 function buildNav(){
-  const bar=document.getElementById('nav-bar');
-  bar.innerHTML=NAV.map(([id,label,svg])=>
-    `<div class="nav-item ${currentTab===id?'active':''}" onclick="switchTab('${id}')">${svg} ${label}<span class="nav-badge">${id==='overview'?allAssets.length:id==='branches'?Object.keys(getBranchAgg()).length:id==='all'?allAssets.length:''}</span></div>`
-  ).join('');
+  const agg=getBranchAgg();
+  document.getElementById('nav-bar').innerHTML=NAV.map(([id,label,svg])=>{
+    const cnt=id==='branches'?Object.keys(agg).length:id==='analytics'?'':allAssets.length;
+    return`<div class="nav-item${currentTab===id?' active':''}" onclick="switchTab('${id}')">${svg} ${label}<span class="nav-badge">${cnt}</span></div>`;
+  }).join('');
 }
+
 function switchTab(tab){
   currentTab=tab;
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+tab)?.classList.add('active');
   buildNav();
   if(tab==='overview')renderOverview();
-  else if(tab==='branches'){activeBranch=null;activeCat='All';renderBranches()}
+  else if(tab==='branches'){if(!activeBranch){renderBranches()}else{renderBranchDetail(document.getElementById('page-branches'))}}
   else if(tab==='all'){currentPage=1;renderAll()}
   else if(tab==='analytics')renderAnalytics();
 }
 
-// ===== RENDER OVERVIEW =====
-function renderTab(tab){buildNav();if(tab==='overview')renderOverview();else if(tab==='branches')renderBranches();else if(tab==='all')renderAll();else if(tab==='analytics')renderAnalytics()}
+function renderTab(tab){buildNav();
+  if(tab==='overview')renderOverview();
+  else if(tab==='branches')renderBranches();
+  else if(tab==='all')renderAll();
+  else if(tab==='analytics')renderAnalytics();
+}
+
+// ===== OVERVIEW =====
 function renderOverview(){
   const agg=getBranchAgg();const branches=Object.keys(agg);
   const units=allAssets.reduce((s,d)=>s+d.qty,0);
   const value=allAssets.reduce((s,d)=>s+d.amount*d.qty,0);
-  const inUse=allAssets.filter(d=>(d.status||'').toLowerCase().includes('استخدام')).reduce((s,d)=>s+d.qty,0);
+  const inUse=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('استخدام')||v.includes('قيد')}).reduce((s,d)=>s+d.qty,0);
   const cats=new Set(allAssets.map(d=>d.category)).size;
   const top=branches.map(b=>({b,u:agg[b].units})).sort((x,y)=>y.u-x.u).slice(0,6);
-  const host=document.getElementById('page-overview');
-  host.innerHTML=`
+  document.getElementById('page-overview').innerHTML=`
     <div class="topbar">
       <div>
         <div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">DASHBOARD</div>
@@ -547,35 +533,17 @@ function renderOverview(){
       </div>
     </div>
     <div class="stats-grid">
-      <div class="stat-card c1" onclick="switchTab('branches')">
-        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg></div>
-        <div class="stat-num" id="s-branches">0</div><div class="stat-label">Branches</div>
-      </div>
-      <div class="stat-card c2" onclick="switchTab('all')">
-        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/></svg></div>
-        <div class="stat-num" id="s-types">0</div><div class="stat-label">Asset Types</div>
-      </div>
-      <div class="stat-card c3">
-        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg></div>
-        <div class="stat-num" id="s-units">0</div><div class="stat-label">Total Units</div>
-      </div>
-      <div class="stat-card c4">
-        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div>
-        <div class="stat-num" id="s-inuse">0</div><div class="stat-label">In Use</div>
-      </div>
-      <div class="stat-card c5">
-        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9h4a2 2 0 0 1 0 4H9"/></svg></div>
-        <div class="stat-num" id="s-value">0</div><div class="stat-label">Total Value (SAR)</div>
-      </div>
-      <div class="stat-card c6">
-        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
-        <div class="stat-num" id="s-cats">0</div><div class="stat-label">Categories</div>
-      </div>
+      <div class="stat-card c1" onclick="switchTab('branches')"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg></div><div class="stat-num" id="s-br">0</div><div class="stat-label">Branches</div></div>
+      <div class="stat-card c2" onclick="switchTab('all')"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/></svg></div><div class="stat-num" id="s-ty">0</div><div class="stat-label">Asset Types</div></div>
+      <div class="stat-card c3"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg></div><div class="stat-num" id="s-un">0</div><div class="stat-label">Total Units</div></div>
+      <div class="stat-card c4"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div><div class="stat-num" id="s-iu">0</div><div class="stat-label">In Use</div></div>
+      <div class="stat-card c5"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9h4a2 2 0 0 1 0 4H9"/></svg></div><div class="stat-num" id="s-va">0</div><div class="stat-label">Total Value (SAR)</div></div>
+      <div class="stat-card c6"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div><div class="stat-num" id="s-ca">0</div><div class="stat-label">Categories</div></div>
     </div>
     <div class="kpi-strip">
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').toLowerCase().includes('صيان')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Under Maintenance</div></div>
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').toLowerCase().includes('متوقف')||(d.status||'').toLowerCase().includes('تالف')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Stopped/Damaged</div></div>
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').toLowerCase().includes('مخزن')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">In Storage</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('صيان')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Under Maintenance</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('متوقف')||v.includes('تالف')}).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Stopped/Damaged</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('مخزن')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">In Storage</div></div>
       <div class="kpi-box"><div class="kpi-val">${Math.round(inUse/(units||1)*100)}%</div><div class="kpi-lbl">Utilization Rate</div></div>
     </div>
     <div class="topbar" style="margin-bottom:16px">
@@ -584,22 +552,24 @@ function renderOverview(){
     </div>
     <div class="branch-grid">${top.map(({b})=>renderBranchCard(b,agg[b])).join('')}</div>
     <div class="table-card">
-      <div class="table-header"><div class="table-title">Recent Assets <span class="table-count">${allAssets.slice(0,8).length}</span></div></div>
+      <div class="table-header"><div class="table-title">Recent Assets <span class="table-count">${Math.min(allAssets.length,10)}</span></div></div>
       <div class="tbl-wrap"><table>
-        <thead><tr><th>ID</th><th>Asset Name</th><th>Branch</th><th>Category</th><th>Qty</th><th>Status</th><th>Amount</th><th></th></tr></thead>
-        <tbody>${allAssets.slice(0,8).map(d=>`<tr>
+        <thead><tr><th>#</th><th>Photo</th><th>Asset</th><th>Branch</th><th>Category</th><th>Qty</th><th>Status</th><th></th></tr></thead>
+        <tbody>${allAssets.slice(0,10).map(d=>`<tr>
           <td><span class="id-tag">#${d.id}</span></td>
-          <td>${esc(d.name)}</td><td>${esc(d.branch)}</td><td>${esc(d.category)}</td>
-          <td><span style="font-family:'Space Mono',monospace">${d.qty}</span></td>
+          <td>${d.photo?`<img src="${esc(d.photo)}" class="photo-thumb" onerror="this.style.display='none'"/>`:''}</td>
+          <td style="font-weight:700">${esc(d.name)}</td>
+          <td style="font-size:12px">${esc(d.branch)}</td>
+          <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
+          <td style="font-family:'Space Mono',monospace">${d.qty}</td>
           <td>${statusBadge(d.status)}</td>
-          <td style="font-family:'Space Mono',monospace;font-size:12px">${fmtMoney(d.amount)}</td>
           <td><button class="view-btn" onclick="openDetail(${d.id})">View</button></td>
         </tr>`).join('')}</tbody>
       </table></div>
     </div>`;
   setTimeout(()=>{
-    const nums=[['s-branches',branches.length],['s-types',allAssets.length],['s-units',units],['s-inuse',inUse],['s-value',value],['s-cats',cats]];
-    nums.forEach(([id,n])=>{const el=document.getElementById(id);if(el)animateNum(el,n)});
+    [['s-br',branches.length],['s-ty',allAssets.length],['s-un',units],['s-iu',inUse],['s-va',value],['s-ca',cats]]
+    .forEach(([id,n])=>{const el=document.getElementById(id);if(el)animateNum(el,n)});
   },50);
 }
 
@@ -608,8 +578,7 @@ function renderBranchCard(name,a){
   return`<div class="branch-card" onclick="openBranch('${esc(name)}')">
     <div class="branch-qty"><b>${a.units}</b><span>units</span></div>
     <span class="brand-badge" style="background:${brandColor(a.brand)}">${esc(a.brand)}</span>
-    <h3>${esc(name)}</h3>
-    ${barcode(name)}
+    <h3>${esc(name)}</h3>${barcode(name)}
     <div class="branch-footer">
       <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(c)} · ${k}</span>`).join('')}</div>
       <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)">${a.types} types</span>
@@ -622,29 +591,32 @@ function renderBranches(){
   const host=document.getElementById('page-branches');
   if(activeBranch){renderBranchDetail(host);return}
   const agg=getBranchAgg();
-  const names=Object.keys(agg).sort((a,b)=>agg[b].units-agg[a].units).filter(n=>!branchSearchQ||n.toLowerCase().includes(branchSearchQ.toLowerCase())||agg[n].brand.toLowerCase().includes(branchSearchQ.toLowerCase()));
+  const names=Object.keys(agg).sort((a,b)=>agg[b].units-agg[a].units)
+    .filter(n=>!branchSearchQ||n.toLowerCase().includes(branchSearchQ.toLowerCase()));
   host.innerHTML=`
     <div class="topbar">
-      <div>
-        <div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">BRANCHES</div>
-        <div style="font-size:20px;font-weight:700">Select a Branch</div>
-      </div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">BRANCHES</div><div style="font-size:20px;font-weight:700">All Branches</div></div>
       <div class="filter-row" style="margin:0">
-        <div class="search" style="position:relative">
-          <input class="flt-input" placeholder="Search branches…" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
-        </div>
+        <input class="flt-input" placeholder="Search branches…" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
         <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
       </div>
     </div>
     <div class="branch-grid">${names.map(n=>renderBranchCard(n,agg[n])).join('')||'<div class="empty">No branches found</div>'}</div>`;
 }
 
-function openBranch(name){activeBranch=name;activeCat='All';assetSearchQ='';switchTab('branches')}
+function openBranch(name){
+  activeBranch=name;activeCat='All';assetSearchQ='';
+  currentTab='branches';
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-branches').classList.add('active');
+  buildNav();
+  renderBranchDetail(document.getElementById('page-branches'));
+}
 
 function renderBranchDetail(host){
   const all=allAssets.filter(d=>d.branch===activeBranch);
   const agg=getBranchAgg()[activeBranch]||{brand:'—',types:0,units:0,value:0,cats:{}};
-  const catList=['All',...Array.from(new Set(all.map(d=>d.category)))];
+  const catList=['All',...new Set(all.map(d=>d.category))];
   let items=all.filter(d=>activeCat==='All'||d.category===activeCat);
   if(assetSearchQ){const q=assetSearchQ.toLowerCase();items=items.filter(d=>(d.name+d.model+d.category+d.color+d.notes).toLowerCase().includes(q))}
   const groups={};items.forEach(d=>(groups[d.category]??=[]).push(d));
@@ -656,7 +628,7 @@ function renderBranchDetail(host){
       <div class="l">
         <span class="brand-badge" style="background:${brandColor(agg.brand)}">${esc(agg.brand)}</span>
         <h2>${esc(activeBranch)}</h2>
-        <div style="color:var(--muted);font-size:12px">Last updated: ${fmtDate(all[0]?.created)}</div>
+        <div style="color:var(--muted);font-size:12px">Last entry: ${fmtDate(all[0]?.created)}</div>
       </div>
       <div class="mini-stats">
         <div class="ms-item"><b>${agg.types}</b><span>Types</span></div>
@@ -666,31 +638,27 @@ function renderBranchDetail(host){
       </div>
     </div>
     <div class="filter-row" style="margin-bottom:14px">
-      <input class="flt-input" placeholder="Search in branch…" oninput="assetSearchQ=this.value;renderBranchDetail(document.getElementById('page-branches'))" value="${esc(assetSearchQ)}" style="min-width:220px"/>
+      <input class="flt-input" placeholder="Search assets…" oninput="assetSearchQ=this.value;renderBranchDetail(document.getElementById('page-branches'))" value="${esc(assetSearchQ)}" style="min-width:220px"/>
     </div>
-    <div class="pills">${catList.map(c=>{const n=c==='All'?all.length:all.filter(d=>d.category===c).length;
-      return`<button class="pill ${activeCat===c?'active':''}" onclick="activeCat='${esc(c)}';renderBranchDetail(document.getElementById('page-branches'))">${esc(c)}<span class="n">${n}</span></button>`
+    <div class="pills">${catList.map(c=>{
+      const n=c==='All'?all.length:all.filter(d=>d.category===c).length;
+      return`<button class="pill${activeCat===c?' active':''}" onclick="activeCat='${esc(c)}';renderBranchDetail(document.getElementById('page-branches'))">${esc(c)}<span class="n">${n}</span></button>`;
     }).join('')}</div>
     ${Object.keys(groups).length?Object.entries(groups).map(([cat,arr])=>{
       const u=arr.reduce((s,d)=>s+d.qty,0);
       return`<div class="cat-section">
-        <div class="cat-bar">
-          <span class="cat-dot" style="background:${catColor(cat)}"></span>
-          <h4>${esc(cat)}</h4>
-          <span class="meta">${arr.length} types · ${u} units</span>
-        </div>
+        <div class="cat-bar"><span class="cat-dot" style="background:${catColor(cat)}"></span><h4>${esc(cat)}</h4><span class="meta">${arr.length} types · ${u} units</span></div>
         <div class="asset-grid">${arr.map(renderAssetCard).join('')}</div>
-      </div>`
+      </div>`;
     }).join(''):'<div class="empty">No matching assets</div>'}`;
 }
 
 function renderAssetCard(d){
   const ic=`<svg viewBox="0 0 24 24" style="width:44px;height:44px;stroke:var(--muted);fill:none;stroke-width:1.5">${assetIcon(d.category,d.name)}</svg>`;
-  const bg=d.photo?`style="background-image:url('${esc(d.photo)}');background-size:cover;background-position:center"`:'';
   return`<div class="asset-card" onclick="openDetail(${d.id})">
-    <div class="asset-thumb" ${bg}>
-      <span class="asset-qty-pill">×${d.qty}</span>
-      ${d.photo?'':ic}
+    <div class="asset-thumb">
+      <span class="asset-qty-pill">x${d.qty}</span>
+      ${d.photo?`<img src="${esc(d.photo)}" alt="" onerror="this.outerHTML='${ic.replace(/'/g,"\\'")}'"/>`:`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${ic}</div>`}
     </div>
     <div class="asset-body">
       <h5>${esc(d.name)}</h5>
@@ -704,25 +672,25 @@ function renderAssetCard(d){
   </div>`;
 }
 
-// ===== ALL ASSETS TABLE =====
+// ===== ALL ASSETS =====
 function renderAll(){
   const host=document.getElementById('page-all');
   let rows=allAssets.slice();
   const sq=document.getElementById('all-q')?.value||'';
-  const scmp=document.getElementById('all-company')?.value||'';
+  const sc=document.getElementById('all-company')?.value||'';
   const scat=document.getElementById('all-cat')?.value||'';
   const sst=document.getElementById('all-status')?.value||'';
   if(sq){const q=sq.toLowerCase();rows=rows.filter(d=>(d.name+d.model+d.category+d.branch+d.status+d.color).toLowerCase().includes(q))}
-  if(scmp)rows=rows.filter(d=>d.branch.includes(scmp));
+  if(sc)rows=rows.filter(d=>d.branch===sc);
   if(scat)rows=rows.filter(d=>d.category===scat);
   if(sst)rows=rows.filter(d=>(d.status||'').toLowerCase().includes(sst.toLowerCase()));
   if(sortState.key){
-    const k=sortState.key,dir=sortState.dir;
-    const val=i=>k==='id'?i.id:k==='name'?i.name:k==='branch'?i.branch:k==='cat'?i.category:k==='qty'?i.qty:k==='amount'?i.amount:k==='status'?i.status:'';
-    rows.sort((a,b)=>{const x=val(a),y=val(b);return(x<y?-1:x>y?1:0)*dir});
+    const{key:k,dir}=sortState;
+    const v=i=>k==='id'?i.id:k==='name'?i.name:k==='branch'?i.branch:k==='cat'?i.category:k==='qty'?i.qty:k==='amount'?i.amount:i.status;
+    rows.sort((a,b)=>(v(a)<v(b)?-1:v(a)>v(b)?1:0)*dir);
   }
   const total=Math.ceil(rows.length/PAGE_SIZE);
-  const sliced=rows.slice((currentPage-1)*PAGE_SIZE,(currentPage)*PAGE_SIZE);
+  const sliced=rows.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
   const cats=[...new Set(allAssets.map(d=>d.category))].sort();
   const allBranches=[...new Set(allAssets.map(d=>d.branch))].sort();
   host.innerHTML=`
@@ -735,45 +703,30 @@ function renderAll(){
       </div>
     </div>
     <div class="filter-row">
-      <div class="flt-group"><div class="flt-label">Search</div>
-        <input class="flt-input" id="all-q" placeholder="Search…" oninput="currentPage=1;renderAll()" value="${esc(sq)}" style="min-width:180px"/></div>
-      <div class="flt-group"><div class="flt-label">Branch</div>
-        <select class="flt-select" id="all-company" onchange="currentPage=1;renderAll()">
-          <option value="">All Branches</option>
-          ${allBranches.map(b=>`<option value="${esc(b)}" ${scmp===b?'selected':''}>${esc(b)}</option>`).join('')}
-        </select></div>
-      <div class="flt-group"><div class="flt-label">Category</div>
-        <select class="flt-select" id="all-cat" onchange="currentPage=1;renderAll()">
-          <option value="">All Categories</option>
-          ${cats.map(c=>`<option value="${esc(c)}" ${scat===c?'selected':''}>${esc(c)}</option>`).join('')}
-        </select></div>
-      <div class="flt-group"><div class="flt-label">Status</div>
-        <select class="flt-select" id="all-status" onchange="currentPage=1;renderAll()">
-          <option value="">All Status</option>
-          <option value="استخدام" ${sst==='استخدام'?'selected':''}>في الاستخدام</option>
-          <option value="مخزن" ${sst==='مخزن'?'selected':''}>مخزن</option>
-          <option value="صيان" ${sst==='صيان'?'selected':''}>صيانة</option>
-          <option value="متوقف" ${sst==='متوقف'?'selected':''}>متوقف</option>
-        </select></div>
+      <div class="flt-group"><div class="flt-label">Search</div><input class="flt-input" id="all-q" placeholder="Search…" oninput="currentPage=1;renderAll()" value="${esc(sq)}" style="min-width:180px"/></div>
+      <div class="flt-group"><div class="flt-label">Branch</div><select class="flt-select" id="all-company" onchange="currentPage=1;renderAll()"><option value="">All Branches</option>${allBranches.map(b=>`<option value="${esc(b)}"${sc===b?' selected':''}>${esc(b)}</option>`).join('')}</select></div>
+      <div class="flt-group"><div class="flt-label">Category</div><select class="flt-select" id="all-cat" onchange="currentPage=1;renderAll()"><option value="">All Categories</option>${cats.map(c=>`<option value="${esc(c)}"${scat===c?' selected':''}>${esc(c)}</option>`).join('')}</select></div>
+      <div class="flt-group"><div class="flt-label">Status</div><select class="flt-select" id="all-status" onchange="currentPage=1;renderAll()"><option value="">All Status</option><option value="استخدام">قيد الاستخدام</option><option value="مخزن">مخزن</option><option value="صيان">صيانة</option><option value="متوقف">متوقف</option></select></div>
     </div>
     <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:10px">${rows.length} result${rows.length!==1?'s':''} found</div>
     <div class="table-card">
       <div class="tbl-wrap"><table>
         <thead><tr>
-          <th style="cursor:pointer" onclick="sortAll('id')">#</th>
-          <th style="cursor:pointer" onclick="sortAll('name')">Asset</th>
-          <th style="cursor:pointer" onclick="sortAll('branch')">Branch</th>
-          <th style="cursor:pointer" onclick="sortAll('cat')">Category</th>
+          <th onclick="sortAll('id')" style="cursor:pointer"># ↕</th>
+          <th>Photo</th>
+          <th onclick="sortAll('name')" style="cursor:pointer">Asset ↕</th>
+          <th onclick="sortAll('branch')" style="cursor:pointer">Branch ↕</th>
+          <th onclick="sortAll('cat')" style="cursor:pointer">Category ↕</th>
           <th>Model</th>
-          <th style="cursor:pointer" onclick="sortAll('qty')">Qty</th>
-          <th style="cursor:pointer" onclick="sortAll('status')">Status</th>
+          <th onclick="sortAll('qty')" style="cursor:pointer">Qty ↕</th>
+          <th onclick="sortAll('status')" style="cursor:pointer">Status ↕</th>
           <th>Color</th>
-          <th style="cursor:pointer" onclick="sortAll('amount')">Amount</th>
-          <th>Date</th>
+          <th onclick="sortAll('amount')" style="cursor:pointer">Amount ↕</th>
           <th></th>
         </tr></thead>
         <tbody>${sliced.map(d=>`<tr>
           <td><span class="id-tag">#${d.id}</span></td>
+          <td>${d.photo?`<img src="${esc(d.photo)}" class="photo-thumb" onerror="this.style.display='none'"/>`:''}</td>
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
@@ -782,7 +735,6 @@ function renderAll(){
           <td>${statusBadge(d.status)}</td>
           <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'—')}</td>
           <td style="font-family:'Space Mono',monospace;font-size:12px">${fmtMoney(d.amount)}</td>
-          <td style="font-size:11px;color:var(--muted)">${fmtDate(d.purchaseDate)}</td>
           <td><button class="view-btn" onclick="openDetail(${d.id})">View</button></td>
         </tr>`).join('')||'<tr><td colspan="11"><div class="empty">No assets found</div></td></tr>'}</tbody>
       </table></div>
@@ -790,12 +742,12 @@ function renderAll(){
     <div class="pagination">${buildPagination(total)}</div>`;
 }
 
-function sortAll(key){if(sortState.key===key)sortState.dir*=-1;else{sortState.key=key;sortState.dir=1}currentPage=1;renderAll()}
+function sortAll(k){if(sortState.key===k)sortState.dir*=-1;else{sortState.key=k;sortState.dir=1}currentPage=1;renderAll()}
 function buildPagination(total){
   if(total<=1)return'';
   let h='';
   if(currentPage>1)h+=`<button class="pg-btn" onclick="goPg(${currentPage-1})">←</button>`;
-  for(let i=1;i<=Math.min(total,7);i++)h+=`<button class="pg-btn ${i===currentPage?'active':''}" onclick="goPg(${i})">${i}</button>`;
+  for(let i=1;i<=Math.min(total,7);i++)h+=`<button class="pg-btn${i===currentPage?' active':''}" onclick="goPg(${i})">${i}</button>`;
   if(total>7)h+=`<span style="color:var(--muted);font-size:11px">... ${total}</span>`;
   if(currentPage<total)h+=`<button class="pg-btn" onclick="goPg(${currentPage+1})">→</button>`;
   return h;
@@ -806,28 +758,29 @@ function globalSearch(v){switchTab('all');setTimeout(()=>{const el=document.getE
 
 // ===== ANALYTICS =====
 function renderAnalytics(){
-  const host=document.getElementById('page-analytics');
-  host.innerHTML=`
+  document.getElementById('page-analytics').innerHTML=`
     <div class="topbar"><div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">ANALYTICS</div><div style="font-size:20px;font-weight:700">Asset Distribution</div></div></div>
     <div class="charts-grid">
       <div class="chart-card"><div class="chart-header">Units by Branch</div><div class="chart-wrap"><canvas id="c-branch"></canvas></div></div>
       <div class="chart-card"><div class="chart-header">By Category</div><div class="chart-wrap"><canvas id="c-cat"></canvas></div></div>
       <div class="chart-card"><div class="chart-header">By Status</div><div class="chart-wrap"><canvas id="c-status"></canvas></div></div>
-      <div class="chart-card"><div class="chart-header">By Brand / Company</div><div class="chart-wrap"><canvas id="c-brand"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">By Brand</div><div class="chart-wrap"><canvas id="c-brand"></canvas></div></div>
     </div>`;
-  Object.values(chartInstances).forEach(c=>{try{c.destroy()}catch(e){}});chartInstances={};
+  Object.values(chartInstances).forEach(c=>{try{c.destroy()}catch(e){}});
+  chartInstances={};
   const css=getComputedStyle(document.documentElement);
-  const txt=css.getPropertyValue('--muted2').trim();const grid=css.getPropertyValue('--border').trim();
+  const txt=css.getPropertyValue('--muted2').trim();
+  const grid=css.getPropertyValue('--border').trim();
   Chart.defaults.color=txt;Chart.defaults.font.family='Space Grotesk';
   const agg=getBranchAgg();const bn=Object.keys(agg);
   chartInstances.branch=new Chart(document.getElementById('c-branch'),{type:'bar',data:{labels:bn,datasets:[{data:bn.map(b=>agg[b].units),backgroundColor:bn.map(b=>brandColor(agg[b].brand)),borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
   const cats={};allAssets.forEach(d=>cats[d.category]=(cats[d.category]||0)+d.qty);const ck=Object.keys(cats);
   chartInstances.cat=new Chart(document.getElementById('c-cat'),{type:'doughnut',data:{labels:ck,datasets:[{data:ck.map(c=>cats[c]),backgroundColor:ck.map(catColor),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
   const st={};allAssets.forEach(d=>{const k=d.status||'غير محدد';st[k]=(st[k]||0)+d.qty});const sk=Object.keys(st);
-  const stc={'في الاستخدام':'#00FF88','متوقف':'#FF3366','تالف':'#FF3366','صيانة':'#FFB020','مخزن':'#60A5FA','غير محدد':'#4A6080'};
+  const stc={'قيد الاستخدام':'#00FF88','في الاستخدام':'#00FF88','متوقف':'#FF3366','تالف':'#FF3366','صيانة':'#FFB020','مخزن':'#60A5FA'};
   chartInstances.status=new Chart(document.getElementById('c-status'),{type:'doughnut',data:{labels:sk,datasets:[{data:sk.map(k=>st[k]),backgroundColor:sk.map(k=>stc[k]||'#8B5CF6'),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
   const br={};allAssets.forEach(d=>br[d.brand]=(br[d.brand]||0)+d.qty);const bk=Object.keys(br);
-  chartInstances.brand=new Chart(document.getElementById('c-brand'),{type:'bar',data:{labels:bk,datasets:[{data:bk.map(b=>br[b]),backgroundColor:bk.map(b=>brandColor(b)),borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
+  chartInstances.brand=new Chart(document.getElementById('c-brand'),{type:'bar',data:{labels:bk,datasets:[{data:bk.map(b=>br[b]),backgroundColor:bk.map(brandColor),borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
 }
 
 // ===== DETAIL MODAL =====
@@ -835,11 +788,12 @@ function openDetail(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   const rows=[['Branch',d.branch],['Category',d.category],['Model',d.model||'—'],['Status',d.status||'—'],['Color',d.color||'—'],['Quantity',d.qty],['Amount',fmtMoney(d.amount)],['Total Value',fmtMoney(d.amount*d.qty)],['Invoice',d.invoice||'—'],['Purchase Date',fmtDate(d.purchaseDate)]];
   document.getElementById('modal-detail-body').innerHTML=`
+    ${d.photo?`<img src="${esc(d.photo)}" style="width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:16px" onerror="this.style.display='none'"/>`:''}
     <div class="modal-info">
       <div class="modal-info-row"><span class="modal-info-label">Asset Name</span><span class="modal-info-val">${esc(d.name)}</span></div>
-      ${rows.map(([k,v])=>`<div class="modal-info-row"><span class="modal-info-label">${esc(k)}</span><span class="modal-info-val">${esc(String(v))}</span></div>`).join('')}
+      ${rows.map(([k,v])=>`<div class="modal-info-row"><span class="modal-info-label">${k}</span><span class="modal-info-val">${esc(String(v))}</span></div>`).join('')}
     </div>
-    ${d.notes?`<div class="modal-label">Notes</div><div style="background:var(--surface2);border-radius:10px;padding:12px;font-size:13px;line-height:1.6;color:var(--text)">${esc(d.notes)}</div>`:''}`;
+    ${d.notes?`<div class="modal-label">Notes</div><div style="background:var(--surface2);border-radius:10px;padding:12px;font-size:13px;line-height:1.6">${esc(d.notes)}</div>`:''}`;
   document.getElementById('modal-detail').classList.add('open');
 }
 
@@ -850,66 +804,67 @@ function populateBranchSelect(){
   sel.innerHTML='<option value="">Select Branch</option>'+branches.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
 }
 function openAddAsset(){populateBranchSelect();document.getElementById('modal-add').classList.add('open')}
+
 async function submitNewAsset(){
   const name=document.getElementById('add-name').value.trim();
   const branch=document.getElementById('add-branch').value;
   const category=document.getElementById('add-category').value;
   const qty=parseInt(document.getElementById('add-qty').value)||1;
-  if(!name||!branch||!category){toast('Please fill all required fields','error');return}
+  if(!name||!branch||!category){toast('Fill all required fields','error');return}
   const btn=document.getElementById('add-submit-btn');
   btn.disabled=true;btn.textContent='Submitting...';
   try{
-    // Try SharePoint, fallback to demo mode
     await getToken();
     const digestR=await fetch(`${SITE}/_api/contextinfo`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`}});
     const digest=(await digestR.json()).d.GetContextWebInformation.FormDigestValue;
-    const amount=parseFloat(document.getElementById('add-amount').value)||0;
     const body={
       "__metadata":{"type":"SP.Data.ListItem"},
-      "Title":name,"AssetType":category,"Status":document.getElementById('add-status').value,
-      "Color":document.getElementById('add-color').value,"SerialNumber":String(qty),
-      "Model":document.getElementById('add-model').value,"PurchasePrice":amount,
-      "ConditionNotes":document.getElementById('add-notes').value,
+      Title:name, AssetType:category,
+      Status:document.getElementById('add-status').value,
+      Color:document.getElementById('add-color').value,
+      SerialNumber:String(qty),
+      Model:document.getElementById('add-model').value,
+      PurchasePrice:parseFloat(document.getElementById('add-amount').value)||0,
+      ConditionNotes:document.getElementById('add-notes').value,
       [BRANCH_KEY]:branch
     };
     const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items`,{
-      method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},
+      method:'POST',
+      headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},
       body:JSON.stringify(body)
     });
     const d2=await r.json();
-    if(d2.d?.ID){toast(`✓ Asset added #${d2.d.ID}`,'success');closeModal('modal-add');await loadAll();}
-    else{toast('Add failed','error')}
-  }catch(e){
-    // Demo fallback: add locally
-    const newId=Math.max(...allAssets.map(x=>x.id))+1;
-    allAssets.unshift({id:newId,branch,brand:(branch.split(/[-–]/)[0]||'').trim(),name,category,model:document.getElementById('add-model').value,status:document.getElementById('add-status').value,color:document.getElementById('add-color').value,qty,notes:document.getElementById('add-notes').value,purchaseDate:'',amount:parseFloat(document.getElementById('add-amount').value)||0,invoice:'',photo:'',created:new Date().toISOString()});
-    toast(`✓ Asset added (demo mode) #${newId}`,'success');
-    closeModal('modal-add');renderTab(currentTab);
-  }
-  finally{btn.disabled=false;btn.textContent='Add Asset'}
+    if(d2.d?.ID){toast(`✓ Asset #${d2.d.ID} added to SharePoint!`,'success');closeModal('modal-add');await loadAll();}
+    else{toast('Add failed: '+(d2.error?.message?.value||JSON.stringify(d2)),'error')}
+  }catch(e){toast('Error: '+e.message,'error')}
+  finally{btn.disabled=false;btn.innerHTML='<svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset'}
 }
 
 // ===== EXPORT =====
 function exportExcel(){
-  const data=allAssets.map(d=>({'ID':d.id,'Name':d.name,'Branch':d.branch,'Brand':d.brand,'Category':d.category,'Model':d.model,'Qty':d.qty,'Status':d.status,'Color':d.color,'Amount SAR':d.amount,'Total SAR':d.amount*d.qty,'Invoice':d.invoice,'Purchase Date':fmtDate(d.purchaseDate),'Notes':d.notes}));
-  const ws=XLSX.utils.json_to_sheet(data);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Inventory');XLSX.writeFile(wb,`Swag_Inventory_${new Date().toISOString().slice(0,10)}.xlsx`);
+  const data=allAssets.map(d=>({ID:d.id,Name:d.name,Branch:d.branch,Brand:d.brand,Category:d.category,Model:d.model,Qty:d.qty,Status:d.status,Color:d.color,'Amount SAR':d.amount,'Total SAR':d.amount*d.qty,Invoice:d.invoice,'Purchase Date':fmtDate(d.purchaseDate),Notes:d.notes}));
+  const ws=XLSX.utils.json_to_sheet(data);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Inventory');
+  XLSX.writeFile(wb,`Swag_Inventory_${new Date().toISOString().slice(0,10)}.xlsx`);
   toast('✓ Excel exported!','success');
 }
 
 // ===== THEME =====
 let currentTheme='dark';
-function toggleTheme(){currentTheme=currentTheme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',currentTheme);if(currentTab==='analytics')setTimeout(renderAnalytics,100)}
+function toggleTheme(){
+  currentTheme=currentTheme==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',currentTheme);
+  if(currentTab==='analytics')setTimeout(renderAnalytics,100);
+}
 
-// ===== MODAL CLOSE =====
 function closeModal(id){document.getElementById(id)?.classList.remove('open')}
 document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))closeModal(e.target.id)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'))});
 
-// ===== TOAST =====
 function toast(msg,type='info'){
   const wrap=document.getElementById('toast-wrap');if(!wrap)return;
   const el=document.createElement('div');el.className=`toast ${type}`;el.textContent=msg;
-  wrap.appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transition='all .3s';setTimeout(()=>el.remove(),300)},3000);
+  wrap.appendChild(el);
+  setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300)},3500);
 }
 
 // ===== BOOT =====
@@ -917,25 +872,22 @@ window.onload=async()=>{
   await initMsal();
   if(!msalInstance)return;
   await msalInstance.initialize();
-  const resp=await msalInstance.handleRedirectPromise();
-  if(resp?.account){setUser(resp.account);accessToken=resp.accessToken;showDashboard();await loadAll();return}
+  try{
+    const resp=await msalInstance.handleRedirectPromise();
+    if(resp?.account){setUser(resp.account);accessToken=resp.accessToken;showDashboard();await loadAll();return}
+  }catch(e){console.error('Redirect error:',e)}
   const accounts=msalInstance.getAllAccounts();
-  if(accounts.length>0){
-    try{await getToken();showDashboard();await loadAll()}
-    catch(e){/* not logged in */}
+  if(accounts.length){
+    try{await getToken();showDashboard();await loadAll();return}
+    catch(e){console.log('Silent fail:',e)}
   }
-  // Show demo even without login
-  if(document.getElementById('login-screen').style.display!=='none'){
-    // Offer demo mode button
-    const card=document.querySelector('.login-card');
-    const demoBtn=document.createElement('button');
-    demoBtn.className='login-btn';demoBtn.style.marginTop='12px';demoBtn.style.background='rgba(139,92,246,.1)';demoBtn.style.borderColor='rgba(139,92,246,.3)';
-    demoBtn.innerHTML='<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/></svg> View Demo (No Login)';
-    demoBtn.onclick=()=>{currentUser={name:'Demo User',email:'demo@swag.com'};document.getElementById('user-name').textContent='Demo User';document.getElementById('user-initial').textContent='D';allAssets=DEMO_DATA;showDashboard();populateBranchSelect();renderTab('overview');buildNav()};
-    card.appendChild(demoBtn);
-  }
-  setInterval(()=>{const tm=document.getElementById('live-time');if(tm&&!tm.textContent.includes('Sync'))tm.textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})},60000);
+  setInterval(()=>{
+    const tm=document.getElementById('live-time');
+    if(tm&&!tm.textContent.includes('Sync'))tm.textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  },60000);
 };
+
+// Auto-refresh every 2 min
 setInterval(()=>{if(document.getElementById('dashboard').style.display!=='none')loadAll()},120000);
 </script>
 </body>
