@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Swag Inventory â€” Control Center v2</title>
+<title>Swag Inventory — Control Center v2</title>
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.4.0/lib/msal-browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -295,7 +295,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
         <div class="user-avatar" id="user-initial">T</div>
         <span id="user-name">Loading...</span>
       </div>
-      <input id="global-search" class="flt-input" placeholder="Search assetsâ€¦" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
+      <input id="global-search" class="flt-input" placeholder="Search assets…" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
       <!-- Notification Bell -->
       <div style="position:relative">
         <div class="notif-bell" onclick="toggleNotifPanel()">
@@ -305,7 +305,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
         </div>
         <div class="notif-panel" id="notif-panel">
           <div class="notif-header">
-            <span>ðŸ”” Alerts</span>
+            <span>🔔 Alerts</span>
             <button class="btn-ghost" style="font-size:10px;padding:3px 8px;border-radius:6px;cursor:pointer;background:var(--surface3);border:1px solid var(--border)" onclick="clearAllNotifs()">Clear All</button>
           </div>
           <div id="notif-list"><div class="notif-empty">No alerts right now</div></div>
@@ -313,7 +313,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
       </div>
       <button class="hdr-btn" onclick="loadAll(true)"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> Refresh</button>
       <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
-      <button class="hdr-btn" onclick="toggleTheme()">ðŸŒ™</button>
+      <button class="hdr-btn" onclick="toggleTheme()">🌙</button>
       <button class="hdr-btn danger" onclick="signOut()">Sign out</button>
     </div>
   </div>
@@ -350,9 +350,9 @@ tr:hover td{background:rgba(0,217,255,.02)}
     <div class="modal-label">Category *</div>
     <select class="modal-select" id="add-category">
       <option value="">Select Category</option>
-      <option>ÙƒÙ…Ø¨ÙŠÙˆØªØ±</option><option>Ù„Ø§Ø¨ØªÙˆØ¨</option><option>Ø´Ø§Ø´Ø©</option>
-      <option>Ø·Ø§Ø¨Ø¹Ø©</option><option>ÙƒØ§Ù…ÙŠØ±Ø§Øª</option><option>ÙƒØ±Ø§Ø³ÙŠ</option>
-      <option>Ø£Ø«Ø§Ø«</option><option>Ø´Ø¨ÙƒØ§Øª</option><option>Ø£Ø®Ø±Ù‰</option>
+      <option>كمبيوتر</option><option>لابتوب</option><option>شاشة</option>
+      <option>طابعة</option><option>كاميرات</option><option>كراسي</option>
+      <option>أثاث</option><option>شبكات</option><option>أخرى</option>
     </select>
     <div class="modal-grid2" style="margin-bottom:14px">
       <div>
@@ -368,15 +368,15 @@ tr:hover td{background:rgba(0,217,255,.02)}
       <div>
         <div class="modal-label">Status</div>
         <select class="modal-select" id="add-status">
-          <option value="Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…">Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…</option>
-          <option value="Ù…Ø®Ø²Ù†">Ù…Ø®Ø²Ù†</option>
-          <option value="ØµÙŠØ§Ù†Ø©">ØµÙŠØ§Ù†Ø©</option>
-          <option value="Ù…ØªÙˆÙ‚Ù">Ù…ØªÙˆÙ‚Ù</option>
+          <option value="قيد الاستخدام">قيد الاستخدام</option>
+          <option value="مخزن">مخزن</option>
+          <option value="صيانة">صيانة</option>
+          <option value="متوقف">متوقف</option>
         </select>
       </div>
       <div>
         <div class="modal-label">Color</div>
-        <input class="modal-input" id="add-color" placeholder="Ø£Ø³ÙˆØ¯ØŒ Ø±Ù…Ø§Ø¯ÙŠ..."/>
+        <input class="modal-input" id="add-color" placeholder="أسود، رمادي..."/>
       </div>
     </div>
     <div class="modal-grid2" style="margin-bottom:14px">
@@ -390,7 +390,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
       </div>
     </div>
 
-    <!-- âœ… IMAGE UPLOAD -->
+    <!-- ✅ IMAGE UPLOAD -->
     <div class="modal-label">Photo</div>
     <div class="photo-upload-area" id="photo-drop" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handlePhotoDrop(event)">
       <input type="file" accept="image/*" id="photo-file-input" onchange="handlePhotoSelect(event)"/>
@@ -436,7 +436,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 <!-- ========== CONFIRM DELETE ========== -->
 <div class="confirm-overlay" id="confirm-delete">
   <div class="confirm-box">
-    <div style="font-size:40px;margin-bottom:12px">ðŸ—‘ï¸</div>
+    <div style="font-size:40px;margin-bottom:12px">🗑️</div>
     <h3>Delete Asset?</h3>
     <p id="confirm-delete-msg">This action cannot be undone. The asset will be permanently removed from SharePoint.</p>
     <div class="confirm-btns">
@@ -465,20 +465,20 @@ const SCOPES     = [
 
 // ============================================================
 const BRAND_COLOR = {
-  'Ø³ÙˆØ§Ø¬':'#d4322c','swag':'#d4322c',
-  'Ù„Ø§Ø±ÙˆØ´':'#2f9aa3','laroche':'#2f9aa3',
-  'Ø¬ÙˆÙ„Ø¯':'#c9a227','gold':'#c9a227',
-  'Ø§ÙˆØªÙÙŠØª':'#7c5cff','Ø£ÙˆØªÙÙŠØª':'#7c5cff','outfit':'#7c5cff'
+  'سواج':'#d4322c','swag':'#d4322c',
+  'لاروش':'#2f9aa3','laroche':'#2f9aa3',
+  'جولد':'#c9a227','gold':'#c9a227',
+  'اوتفيت':'#7c5cff','أوتفيت':'#7c5cff','outfit':'#7c5cff'
 };
 const CAT_COLORS = {
-  'ÙƒÙ…Ø¨ÙŠÙˆØªØ±':'#3fb9c4','Ù„Ø§Ø¨ØªÙˆØ¨':'#60A5FA','Ø´Ø§Ø´Ø©':'#8B5CF6',
-  'Ø·Ø§Ø¨Ø¹Ø©':'#FFB020','ÙƒØ§Ù…ÙŠØ±Ø§Øª':'#f87171','ÙƒØ±Ø§Ø³ÙŠ':'#D4A84B',
-  'Ø£Ø«Ø§Ø«':'#b07a3a','Ø´Ø¨ÙƒØ§Øª':'#34d399','Ø£Ø®Ø±Ù‰':'#8a97a8'
+  'كمبيوتر':'#3fb9c4','لابتوب':'#60A5FA','شاشة':'#8B5CF6',
+  'طابعة':'#FFB020','كاميرات':'#f87171','كراسي':'#D4A84B',
+  'أثاث':'#b07a3a','شبكات':'#34d399','أخرى':'#8a97a8'
 };
 const COLOR_HEX = {
-  'Ø£Ø³ÙˆØ¯':'#1c1c1e','Ø±Ù…Ø§Ø¯ÙŠ':'#8a8f98','Ø£Ø¨ÙŠØ¶':'#f3f4f6',
-  'ÙØ¶ÙŠ':'#cfd4d9','Ø¨Ù†ÙŠ':'#6b4a2b','Ø°Ù‡Ø¨ÙŠ':'#c9a227',
-  'Ø£Ø²Ø±Ù‚':'#2f6fed','Ø£Ø­Ù…Ø±':'#d6473e','Ø£Ø®Ø¶Ø±':'#1f9e6a'
+  'أسود':'#1c1c1e','رمادي':'#8a8f98','أبيض':'#f3f4f6',
+  'فضي':'#cfd4d9','بني':'#6b4a2b','ذهبي':'#c9a227',
+  'أزرق':'#2f6fed','أحمر':'#d6473e','أخضر':'#1f9e6a'
 };
 
 function catColor(c){
@@ -543,10 +543,10 @@ function showDashboard(){
 
 // ===== DATA MAPPING =====
 function mapItem(it){
-  const branch=(it[BRANCH_KEY]||'ØºÙŠØ± Ù…Ø­Ø¯Ø¯').toString().trim();
-  const brand=(branch.split(/[-â€“]/)[0]||'').trim()||'â€”';
+  const branch=(it[BRANCH_KEY]||'غير محدد').toString().trim();
+  const brand=(branch.split(/[-–]/)[0]||'').trim()||'—';
 
-  // âœ… FIXED IMAGE LOADING â€” multiple strategies
+  // ✅ FIXED IMAGE LOADING — multiple strategies
   let photo='';
   try{
     // Strategy 1: DevicePhoto as JSON object
@@ -570,8 +570,8 @@ function mapItem(it){
   const qn=parseInt(qraw.replace(/\D/g,''),10);
   return{
     id:it.ID, branch, brand,
-    name:it.Title||'â€”',
-    category:it.AssetType||'Ø£Ø®Ø±Ù‰',
+    name:it.Title||'—',
+    category:it.AssetType||'أخرى',
     model:it.Model||'',
     status:it.Status||'',
     color:it.Color||'',
@@ -605,7 +605,7 @@ async function loadAll(refresh){
       url=d['odata.nextLink']||null;
     }
     allAssets=items.map(mapItem);
-    if(refresh)toast(`âœ“ ${allAssets.length} assets loaded`,'success');
+    if(refresh)toast(`✓ ${allAssets.length} assets loaded`,'success');
     setLive(new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}));
     populateBranchSelect();
     checkAlerts();
@@ -622,10 +622,10 @@ function setLive(t){const el=document.getElementById('live-time');if(el)el.textC
 function checkAlerts(){
   notifications=[];
   // Maintenance alert
-  const maint=allAssets.filter(d=>(d.status||'').includes('ØµÙŠØ§Ù†'));
-  if(maint.length>0)notifications.push({type:'warn',title:`${maint.length} assets under maintenance`,sub:'Status: ØµÙŠØ§Ù†Ø©',color:CAT_COLORS['Ø·Ø§Ø¨Ø¹Ø©'],ids:maint.map(d=>d.id)});
+  const maint=allAssets.filter(d=>(d.status||'').includes('صيان'));
+  if(maint.length>0)notifications.push({type:'warn',title:`${maint.length} assets under maintenance`,sub:'Status: صيانة',color:CAT_COLORS['طابعة'],ids:maint.map(d=>d.id)});
   // Stopped/damaged
-  const stopped=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('Ù…ØªÙˆÙ‚Ù')||v.includes('ØªØ§Ù„Ù')});
+  const stopped=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('متوقف')||v.includes('تالف')});
   if(stopped.length>0)notifications.push({type:'error',title:`${stopped.length} assets stopped/damaged`,sub:'Require immediate attention',color:'#FF3366',ids:stopped.map(d=>d.id)});
   // No status
   const noStatus=allAssets.filter(d=>!d.status||d.status.trim()==='');
@@ -639,7 +639,7 @@ function renderNotifPanel(){
   if(!count||!list)return;
   if(notifications.length===0){
     count.classList.remove('show');
-    list.innerHTML='<div class="notif-empty">âœ… All assets look good!</div>';
+    list.innerHTML='<div class="notif-empty">✅ All assets look good!</div>';
     return;
   }
   count.textContent=notifications.length;
@@ -659,7 +659,7 @@ function filterByAlert(idx){
   setTimeout(()=>{
     const el=document.getElementById('all-q');
     if(el){
-      // Filter by IDs â€” highlight matching
+      // Filter by IDs — highlight matching
       el.value='';renderAll();
     }
   },100);
@@ -676,28 +676,28 @@ document.addEventListener('click',e=>{
 
 // ===== HELPERS =====
 function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
-function fmtMoney(n){return n?fmt(n)+' SAR':'â€”'}
-function fmtDate(d){if(!d)return'â€”';try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(_){return d}}
+function fmtMoney(n){return n?fmt(n)+' SAR':'—'}
+function fmtDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(_){return d}}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
 function statusBadge(s){
   const v=(s||'').toLowerCase();
-  if(v.includes('Ø§Ø³ØªØ®Ø¯Ø§Ù…')||v.includes('Ù‚ÙŠØ¯'))return`<span class="badge b-use"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('Ù…ØªÙˆÙ‚Ù')||v.includes('ØªØ§Ù„Ù'))return`<span class="badge b-stop"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('ØµÙŠØ§Ù†'))return`<span class="badge b-fix"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('Ù…Ø®Ø²Ù†'))return`<span class="badge b-store"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(!s)return`<span class="badge b-def">â€”</span>`;
+  if(v.includes('استخدام')||v.includes('قيد'))return`<span class="badge b-use"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('متوقف')||v.includes('تالف'))return`<span class="badge b-stop"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('صيان'))return`<span class="badge b-fix"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('مخزن'))return`<span class="badge b-store"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(!s)return`<span class="badge b-def">—</span>`;
   return`<span class="badge b-def"><span class="b-dot"></span>${esc(s)}</span>`;
 }
 function assetIcon(cat,name){
   const n=(name||'')+(cat||'');
-  if(n.includes('ÙƒØ§Ø´ÙŠØ±')||n.includes('ÙƒÙ…Ø¨ÙŠÙˆØªØ±'))return'<path d="M3 5h18v11H3z"/><path d="M8 21h8M12 16v5"/>';
-  if(n.includes('Ù„Ø§Ø¨ØªÙˆØ¨'))return'<path d="M4 5h16v10H4z"/><path d="M2 19h20l-2-2H4z"/>';
-  if(n.includes('Ø´Ø§Ø´Ø©'))return'<path d="M3 4h18v12H3z"/><path d="M9 20h6M12 16v4"/>';
-  if(n.includes('Ø·Ø§Ø¨Ø¹Ø©'))return'<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>';
-  if(n.includes('ÙƒØ±Ø³ÙŠ'))return'<path d="M6 18v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6"/><path d="M6 21v-3M18 21v-3M4 12h16"/>';
-  if(n.includes('ÙƒØ§Ù…ÙŠØ±Ø§'))return'<path d="M2 7h13l3 3v7H2z"/><circle cx="9" cy="13" r="3"/><path d="M18 9l4-2v9l-4-2"/>';
-  if(n.includes('Ø·Ø§ÙˆÙ„Ø©')||n.includes('Ø£Ø«Ø§Ø«'))return'<path d="M3 7h18M5 7v13M19 7v13M3 13h18"/>';
+  if(n.includes('كاشير')||n.includes('كمبيوتر'))return'<path d="M3 5h18v11H3z"/><path d="M8 21h8M12 16v5"/>';
+  if(n.includes('لابتوب'))return'<path d="M4 5h16v10H4z"/><path d="M2 19h20l-2-2H4z"/>';
+  if(n.includes('شاشة'))return'<path d="M3 4h18v12H3z"/><path d="M9 20h6M12 16v4"/>';
+  if(n.includes('طابعة'))return'<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>';
+  if(n.includes('كرسي'))return'<path d="M6 18v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6"/><path d="M6 21v-3M18 21v-3M4 12h16"/>';
+  if(n.includes('كاميرا'))return'<path d="M2 7h13l3 3v7H2z"/><circle cx="9" cy="13" r="3"/><path d="M18 9l4-2v9l-4-2"/>';
+  if(n.includes('طاولة')||n.includes('أثاث'))return'<path d="M3 7h18M5 7v13M19 7v13M3 13h18"/>';
   return'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/>';
 }
 function barcode(seed){
@@ -757,7 +757,7 @@ function renderOverview(){
   const agg=getBranchAgg();const branches=Object.keys(agg);
   const units=allAssets.reduce((s,d)=>s+d.qty,0);
   const value=allAssets.reduce((s,d)=>s+d.amount*d.qty,0);
-  const inUse=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('Ø§Ø³ØªØ®Ø¯Ø§Ù…')||v.includes('Ù‚ÙŠØ¯')}).reduce((s,d)=>s+d.qty,0);
+  const inUse=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('استخدام')||v.includes('قيد')}).reduce((s,d)=>s+d.qty,0);
   const cats=new Set(allAssets.map(d=>d.category)).size;
   const top=branches.map(b=>({b,u:agg[b].units})).sort((x,y)=>y.u-x.u).slice(0,6);
   document.getElementById('page-overview').innerHTML=`
@@ -777,14 +777,14 @@ function renderOverview(){
       <div class="stat-card c6"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div><div class="stat-num" id="s-ca">0</div><div class="stat-label">Categories</div></div>
     </div>
     <div class="kpi-strip">
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('ØµÙŠØ§Ù†')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Under Maintenance</div></div>
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('Ù…ØªÙˆÙ‚Ù')||v.includes('ØªØ§Ù„Ù')}).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Stopped/Damaged</div></div>
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('Ù…Ø®Ø²Ù†')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">In Storage</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('صيان')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Under Maintenance</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('متوقف')||v.includes('تالف')}).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Stopped/Damaged</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('مخزن')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">In Storage</div></div>
       <div class="kpi-box"><div class="kpi-val">${Math.round(inUse/(units||1)*100)}%</div><div class="kpi-lbl">Utilization Rate</div></div>
     </div>
     <div class="topbar" style="margin-bottom:16px">
       <div style="font-size:14px;font-weight:700">Top Branches by Units</div>
-      <button class="btn btn-ghost" onclick="switchTab('branches')" style="font-size:11px;padding:6px 12px">View All â†’</button>
+      <button class="btn btn-ghost" onclick="switchTab('branches')" style="font-size:11px;padding:6px 12px">View All →</button>
     </div>
     <div class="branch-grid">${top.map(({b})=>renderBranchCard(b,agg[b])).join('')}</div>
     <div class="table-card">
@@ -816,7 +816,7 @@ function renderBranchCard(name,a){
     <span class="brand-badge" style="background:${brandColor(a.brand)}">${esc(a.brand)}</span>
     <h3>${esc(name)}</h3>${barcode(name)}
     <div class="branch-footer">
-      <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(c)} Â· ${k}</span>`).join('')}</div>
+      <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(c)} · ${k}</span>`).join('')}</div>
       <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)">${a.types} types</span>
     </div>
   </div>`;
@@ -833,7 +833,7 @@ function renderBranches(){
     <div class="topbar">
       <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">BRANCHES</div><div style="font-size:20px;font-weight:700">All Branches</div></div>
       <div class="filter-row" style="margin:0">
-        <input class="flt-input" placeholder="Search branchesâ€¦" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
+        <input class="flt-input" placeholder="Search branches…" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
         <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
       </div>
     </div>
@@ -849,7 +849,7 @@ function openBranch(name){
 }
 function renderBranchDetail(host){
   const all=allAssets.filter(d=>d.branch===activeBranch);
-  const agg=getBranchAgg()[activeBranch]||{brand:'â€”',types:0,units:0,value:0,cats:{}};
+  const agg=getBranchAgg()[activeBranch]||{brand:'—',types:0,units:0,value:0,cats:{}};
   const catList=['All',...new Set(all.map(d=>d.category))];
   let items=all.filter(d=>activeCat==='All'||d.category===activeCat);
   if(assetSearchQ){const q=assetSearchQ.toLowerCase();items=items.filter(d=>(d.name+d.model+d.category+d.color+d.notes).toLowerCase().includes(q))}
@@ -872,7 +872,7 @@ function renderBranchDetail(host){
       </div>
     </div>
     <div class="filter-row" style="margin-bottom:14px">
-      <input class="flt-input" placeholder="Search assetsâ€¦" oninput="assetSearchQ=this.value;renderBranchDetail(document.getElementById('page-branches'))" value="${esc(assetSearchQ)}" style="min-width:220px"/>
+      <input class="flt-input" placeholder="Search assets…" oninput="assetSearchQ=this.value;renderBranchDetail(document.getElementById('page-branches'))" value="${esc(assetSearchQ)}" style="min-width:220px"/>
     </div>
     <div class="pills">${catList.map(c=>{
       const n=c==='All'?all.length:all.filter(d=>d.category===c).length;
@@ -881,7 +881,7 @@ function renderBranchDetail(host){
     ${Object.keys(groups).length?Object.entries(groups).map(([cat,arr])=>{
       const u=arr.reduce((s,d)=>s+d.qty,0);
       return`<div class="cat-section">
-        <div class="cat-bar"><span class="cat-dot" style="background:${catColor(cat)}"></span><h4>${esc(cat)}</h4><span class="meta">${arr.length} types Â· ${u} units</span></div>
+        <div class="cat-bar"><span class="cat-dot" style="background:${catColor(cat)}"></span><h4>${esc(cat)}</h4><span class="meta">${arr.length} types · ${u} units</span></div>
         <div class="asset-grid">${arr.map(renderAssetCard).join('')}</div>
       </div>`;
     }).join(''):'<div class="empty">No matching assets</div>'}`;
@@ -889,7 +889,7 @@ function renderBranchDetail(host){
 
 function renderAssetCard(d){
   const ic=`<svg viewBox="0 0 24 24" style="width:44px;height:44px;stroke:var(--muted);fill:none;stroke-width:1.5">${assetIcon(d.category,d.name)}</svg>`;
-  // âœ… Fixed image with auth token for SharePoint
+  // ✅ Fixed image with auth token for SharePoint
   const imgHtml=d.photo
     ?`<img src="${esc(d.photo)}" alt="" class="sp-img" data-src="${esc(d.photo)}" onerror="handleImgError(this,'${ic.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')" style="width:100%;height:100%;object-fit:cover"/>`
     :`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${ic}</div>`;
@@ -900,10 +900,10 @@ function renderAssetCard(d){
     </div>
     <div class="asset-body">
       <h5>${esc(d.name)}</h5>
-      <div class="asset-model">${esc(d.model||'â€”')}</div>
+      <div class="asset-model">${esc(d.model||'—')}</div>
       <div class="asset-row">
         <span class="color-dot" style="background:${colorHex(d.color)}"></span>
-        <span style="font-size:12px;color:var(--muted2)">${esc(d.color||'â€”')}</span>
+        <span style="font-size:12px;color:var(--muted2)">${esc(d.color||'—')}</span>
         ${statusBadge(d.status)}
       </div>
     </div>
@@ -932,7 +932,7 @@ function renderAll(){
   const sc=document.getElementById('all-company')?.value||'';
   const scat=document.getElementById('all-cat')?.value||'';
   const sst=document.getElementById('all-status')?.value||'';
-  // âœ… ADVANCED FILTERS
+  // ✅ ADVANCED FILTERS
   const dateFrom=document.getElementById('adv-date-from')?.value||'';
   const dateTo=document.getElementById('adv-date-to')?.value||'';
   const amtMin=document.getElementById('adv-amt-min')?.value||'';
@@ -965,19 +965,19 @@ function renderAll(){
       <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">REGISTRY</div><div style="font-size:20px;font-weight:700">All Assets</div></div>
       <div class="topbar-actions">
         <button class="btn btn-ghost" onclick="toggleAdvFilters()"><svg class="ico" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg> Advanced Filters</button>
-        <button class="btn btn-ghost" onclick="clearAllFilters()">âœ• Clear</button>
+        <button class="btn btn-ghost" onclick="clearAllFilters()">✕ Clear</button>
         <button class="btn btn-ghost" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
         <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
       </div>
     </div>
     <div class="filter-row">
-      <div class="flt-group"><div class="flt-label">Search</div><input class="flt-input" id="all-q" placeholder="Searchâ€¦" oninput="currentPage=1;renderAll()" value="${esc(sq)}" style="min-width:180px"/></div>
+      <div class="flt-group"><div class="flt-label">Search</div><input class="flt-input" id="all-q" placeholder="Search…" oninput="currentPage=1;renderAll()" value="${esc(sq)}" style="min-width:180px"/></div>
       <div class="flt-group"><div class="flt-label">Branch</div><select class="flt-select" id="all-company" onchange="currentPage=1;renderAll()"><option value="">All Branches</option>${allBranches.map(b=>`<option value="${esc(b)}"${sc===b?' selected':''}>${esc(b)}</option>`).join('')}</select></div>
       <div class="flt-group"><div class="flt-label">Category</div><select class="flt-select" id="all-cat" onchange="currentPage=1;renderAll()"><option value="">All Categories</option>${cats.map(c=>`<option value="${esc(c)}"${scat===c?' selected':''}>${esc(c)}</option>`).join('')}</select></div>
-      <div class="flt-group"><div class="flt-label">Status</div><select class="flt-select" id="all-status" onchange="currentPage=1;renderAll()"><option value="">All Status</option><option value="Ø§Ø³ØªØ®Ø¯Ø§Ù…">Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…</option><option value="Ù…Ø®Ø²Ù†">Ù…Ø®Ø²Ù†</option><option value="ØµÙŠØ§Ù†">ØµÙŠØ§Ù†Ø©</option><option value="Ù…ØªÙˆÙ‚Ù">Ù…ØªÙˆÙ‚Ù</option></select></div>
+      <div class="flt-group"><div class="flt-label">Status</div><select class="flt-select" id="all-status" onchange="currentPage=1;renderAll()"><option value="">All Status</option><option value="استخدام">قيد الاستخدام</option><option value="مخزن">مخزن</option><option value="صيان">صيانة</option><option value="متوقف">متوقف</option></select></div>
     </div>
 
-    <!-- âœ… ADVANCED FILTERS PANEL -->
+    <!-- ✅ ADVANCED FILTERS PANEL -->
     <div class="adv-filter-panel${advOpen?' open':''}" id="adv-filter-panel">
       <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'Space Mono',monospace">Advanced Filters</div>
       <div class="adv-filter-grid">
@@ -985,7 +985,7 @@ function renderAll(){
         <div class="flt-group"><div class="flt-label">Date To</div><input type="date" class="flt-input" id="adv-date-to" onchange="currentPage=1;renderAll()" value="${dateTo}"/></div>
         <div class="flt-group"><div class="flt-label">Amount Min (SAR)</div><input type="number" class="flt-input" id="adv-amt-min" placeholder="0" oninput="currentPage=1;renderAll()" value="${amtMin}"/></div>
         <div class="flt-group"><div class="flt-label">Amount Max (SAR)</div><input type="number" class="flt-input" id="adv-amt-max" placeholder="99999" oninput="currentPage=1;renderAll()" value="${amtMax}"/></div>
-        <div class="flt-group"><div class="flt-label">Color</div><input class="flt-input" id="adv-color" placeholder="Ø£Ø³ÙˆØ¯ØŒ Ø±Ù…Ø§Ø¯ÙŠâ€¦" oninput="currentPage=1;renderAll()" value="${colorFlt}"/></div>
+        <div class="flt-group"><div class="flt-label">Color</div><input class="flt-input" id="adv-color" placeholder="أسود، رمادي…" oninput="currentPage=1;renderAll()" value="${colorFlt}"/></div>
       </div>
     </div>
 
@@ -993,16 +993,16 @@ function renderAll(){
     <div class="table-card">
       <div class="tbl-wrap"><table>
         <thead><tr>
-          <th onclick="sortAll('id')" style="cursor:pointer"># â†•</th>
+          <th onclick="sortAll('id')" style="cursor:pointer"># ↕</th>
           <th>Photo</th>
-          <th onclick="sortAll('name')" style="cursor:pointer">Asset â†•</th>
-          <th onclick="sortAll('branch')" style="cursor:pointer">Branch â†•</th>
-          <th onclick="sortAll('cat')" style="cursor:pointer">Category â†•</th>
+          <th onclick="sortAll('name')" style="cursor:pointer">Asset ↕</th>
+          <th onclick="sortAll('branch')" style="cursor:pointer">Branch ↕</th>
+          <th onclick="sortAll('cat')" style="cursor:pointer">Category ↕</th>
           <th>Model</th>
-          <th onclick="sortAll('qty')" style="cursor:pointer">Qty â†•</th>
-          <th onclick="sortAll('status')" style="cursor:pointer">Status â†•</th>
+          <th onclick="sortAll('qty')" style="cursor:pointer">Qty ↕</th>
+          <th onclick="sortAll('status')" style="cursor:pointer">Status ↕</th>
           <th>Color</th>
-          <th onclick="sortAll('amount')" style="cursor:pointer">Amount â†•</th>
+          <th onclick="sortAll('amount')" style="cursor:pointer">Amount ↕</th>
           <th>Actions</th>
         </tr></thead>
         <tbody>${sliced.map(d=>`<tr>
@@ -1011,10 +1011,10 @@ function renderAll(){
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2)">${esc(d.model||'â€”')}</td>
+          <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2)">${esc(d.model||'—')}</td>
           <td style="font-family:'Space Mono',monospace;font-weight:700">${d.qty}</td>
           <td>${statusBadge(d.status)}</td>
-          <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'â€”')}</td>
+          <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'—')}</td>
           <td style="font-family:'Space Mono',monospace;font-size:12px">${fmtMoney(d.amount)}</td>
           <td>
             <div style="display:flex;gap:4px;flex-wrap:wrap">
@@ -1035,10 +1035,10 @@ function sortAll(k){if(sortState.key===k)sortState.dir*=-1;else{sortState.key=k;
 function buildPagination(total){
   if(total<=1)return'';
   let h='';
-  if(currentPage>1)h+=`<button class="pg-btn" onclick="goPg(${currentPage-1})">â†</button>`;
+  if(currentPage>1)h+=`<button class="pg-btn" onclick="goPg(${currentPage-1})">←</button>`;
   for(let i=1;i<=Math.min(total,7);i++)h+=`<button class="pg-btn${i===currentPage?' active':''}" onclick="goPg(${i})">${i}</button>`;
   if(total>7)h+=`<span style="color:var(--muted);font-size:11px">... ${total}</span>`;
-  if(currentPage<total)h+=`<button class="pg-btn" onclick="goPg(${currentPage+1})">â†’</button>`;
+  if(currentPage<total)h+=`<button class="pg-btn" onclick="goPg(${currentPage+1})">→</button>`;
   return h;
 }
 function goPg(p){currentPage=p;renderAll()}
@@ -1065,8 +1065,8 @@ function renderAnalytics(){
   chartInstances.branch=new Chart(document.getElementById('c-branch'),{type:'bar',data:{labels:bn,datasets:[{data:bn.map(b=>agg[b].units),backgroundColor:bn.map(b=>brandColor(agg[b].brand)),borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
   const cats={};allAssets.forEach(d=>cats[d.category]=(cats[d.category]||0)+d.qty);const ck=Object.keys(cats);
   chartInstances.cat=new Chart(document.getElementById('c-cat'),{type:'doughnut',data:{labels:ck,datasets:[{data:ck.map(c=>cats[c]),backgroundColor:ck.map(catColor),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
-  const st={};allAssets.forEach(d=>{const k=d.status||'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';st[k]=(st[k]||0)+d.qty});const sk=Object.keys(st);
-  const stc={'Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…':'#00FF88','ÙÙŠ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…':'#00FF88','Ù…ØªÙˆÙ‚Ù':'#FF3366','ØªØ§Ù„Ù':'#FF3366','ØµÙŠØ§Ù†Ø©':'#FFB020','Ù…Ø®Ø²Ù†':'#60A5FA'};
+  const st={};allAssets.forEach(d=>{const k=d.status||'غير محدد';st[k]=(st[k]||0)+d.qty});const sk=Object.keys(st);
+  const stc={'قيد الاستخدام':'#00FF88','في الاستخدام':'#00FF88','متوقف':'#FF3366','تالف':'#FF3366','صيانة':'#FFB020','مخزن':'#60A5FA'};
   chartInstances.status=new Chart(document.getElementById('c-status'),{type:'doughnut',data:{labels:sk,datasets:[{data:sk.map(k=>st[k]),backgroundColor:sk.map(k=>stc[k]||'#8B5CF6'),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
   const br={};allAssets.forEach(d=>br[d.brand]=(br[d.brand]||0)+d.qty);const bk=Object.keys(br);
   chartInstances.brand=new Chart(document.getElementById('c-brand'),{type:'bar',data:{labels:bk,datasets:[{data:bk.map(b=>br[b]),backgroundColor:bk.map(brandColor),borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
@@ -1075,7 +1075,7 @@ function renderAnalytics(){
 // ===== DETAIL MODAL =====
 function openDetail(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
-  const rows=[['Branch',d.branch],['Category',d.category],['Model',d.model||'â€”'],['Status',d.status||'â€”'],['Color',d.color||'â€”'],['Quantity',d.qty],['Amount',fmtMoney(d.amount)],['Total Value',fmtMoney(d.amount*d.qty)],['Invoice',d.invoice||'â€”'],['Purchase Date',fmtDate(d.purchaseDate)],['Created',fmtDate(d.created)]];
+  const rows=[['Branch',d.branch],['Category',d.category],['Model',d.model||'—'],['Status',d.status||'—'],['Color',d.color||'—'],['Quantity',d.qty],['Amount',fmtMoney(d.amount)],['Total Value',fmtMoney(d.amount*d.qty)],['Invoice',d.invoice||'—'],['Purchase Date',fmtDate(d.purchaseDate)],['Created',fmtDate(d.created)]];
   document.getElementById('modal-detail-body').innerHTML=`
     ${d.photo?`<img src="${esc(d.photo)}" style="width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:16px" onerror="this.style.display='none'" crossorigin="anonymous" data-src="${esc(d.photo)}" id="detail-hero-img"/>`:''}
     <div class="modal-info">
@@ -1117,13 +1117,13 @@ function openAddAsset(){
   ['add-name','add-model','add-color','add-invoice','add-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   document.getElementById('add-qty').value='1';
   document.getElementById('add-amount').value='';
-  document.getElementById('add-status').value='Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…';
+  document.getElementById('add-status').value='قيد الاستخدام';
   document.getElementById('add-category').value='';
   populateBranchSelect();
   document.getElementById('modal-add').classList.add('open');
 }
 
-// âœ… EDIT ASSET
+// ✅ EDIT ASSET
 function openEditAsset(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   uploadedPhotoBase64=null;
@@ -1221,7 +1221,7 @@ async function submitAsset(){
         headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},
         body:JSON.stringify(body)
       });
-      if(r.status===204||r.ok){toast(`âœ“ Asset #${editId} updated!`,'success');closeModal('modal-add');await loadAll();}
+      if(r.status===204||r.ok){toast(`✓ Asset #${editId} updated!`,'success');closeModal('modal-add');await loadAll();}
       else{const t=await r.text();toast('Update failed: '+t.slice(0,100),'error')}
     }else{
       r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items`,{
@@ -1230,7 +1230,7 @@ async function submitAsset(){
         body:JSON.stringify(body)
       });
       const d2=await r.json();
-      if(d2.d?.ID){toast(`âœ“ Asset #${d2.d.ID} added!`,'success');closeModal('modal-add');await loadAll();}
+      if(d2.d?.ID){toast(`✓ Asset #${d2.d.ID} added!`,'success');closeModal('modal-add');await loadAll();}
       else{toast('Add failed: '+(d2.error?.message?.value||JSON.stringify(d2)),'error')}
     }
   }catch(e){toast('Error: '+e.message,'error')}
@@ -1255,7 +1255,7 @@ async function confirmDeleteAsset(){
       method:'DELETE',
       headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*'}
     });
-    if(r.status===200||r.status===204){toast(`âœ“ Asset #${id} deleted`,'success');await loadAll();}
+    if(r.status===200||r.status===204){toast(`✓ Asset #${id} deleted`,'success');await loadAll();}
     else{const t=await r.text();toast('Delete failed: '+t.slice(0,100),'error')}
   }catch(e){toast('Error: '+e.message,'error')}
 }
@@ -1265,7 +1265,7 @@ function openQR(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   const qrData=JSON.stringify({id:d.id,name:d.name,branch:d.branch,category:d.category,qty:d.qty,status:d.status});
   document.getElementById('qr-name').textContent=d.name;
-  document.getElementById('qr-branch').textContent=d.branch+' Â· #'+d.id;
+  document.getElementById('qr-branch').textContent=d.branch+' · #'+d.id;
   const canvas=document.getElementById('qr-canvas');
   QRCode.toCanvas(canvas,qrData,{width:200,margin:2,color:{dark:'#0E1117',light:'#F6F9FF'}},err=>{if(err)console.error(err)});
   document.getElementById('modal-qr').classList.add('open');
@@ -1308,19 +1308,19 @@ function printAsset(id){
     @media print{body{padding:0}}
   </style></head><body>
     <h2>${esc(d.name)}</h2>
-    <div class="sub">Asset #${d.id} Â· ${esc(d.branch)}</div>
+    <div class="sub">Asset #${d.id} · ${esc(d.branch)}</div>
     <hr/>
     <table>
       <tr><td>Branch</td><td>${esc(d.branch)}</td></tr>
       <tr><td>Category</td><td>${esc(d.category)}</td></tr>
-      <tr><td>Model</td><td>${esc(d.model||'â€”')}</td></tr>
-      <tr><td>Status</td><td>${esc(d.status||'â€”')}</td></tr>
-      <tr><td>Color</td><td>${esc(d.color||'â€”')}</td></tr>
+      <tr><td>Model</td><td>${esc(d.model||'—')}</td></tr>
+      <tr><td>Status</td><td>${esc(d.status||'—')}</td></tr>
+      <tr><td>Color</td><td>${esc(d.color||'—')}</td></tr>
       <tr><td>Quantity</td><td>${d.qty}</td></tr>
       <tr><td>Purchase Amount</td><td>${fmtMoney(d.amount)}</td></tr>
       <tr><td>Total Value</td><td>${fmtMoney(d.amount*d.qty)}</td></tr>
-      <tr><td>Invoice</td><td>${esc(d.invoice||'â€”')}</td></tr>
-      <tr><td>Notes</td><td>${esc(d.notes||'â€”')}</td></tr>
+      <tr><td>Invoice</td><td>${esc(d.invoice||'—')}</td></tr>
+      <tr><td>Notes</td><td>${esc(d.notes||'—')}</td></tr>
       <tr><td>Added</td><td>${fmtDate(d.created)}</td></tr>
     </table>
     <div style="margin-top:24px;font-size:11px;color:#aaa">Printed: ${new Date().toLocaleString()}</div>
@@ -1334,7 +1334,7 @@ function exportExcel(){
   const data=allAssets.map(d=>({ID:d.id,Name:d.name,Branch:d.branch,Brand:d.brand,Category:d.category,Model:d.model,Qty:d.qty,Status:d.status,Color:d.color,'Amount SAR':d.amount,'Total SAR':d.amount*d.qty,Invoice:d.invoice,'Purchase Date':fmtDate(d.purchaseDate),Notes:d.notes}));
   const ws=XLSX.utils.json_to_sheet(data);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Inventory');
   XLSX.writeFile(wb,`Swag_Inventory_${new Date().toISOString().slice(0,10)}.xlsx`);
-  toast('âœ“ Excel exported!','success');
+  toast('✓ Excel exported!','success');
 }
 
 // ===== THEME =====
@@ -1352,8 +1352,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelec
 function toast(msg,type='info'){
   const wrap=document.getElementById('toast-wrap');if(!wrap)return;
   const el=document.createElement('div');el.className=`toast ${type}`;
-  const icons={success:'âœ…',error:'âŒ',info:'â„¹ï¸',warn:'âš ï¸'};
-  el.innerHTML=`<span>${icons[type]||'â„¹ï¸'}</span><span>${esc(msg)}</span>`;
+  const icons={success:'✅',error:'❌',info:'ℹ️',warn:'⚠️'};
+  el.innerHTML=`<span>${icons[type]||'ℹ️'}</span><span>${esc(msg)}</span>`;
   wrap.appendChild(el);
   setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300)},3500);
 }
