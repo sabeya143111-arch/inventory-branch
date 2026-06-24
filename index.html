@@ -546,23 +546,23 @@ function mapItem(it){
   const branch=(it[BRANCH_KEY]||'غير محدد').toString().trim();
   const brand=(branch.split(/[-–]/)[0]||'').trim()||'—';
 
-  // ✅ FIXED IMAGE LOADING — multiple strategies
+  // DevicePhoto (Image column) stores the picture as a LIST-ITEM ATTACHMENT.
   let photo='';
   try{
-    // Strategy 1: DevicePhoto as JSON object
-    if(it.DevicePhoto){
-      let p=it.DevicePhoto;
-      if(typeof p==='string')p=JSON.parse(p);
-      if(p?.serverRelativeUrl){
-        const base=p.serverUrl||SITE.replace(/\/sites\/.+/,'');
-        photo=base+p.serverRelativeUrl;
-      }else if(p?.Url){photo=p.Url}
-      else if(typeof it.DevicePhoto==='string'&&it.DevicePhoto.startsWith('http')){
-        photo=it.DevicePhoto;
-      }
+    let p=it.DevicePhoto;
+    if(typeof p==='string')p=JSON.parse(p);
+    if(p?.fileName){
+      // attachment endpoint (CORS-safe + honours bearer token)
+      photo=`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${it.ID})/AttachmentFiles('${encodeURIComponent(p.fileName)}')/$value`;
+    }else if(p?.serverRelativeUrl){
+      const base=p.serverUrl||SITE.replace(/\/sites\/.+/,'');
+      photo=base+p.serverRelativeUrl;
+    }else if(p?.Url){photo=p.Url}
+    else if(typeof it.DevicePhoto==='string'&&it.DevicePhoto.startsWith('http')){
+      photo=it.DevicePhoto;
     }
   }catch(_){}
-  // Strategy 2: direct URL field
+  // direct URL fallbacks
   if(!photo&&it.PhotoUrl)photo=it.PhotoUrl;
   if(!photo&&it.ImageUrl)photo=it.ImageUrl;
 
@@ -919,6 +919,7 @@ const _imgCache={};
 // Raw SharePoint file URLs are blocked by CORS from another origin (vercel).
 // The REST file endpoint IS CORS-enabled + honours the bearer token, so route through it.
 function spFileUrl(u){
+  if(/\/_api\//i.test(u)) return u; // already a REST endpoint (e.g. AttachmentFiles)
   try{
     const path = /^https?:/i.test(u) ? new URL(u).pathname : u;
     const enc  = path.split('/').map(encodeURIComponent).join('/');
