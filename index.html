@@ -3,15 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Swag Inventory — Control Center v2</title>
-
+<title>Swag Inventory â€” Control Center v2</title>
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.4.0/lib/msal-browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
-
 <style>
 :root{--bg:#080A0E;--surface:#0E1117;--surface2:#151B24;--surface3:#1C2433;--border:#1E2A3A;--border2:#243040;--text:#F6F9FF;--muted:#4A6080;--muted2:#6A8090;--accent:#00D9FF;--accent2:#0099CC;--green:#00FF88;--red:#FF3366;--amber:#FFB020;--purple:#8B5CF6;--gold:#D4A84B;--card-glass:rgba(14,17,23,0.70)}
 [data-theme="light"]{--bg:#F4F6FB;--surface:#FFFFFF;--surface2:#F0F3F9;--surface3:#E4E9F2;--border:#DCE3EF;--border2:#C9D3E3;--text:#16202E;--muted:#6A7A92;--muted2:#4A5A72;--accent:#0091B5;--accent2:#006C88;--green:#00A35A;--red:#D6224A;--amber:#C77F00;--purple:#6D44C9;--gold:#A9821F;--card-glass:rgba(255,255,255,0.82)}
@@ -19,6 +16,8 @@
 body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
 body::before{content:'';position:fixed;top:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(0,217,255,.04),transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.04),transparent 70%);pointer-events:none;z-index:0}
+
+/* ====== LOGIN ====== */
 .login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;position:relative;z-index:10}
 .login-card{position:relative;z-index:3;background:var(--card-glass);backdrop-filter:blur(16px);border:1px solid var(--border2);border-radius:24px;padding:48px 48px 56px;text-align:center;max-width:420px;width:90%;box-shadow:0 0 90px rgba(0,217,255,.08),0 40px 80px rgba(0,0,0,.45);animation:loginFade .6s ease}
 @keyframes loginFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -31,6 +30,8 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .login-btn{width:100%;padding:15px;background:rgba(0,217,255,.05);border:1px solid rgba(0,217,255,.2);border-radius:9999px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s}
 .login-btn:hover{background:rgba(0,217,255,.1);border-color:rgba(0,217,255,.45);box-shadow:0 0 24px rgba(0,217,255,.12)}
 [data-theme="light"] .login-logo svg{stroke:#fff}
+
+/* ====== HEADER ====== */
 .header{background:var(--card-glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
 .header-left{display:flex;align-items:center;gap:16px}
 .header-brand{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.5px}
@@ -44,6 +45,8 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .hdr-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;color:var(--muted2);font-size:12px;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
 .hdr-btn:hover{border-color:var(--accent);color:var(--accent)}
 .hdr-btn.danger:hover{border-color:var(--red);color:var(--red)}
+
+/* Notification Bell */
 .notif-bell{position:relative;cursor:pointer;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;display:flex;align-items:center;gap:6px;color:var(--muted2);font-size:12px;font-family:'Space Grotesk',sans-serif;transition:all .15s}
 .notif-bell:hover{border-color:var(--amber);color:var(--amber)}
 .notif-count{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px;font-family:'Space Mono',monospace;min-width:16px;text-align:center;display:none}
@@ -58,20 +61,25 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .notif-item-title{font-weight:600;margin-bottom:2px}
 .notif-item-sub{color:var(--muted);font-size:11px}
 .notif-empty{padding:24px;text-align:center;color:var(--muted);font-size:12px}
+
 .ico{width:1em;height:1em;display:inline-block;vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ====== NAV ====== */
 .nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;padding:0 28px;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .nav-item{padding:14px 18px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:7px}
-.nav-item:hover{color:var(--text)}
-.nav-item.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-item:hover{color:var(--text)}.nav-item.active{color:var(--accent);border-bottom-color:var(--accent)}
 .nav-badge{background:var(--surface3);border-radius:10px;padding:1px 7px;font-size:10px;font-family:'Space Mono',monospace;color:var(--muted2)}
 .nav-item.active .nav-badge{background:rgba(0,217,255,.1);color:var(--accent)}
+
+/* ====== MAIN ====== */
 .main{padding:24px 28px;max-width:1500px;margin:0 auto;position:relative;z-index:1}
-.page{display:none}
-.page.active{display:block;animation:pageIn .2s ease}
+.page{display:none}.page.active{display:block;animation:pageIn .2s ease}
 @keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ====== BUTTONS ====== */
 .btn{padding:8px 16px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;border:none}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#080A0E;box-shadow:0 4px 15px rgba(0,217,255,.2)}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,217,255,.35)}
@@ -81,6 +89,8 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .btn-danger:hover{background:rgba(255,51,102,.15);border-color:var(--red)}
 .btn-warn{background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.25);color:var(--amber)}
 .btn-warn:hover{background:rgba(255,176,32,.15);border-color:var(--amber)}
+
+/* ====== STAT CARDS ====== */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:20px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
@@ -90,6 +100,8 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .stat-num{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;line-height:1;margin-bottom:6px}
 .c1 .stat-num{color:var(--accent)}.c2 .stat-num{color:var(--amber)}.c3 .stat-num{color:var(--purple)}.c4 .stat-num{color:var(--green)}.c5 .stat-num{color:var(--gold)}.c6 .stat-num{color:var(--red)}
 .stat-label{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.3px}
+
+/* ====== TABLE ====== */
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px}
 .table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .table-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
@@ -102,6 +114,8 @@ td{padding:12px 16px;font-size:13px;border-top:1px solid var(--border);vertical-
 tr:hover td{background:rgba(0,217,255,.02)}
 [data-theme="dark"] td{color:#FFFFFF!important;font-weight:600}
 [data-theme="dark"] th{color:#AEBED2}
+
+/* ====== BADGES ====== */
 .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Space Mono',monospace}
 .b-dot{width:4px;height:4px;border-radius:50%}
 .b-use{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.2)}.b-use .b-dot{background:var(--green)}
@@ -112,6 +126,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .id-tag{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2);background:var(--surface2);padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
 .view-btn{background:transparent;border:1px solid var(--border2);border-radius:7px;padding:4px 10px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Space Grotesk',sans-serif}
 .view-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ====== FILTERS ====== */
 .filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end}
 .flt-group{display:flex;flex-direction:column;gap:5px}
 .flt-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-family:'Space Mono',monospace}
@@ -121,6 +137,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .adv-filter-panel{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:18px;margin-bottom:16px;display:none}
 .adv-filter-panel.open{display:block;animation:pageIn .2s ease}
 .adv-filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+
+/* ====== BRANCH CARDS ====== */
 .branch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:20px}
 .branch-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .branch-card:hover{transform:translateY(-4px);border-color:rgba(0,217,255,.4);box-shadow:0 20px 40px rgba(0,0,0,.3)}
@@ -134,6 +152,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .cat-chip{font-size:10px;background:var(--surface2);border:1px solid var(--border);color:var(--muted2);padding:2px 8px;border-radius:6px}
 .barcode{display:flex;gap:2px;height:22px;margin:12px 0 10px;opacity:.4}
 .barcode i{display:block;background:var(--text);border-radius:1px}
+
+/* ====== ASSET CARDS ====== */
 .asset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:20px}
 .asset-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}
 .asset-card:hover{transform:translateY(-3px);border-color:rgba(0,217,255,.4);box-shadow:0 15px 35px rgba(0,0,0,.25)}
@@ -145,6 +165,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .asset-model{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .asset-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .color-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.2);flex:none}
+
+/* ====== CHARTS ====== */
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px}
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}
 .chart-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;font-family:'Space Mono',monospace}
@@ -154,6 +176,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .kpi-val{font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:var(--accent);line-height:1}
 .kpi-lbl{font-size:11px;color:var(--muted);margin-top:8px}
 [data-theme="dark"] .kpi-lbl{color:#B7C3D4;font-weight:600}
+
+/* ====== MODALS ====== */
 .modal-overlay{position:fixed;inset:0;background:rgba(8,10,14,.85);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:32px;min-width:380px;max-width:560px;width:90%;animation:modalIn .25s ease;box-shadow:0 40px 80px rgba(0,0,0,.5);max-height:90vh;overflow-y:auto}
@@ -173,14 +197,20 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .modal-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:'Space Mono',monospace}
 .modal-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .modal-grid2 .modal-input,.modal-grid2 .modal-select{margin-bottom:0}
+
+/* ====== PHOTO UPLOAD ====== */
 .photo-upload-area{border:2px dashed var(--border2);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px;position:relative}
 .photo-upload-area:hover,.photo-upload-area.drag{border-color:var(--accent);background:rgba(0,217,255,.03)}
 .photo-upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .photo-preview{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:none}
+
+/* ====== QR MODAL ====== */
 .qr-container{text-align:center;padding:10px}
-.qr-container canvas,.qr-container svg{border-radius:12px;box-shadow:0 0 20px rgba(0,0,0,.2);background:#fff;padding:8px}
+.qr-container canvas{border-radius:12px;box-shadow:0 0 20px rgba(0,0,0,.2)}
 .qr-asset-name{font-size:16px;font-weight:700;margin:12px 0 4px}
 .qr-asset-branch{font-size:12px;color:var(--muted);margin-bottom:16px}
+
+/* ====== PRINT ====== */
 @media print{
   body{background:#fff!important;color:#000!important}
   .header,.nav,.modal-overlay:not(#modal-print),.toast-wrap,.hdr-btn,.btn,.filter-row,.topbar-actions,.back-btn{display:none!important}
@@ -193,6 +223,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .print-card table{width:100%;border-collapse:collapse;font-size:12px}
 .print-card td{padding:5px 8px;border-bottom:1px solid #eee}
 .print-card td:first-child{color:#666;font-weight:500}
+
+/* ====== MISC ====== */
 .spin{width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{text-align:center;padding:48px;color:var(--muted)}
@@ -234,6 +266,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 </head>
 <body>
 
+<!-- ========== LOGIN ========== -->
 <div id="login-screen" class="login-screen">
   <div class="login-card">
     <div class="login-logo"><svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg></div>
@@ -249,6 +282,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
   </div>
 </div>
 
+<!-- ========== DASHBOARD ========== -->
 <div id="dashboard" style="display:none">
   <div class="header">
     <div class="header-left">
@@ -261,7 +295,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
         <div class="user-avatar" id="user-initial">T</div>
         <span id="user-name">Loading...</span>
       </div>
-      <input id="global-search" class="flt-input" placeholder="Search assets…" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
+      <input id="global-search" class="flt-input" placeholder="Search assetsâ€¦" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
+      <!-- Notification Bell -->
       <div style="position:relative">
         <div class="notif-bell" onclick="toggleNotifPanel()">
           <svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -270,7 +305,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
         </div>
         <div class="notif-panel" id="notif-panel">
           <div class="notif-header">
-            <span>Alerts</span>
+            <span>ðŸ”” Alerts</span>
             <button class="btn-ghost" style="font-size:10px;padding:3px 8px;border-radius:6px;cursor:pointer;background:var(--surface3);border:1px solid var(--border)" onclick="clearAllNotifs()">Clear All</button>
           </div>
           <div id="notif-list"><div class="notif-empty">No alerts right now</div></div>
@@ -278,13 +313,11 @@ tr:hover td{background:rgba(0,217,255,.02)}
       </div>
       <button class="hdr-btn" onclick="loadAll(true)"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> Refresh</button>
       <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
-      <button class="hdr-btn" onclick="toggleTheme()">🌙</button>
+      <button class="hdr-btn" onclick="toggleTheme()">ðŸŒ™</button>
       <button class="hdr-btn danger" onclick="signOut()">Sign out</button>
     </div>
   </div>
-
   <div class="nav" id="nav-bar"></div>
-
   <div class="main">
     <div class="page active" id="page-overview"></div>
     <div class="page" id="page-branches"></div>
@@ -293,6 +326,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
   </div>
 </div>
 
+<!-- ========== MODAL: DETAIL ========== -->
 <div class="modal-overlay" id="modal-detail">
   <div class="modal">
     <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg> Asset Details</div>
@@ -303,6 +337,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
   </div>
 </div>
 
+<!-- ========== MODAL: ADD/EDIT ASSET ========== -->
 <div class="modal-overlay" id="modal-add">
   <div class="modal">
     <div class="modal-title" id="add-modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add New Asset</div>
@@ -310,18 +345,15 @@ tr:hover td{background:rgba(0,217,255,.02)}
 
     <div class="modal-label">Branch *</div>
     <select class="modal-select" id="add-branch"><option value="">Select Branch</option></select>
-
     <div class="modal-label">Asset Name *</div>
     <input class="modal-input" id="add-name" placeholder="e.g. Cashier Computer"/>
-
     <div class="modal-label">Category *</div>
     <select class="modal-select" id="add-category">
       <option value="">Select Category</option>
-      <option>كمبيوتر</option><option>لابتوب</option><option>شاشة</option>
-      <option>طابعة</option><option>كاميرات</option><option>كراسي</option>
-      <option>أثاث</option><option>شبكات</option><option>أخرى</option>
+      <option>ÙƒÙ…Ø¨ÙŠÙˆØªØ±</option><option>Ù„Ø§Ø¨ØªÙˆØ¨</option><option>Ø´Ø§Ø´Ø©</option>
+      <option>Ø·Ø§Ø¨Ø¹Ø©</option><option>ÙƒØ§Ù…ÙŠØ±Ø§Øª</option><option>ÙƒØ±Ø§Ø³ÙŠ</option>
+      <option>Ø£Ø«Ø§Ø«</option><option>Ø´Ø¨ÙƒØ§Øª</option><option>Ø£Ø®Ø±Ù‰</option>
     </select>
-
     <div class="modal-grid2" style="margin-bottom:14px">
       <div>
         <div class="modal-label">Model</div>
@@ -332,23 +364,21 @@ tr:hover td{background:rgba(0,217,255,.02)}
         <input class="modal-input" id="add-qty" type="number" min="1" value="1"/>
       </div>
     </div>
-
     <div class="modal-grid2" style="margin-bottom:14px">
       <div>
         <div class="modal-label">Status</div>
         <select class="modal-select" id="add-status">
-          <option value="قيد الاستخدام">قيد الاستخدام</option>
-          <option value="مخزن">مخزن</option>
-          <option value="صيانة">صيانة</option>
-          <option value="متوقف">متوقف</option>
+          <option value="Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…">Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…</option>
+          <option value="Ù…Ø®Ø²Ù†">Ù…Ø®Ø²Ù†</option>
+          <option value="ØµÙŠØ§Ù†Ø©">ØµÙŠØ§Ù†Ø©</option>
+          <option value="Ù…ØªÙˆÙ‚Ù">Ù…ØªÙˆÙ‚Ù</option>
         </select>
       </div>
       <div>
         <div class="modal-label">Color</div>
-        <input class="modal-input" id="add-color" placeholder="أسود، رمادي..."/>
+        <input class="modal-input" id="add-color" placeholder="Ø£Ø³ÙˆØ¯ØŒ Ø±Ù…Ø§Ø¯ÙŠ..."/>
       </div>
     </div>
-
     <div class="modal-grid2" style="margin-bottom:14px">
       <div>
         <div class="modal-label">Purchase Amount (SAR)</div>
@@ -360,6 +390,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
       </div>
     </div>
 
+    <!-- âœ… IMAGE UPLOAD -->
     <div class="modal-label">Photo</div>
     <div class="photo-upload-area" id="photo-drop" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handlePhotoDrop(event)">
       <input type="file" accept="image/*" id="photo-file-input" onchange="handlePhotoSelect(event)"/>
@@ -372,42 +403,40 @@ tr:hover td{background:rgba(0,217,255,.02)}
 
     <div class="modal-label">Notes</div>
     <textarea class="modal-textarea" id="add-notes" placeholder="Optional notes..."></textarea>
-
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-add')">Cancel</button>
       <button class="btn btn-primary" id="add-submit-btn" onclick="submitAsset()">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        <span id="add-submit-label">Add Asset</span>
+        <svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> <span id="add-submit-label">Add Asset</span>
       </button>
     </div>
   </div>
 </div>
 
+<!-- ========== MODAL: QR CODE ========== -->
 <div class="modal-overlay" id="modal-qr">
-  <div class="modal" style="max-width:420px;text-align:center">
-    <div class="modal-title" style="justify-content:center">
-      <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 8h.01M10 8h1M13 8h1M16 8h1M7 12h10M7 16h.01M10 16h1M13 16h1M16 16h1"></path></svg>
-      Label / QR
-    </div>
-    <div class="qr-container" id="label-area">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3M17 17h3M14 17h.01M17 14h.01"/></svg> QR Code</div>
+    <div class="qr-container">
       <canvas id="qr-canvas"></canvas>
-      <svg id="barcode-svg" style="display:none"></svg>
       <div class="qr-asset-name" id="qr-name"></div>
       <div class="qr-asset-branch" id="qr-branch"></div>
     </div>
     <div class="modal-footer" style="justify-content:center">
       <button class="btn btn-ghost" onclick="closeModal('modal-qr')">Close</button>
-      <button class="btn btn-primary" onclick="downloadQR()">Download QR</button>
-      <button class="btn btn-ghost" onclick="showBarcode()">Barcode</button>
-      <button class="btn btn-ghost" onclick="showQRCanvas()">QR</button>
-      <button class="btn btn-primary" onclick="printQR()">Print Label</button>
+      <button class="btn btn-primary" onclick="downloadQR()">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Download
+      </button>
+      <button class="btn btn-ghost" onclick="printQR()">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></svg> Print
+      </button>
     </div>
   </div>
 </div>
 
+<!-- ========== CONFIRM DELETE ========== -->
 <div class="confirm-overlay" id="confirm-delete">
   <div class="confirm-box">
-    <div style="font-size:40px;margin-bottom:12px">🗑️</div>
+    <div style="font-size:40px;margin-bottom:12px">ðŸ—‘ï¸</div>
     <h3>Delete Asset?</h3>
     <p id="confirm-delete-msg">This action cannot be undone. The asset will be permanently removed from SharePoint.</p>
     <div class="confirm-btns">
@@ -420,24 +449,48 @@ tr:hover td{background:rgba(0,217,255,.02)}
 <div class="toast-wrap" id="toast-wrap"></div>
 
 <script>
-const TENANT_ID='fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
-const CLIENT_ID='b74353f0-ec73-4a69-ac7d-a7dbb9166b95';
-const SITE='https://netorg20570594.sharepoint.com/sites/484';
-const SITE_BASE='https://netorg20570594.sharepoint.com';
-const LIST_ID='bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
-const BRANCH_KEY='OData__x0627__x0644__x0641__x0631__x06';
-const SCOPES=[
+// ============================================================
+// CONFIG
+// ============================================================
+const TENANT_ID  = 'fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
+const CLIENT_ID  = 'b74353f0-ec73-4a69-ac7d-a7dbb9166b95';
+const SITE       = 'https://netorg20570594.sharepoint.com/sites/-484';
+const LIST_ID    = 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
+const BRANCH_KEY = 'OData__x0627__x0644__x0641__x0631__x06';
+const SCOPES     = [
   'https://netorg20570594.sharepoint.com/AllSites.Read',
   'https://netorg20570594.sharepoint.com/AllSites.Write',
   'User.Read'
 ];
 
-const BRAND_COLOR={'سواج':'#d4322c','swag':'#d4322c','لاروش':'#2f9aa3','laroche':'#2f9aa3','جولد':'#c9a227','gold':'#c9a227','اوتفيت':'#7c5cff','أوتفيت':'#7c5cff','outfit':'#7c5cff'};
-const CAT_COLORS={'كمبيوتر':'#3fb9c4','لابتوب':'#60A5FA','شاشة':'#8B5CF6','طابعة':'#FFB020','كاميرات':'#f87171','كراسي':'#D4A84B','أثاث':'#b07a3a','شبكات':'#34d399','أخرى':'#8a97a8'};
-const COLOR_HEX={'أسود':'#1c1c1e','رمادي':'#8a8f98','أبيض':'#f3f4f6','فضي':'#cfd4d9','بني':'#6b4a2b','ذهبي':'#c9a227','أزرق':'#2f6fed','أحمر':'#d6473e','أخضر':'#1f9e6a'};
+// ============================================================
+const BRAND_COLOR = {
+  'Ø³ÙˆØ§Ø¬':'#d4322c','swag':'#d4322c',
+  'Ù„Ø§Ø±ÙˆØ´':'#2f9aa3','laroche':'#2f9aa3',
+  'Ø¬ÙˆÙ„Ø¯':'#c9a227','gold':'#c9a227',
+  'Ø§ÙˆØªÙÙŠØª':'#7c5cff','Ø£ÙˆØªÙÙŠØª':'#7c5cff','outfit':'#7c5cff'
+};
+const CAT_COLORS = {
+  'ÙƒÙ…Ø¨ÙŠÙˆØªØ±':'#3fb9c4','Ù„Ø§Ø¨ØªÙˆØ¨':'#60A5FA','Ø´Ø§Ø´Ø©':'#8B5CF6',
+  'Ø·Ø§Ø¨Ø¹Ø©':'#FFB020','ÙƒØ§Ù…ÙŠØ±Ø§Øª':'#f87171','ÙƒØ±Ø§Ø³ÙŠ':'#D4A84B',
+  'Ø£Ø«Ø§Ø«':'#b07a3a','Ø´Ø¨ÙƒØ§Øª':'#34d399','Ø£Ø®Ø±Ù‰':'#8a97a8'
+};
+const COLOR_HEX = {
+  'Ø£Ø³ÙˆØ¯':'#1c1c1e','Ø±Ù…Ø§Ø¯ÙŠ':'#8a8f98','Ø£Ø¨ÙŠØ¶':'#f3f4f6',
+  'ÙØ¶ÙŠ':'#cfd4d9','Ø¨Ù†ÙŠ':'#6b4a2b','Ø°Ù‡Ø¨ÙŠ':'#c9a227',
+  'Ø£Ø²Ø±Ù‚':'#2f6fed','Ø£Ø­Ù…Ø±':'#d6473e','Ø£Ø®Ø¶Ø±':'#1f9e6a'
+};
 
-function catColor(c){if(CAT_COLORS[c])return CAT_COLORS[c];let h=0;for(const ch of(c||''))h=(h*31+ch.charCodeAt(0))%360;return`hsl(${h} 55% 55%)`}
-function brandColor(b){const bl=(b||'').toLowerCase();for(const[k,v]of Object.entries(BRAND_COLOR)){if(bl.includes(k))return v}return'#3fb9c4'}
+function catColor(c){
+  if(CAT_COLORS[c])return CAT_COLORS[c];
+  let h=0;for(const ch of(c||''))h=(h*31+ch.charCodeAt(0))%360;
+  return`hsl(${h} 55% 55%)`;
+}
+function brandColor(b){
+  const bl=(b||'').toLowerCase();
+  for(const[k,v]of Object.entries(BRAND_COLOR)){if(bl.includes(k))return v}
+  return'#3fb9c4';
+}
 function colorHex(c){return COLOR_HEX[c]||'#5a6b7c'}
 
 let msalInstance=null, accessToken=null, currentUser=null;
@@ -450,15 +503,18 @@ let pendingDeleteId=null;
 let uploadedPhotoBase64=null;
 let notifications=[];
 let advFiltersOpen=false;
-let activeLabelAsset=null;
-let currentTheme='dark';
 
+// ===== MSAL =====
 async function initMsal(){
   let t=0;
   while(typeof msal==='undefined'&&t<60){await sleep(100);t++}
   if(typeof msal==='undefined'){toast('Auth library not loaded','error');return}
   msalInstance=new msal.PublicClientApplication({
-    auth:{clientId:CLIENT_ID,authority:`https://login.microsoftonline.com/${TENANT_ID}`,redirectUri:window.location.origin+window.location.pathname},
+    auth:{
+      clientId:CLIENT_ID,
+      authority:`https://login.microsoftonline.com/${TENANT_ID}`,
+      redirectUri:window.location.origin+window.location.pathname
+    },
     cache:{cacheLocation:'sessionStorage',storeAuthStateInCookie:true}
   });
 }
@@ -485,58 +541,37 @@ function showDashboard(){
   document.getElementById('dashboard').style.display='block';
 }
 
-function getAsciiSlug(v){
-  let s=String(v||'').replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
-  if(s.length>0) return s.slice(0,3);
-  let h=0; const str=String(v||'');
-  for(let i=0;i<str.length;i++) h=(h*31+str.charCodeAt(i))%999;
-  return 'X'+String(h).padStart(2,'0');
-}
-function makeUniqueAssetCode(asset){
-  const branch=getAsciiSlug(asset.branch);
-  const cat=getAsciiSlug(asset.category);
-  const id=asset.id?String(asset.id).padStart(4,'0'):'NEW';
-  return `${branch}-${cat}-${id}`;
-}
-
+// ===== DATA MAPPING =====
 function mapItem(it){
-  const branch=(it[BRANCH_KEY]||'غير محدد').toString().trim();
-  const brand=(branch.split(/[-–]/)[0]||'').trim()||'—';
+  const branch=(it[BRANCH_KEY]||'ØºÙŠØ± Ù…Ø­Ø¯Ø¯').toString().trim();
+  const brand=(branch.split(/[-â€“]/)[0]||'').trim()||'â€”';
+
+  // âœ… FIXED IMAGE LOADING â€” multiple strategies
   let photo='';
-
   try{
-    let p=it.DevicePhoto||it.Photo||it.Image||it.PhotoUrl||it.ImageUrl;
-
-    if(p){
-      if(typeof p==='string'){
-        const s=p.trim();
-        if(s.startsWith('data:image/')) photo=s;
-        else if(s.startsWith('http')) photo=s;
-        else { try{ p=JSON.parse(s) }catch(e){} }
+    // Strategy 1: DevicePhoto as JSON object
+    if(it.DevicePhoto){
+      let p=it.DevicePhoto;
+      if(typeof p==='string')p=JSON.parse(p);
+      if(p?.serverRelativeUrl){
+        const base=p.serverUrl||SITE.replace(/\/sites\/.+/,'');
+        photo=base+p.serverRelativeUrl;
+      }else if(p?.Url){photo=p.Url}
+      else if(typeof it.DevicePhoto==='string'&&it.DevicePhoto.startsWith('http')){
+        photo=it.DevicePhoto;
       }
-
-      if(!photo && p && typeof p==='object'){
-        if(p.serverRelativeUrl) photo=SITE_BASE+p.serverRelativeUrl;
-        else if(p.serverUrl && p.serverRelativeUrl) photo=p.serverUrl+p.serverRelativeUrl;
-        else if(p.Url) photo=p.Url;
-        else if(p.url) photo=p.url;
-      }
-
-      if(!photo && typeof p==='string' && p.trim()) photo=p.trim();
     }
-  }catch(e){
-    console.warn('DevicePhoto parse error',e,it);
-  }
+  }catch(_){}
+  // Strategy 2: direct URL field
+  if(!photo&&it.PhotoUrl)photo=it.PhotoUrl;
+  if(!photo&&it.ImageUrl)photo=it.ImageUrl;
 
   const qraw=String(it.SerialNumber||it.Quantity||'1');
   const qn=parseInt(qraw.replace(/\D/g,''),10);
-  const id=it.ID;
-  const category=it.AssetType||'أخرى';
-
   return{
-    id,branch,brand,
-    name:it.Title||'—',
-    category,
+    id:it.ID, branch, brand,
+    name:it.Title||'â€”',
+    category:it.AssetType||'Ø£Ø®Ø±Ù‰',
     model:it.Model||'',
     status:it.Status||'',
     color:it.Color||'',
@@ -546,39 +581,31 @@ function mapItem(it){
     amount:Number(it.PurchasePrice)||0,
     invoice:it.OrderNumber||'',
     photo,
-    created:it.Created||'',
-    uniqueCode:makeUniqueAssetCode({id,branch,category})
+    created:it.Created||''
   };
 }
 
 async function spFetch(url){
-  try {
-    await getToken();
-    const r=await fetch(url,{headers:{'Accept':'application/json;odata=nometadata','Authorization':`Bearer ${accessToken}`}});
-    if(!r.ok){
-      const t=await r.text();
-      console.warn(`spFetch Error ${r.status}: ${t.slice(0,200)}`);
-      return { value: [] };
-    }
-    return await r.json();
-  } catch(e) {
-    console.error("spFetch catch:", e);
-    return { value: [] };
-  }
+  await getToken();
+  const r=await fetch(url,{headers:{
+    'Accept':'application/json;odata=nometadata',
+    'Authorization':`Bearer ${accessToken}`
+  }});
+  if(!r.ok){const t=await r.text();throw new Error(`SP ${r.status}: ${t.slice(0,200)}`)}
+  return r.json();
 }
 
 async function loadAll(refresh){
   try{
     setLive('Syncing...');
-    let items=[],url=`${SITE}/_api/web/lists/getbyid('${LIST_ID}')/items?$top=500&$orderby=ID desc`;
+    let items=[], url=`${SITE}/_api/web/lists(guid'${LIST_ID}')/items?$top=500&$orderby=ID desc`;
     while(url){
       const d=await spFetch(url);
-      if(!d || !d.value) break;
-      items=[...items,...d.value];
-      url=d['@odata.nextLink']||d['odata.nextLink']||null;
+      items=[...items,...(d.value||[])];
+      url=d['odata.nextLink']||null;
     }
     allAssets=items.map(mapItem);
-    if(refresh)toast(`✓ ${allAssets.length} assets loaded`,'success');
+    if(refresh)toast(`âœ“ ${allAssets.length} assets loaded`,'success');
     setLive(new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}));
     populateBranchSelect();
     checkAlerts();
@@ -591,23 +618,28 @@ async function loadAll(refresh){
 }
 function setLive(t){const el=document.getElementById('live-time');if(el)el.textContent=t}
 
+// ===== ALERTS / NOTIFICATIONS =====
 function checkAlerts(){
   notifications=[];
-  const maint=allAssets.filter(d=>(d.status||'').includes('صيان'));
-  if(maint.length>0)notifications.push({type:'warn',title:`${maint.length} assets under maintenance`,sub:'Status: صيانة',color:CAT_COLORS['طابعة'],ids:maint.map(d=>d.id)});
-  const stopped=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('متوقف')||v.includes('تالف')});
+  // Maintenance alert
+  const maint=allAssets.filter(d=>(d.status||'').includes('ØµÙŠØ§Ù†'));
+  if(maint.length>0)notifications.push({type:'warn',title:`${maint.length} assets under maintenance`,sub:'Status: ØµÙŠØ§Ù†Ø©',color:CAT_COLORS['Ø·Ø§Ø¨Ø¹Ø©'],ids:maint.map(d=>d.id)});
+  // Stopped/damaged
+  const stopped=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('Ù…ØªÙˆÙ‚Ù')||v.includes('ØªØ§Ù„Ù')});
   if(stopped.length>0)notifications.push({type:'error',title:`${stopped.length} assets stopped/damaged`,sub:'Require immediate attention',color:'#FF3366',ids:stopped.map(d=>d.id)});
+  // No status
   const noStatus=allAssets.filter(d=>!d.status||d.status.trim()==='');
   if(noStatus.length>0)notifications.push({type:'info',title:`${noStatus.length} assets missing status`,sub:'Please update status',color:'#60A5FA',ids:noStatus.map(d=>d.id)});
   renderNotifPanel();
 }
+
 function renderNotifPanel(){
   const count=document.getElementById('notif-count');
   const list=document.getElementById('notif-list');
   if(!count||!list)return;
   if(notifications.length===0){
     count.classList.remove('show');
-    list.innerHTML='<div class="notif-empty">✅ All assets look good!</div>';
+    list.innerHTML='<div class="notif-empty">âœ… All assets look good!</div>';
     return;
   }
   count.textContent=notifications.length;
@@ -618,39 +650,54 @@ function renderNotifPanel(){
       <div><div class="notif-item-title">${esc(n.title)}</div><div class="notif-item-sub">${esc(n.sub)}</div></div>
     </div>`).join('');
 }
+
 function filterByAlert(idx){
   const n=notifications[idx];
   if(!n)return;
   closeNotifPanel();
   switchTab('all');
+  setTimeout(()=>{
+    const el=document.getElementById('all-q');
+    if(el){
+      // Filter by IDs â€” highlight matching
+      el.value='';renderAll();
+    }
+  },100);
 }
-function toggleNotifPanel(){document.getElementById('notif-panel').classList.toggle('open')}
+
+function toggleNotifPanel(){
+  document.getElementById('notif-panel').classList.toggle('open');
+}
 function closeNotifPanel(){document.getElementById('notif-panel')?.classList.remove('open')}
 function clearAllNotifs(){notifications=[];renderNotifPanel();closeNotifPanel()}
-document.addEventListener('click',e=>{if(!e.target.closest('.notif-bell')&&!e.target.closest('.notif-panel')){closeNotifPanel()}});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.notif-bell')&&!e.target.closest('.notif-panel')){closeNotifPanel()}
+});
 
+// ===== HELPERS =====
 function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
-function fmtMoney(n){return n?fmt(n)+' SAR':'—'}
-function fmtDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(_){return d}}
+function fmtMoney(n){return n?fmt(n)+' SAR':'â€”'}
+function fmtDate(d){if(!d)return'â€”';try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(_){return d}}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
 function statusBadge(s){
   const v=(s||'').toLowerCase();
-  if(v.includes('استخدام')||v.includes('قيد'))return`<span class="badge b-use"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('متوقف')||v.includes('تالف'))return`<span class="badge b-stop"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('صيان'))return`<span class="badge b-fix"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('مخزن'))return`<span class="badge b-store"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(!s)return`<span class="badge b-def">—</span>`;
+  if(v.includes('Ø§Ø³ØªØ®Ø¯Ø§Ù…')||v.includes('Ù‚ÙŠØ¯'))return`<span class="badge b-use"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('Ù…ØªÙˆÙ‚Ù')||v.includes('ØªØ§Ù„Ù'))return`<span class="badge b-stop"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('ØµÙŠØ§Ù†'))return`<span class="badge b-fix"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('Ù…Ø®Ø²Ù†'))return`<span class="badge b-store"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(!s)return`<span class="badge b-def">â€”</span>`;
   return`<span class="badge b-def"><span class="b-dot"></span>${esc(s)}</span>`;
 }
 function assetIcon(cat,name){
   const n=(name||'')+(cat||'');
-  if(n.includes('كاشير')||n.includes('كمبيوتر'))return'<path d="M3 5h18v11H3z"/><path d="M8 21h8M12 16v5"/>';
-  if(n.includes('لابتوب'))return'<path d="M4 5h16v10H4z"/><path d="M2 19h20l-2-2H4z"/>';
-  if(n.includes('شاشة'))return'<path d="M3 4h18v12H3z"/><path d="M9 20h6M12 16v4"/>';
-  if(n.includes('طابعة'))return'<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>';
-  if(n.includes('كرسي'))return'<path d="M6 18v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6"/><path d="M6 21v-3M18 21v-3M4 12h16"/>';
-  if(n.includes('كاميرا'))return'<path d="M2 7h13l3 3v7H2z"/><circle cx="9" cy="13" r="3"/><path d="M18 9l4-2v9l-4-2"/>';
-  if(n.includes('طاولة')||n.includes('أثاث'))return'<path d="M3 7h18M5 7v13M19 7v13M3 13h18"/>';
+  if(n.includes('ÙƒØ§Ø´ÙŠØ±')||n.includes('ÙƒÙ…Ø¨ÙŠÙˆØªØ±'))return'<path d="M3 5h18v11H3z"/><path d="M8 21h8M12 16v5"/>';
+  if(n.includes('Ù„Ø§Ø¨ØªÙˆØ¨'))return'<path d="M4 5h16v10H4z"/><path d="M2 19h20l-2-2H4z"/>';
+  if(n.includes('Ø´Ø§Ø´Ø©'))return'<path d="M3 4h18v12H3z"/><path d="M9 20h6M12 16v4"/>';
+  if(n.includes('Ø·Ø§Ø¨Ø¹Ø©'))return'<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>';
+  if(n.includes('ÙƒØ±Ø³ÙŠ'))return'<path d="M6 18v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6"/><path d="M6 21v-3M18 21v-3M4 12h16"/>';
+  if(n.includes('ÙƒØ§Ù…ÙŠØ±Ø§'))return'<path d="M2 7h13l3 3v7H2z"/><circle cx="9" cy="13" r="3"/><path d="M18 9l4-2v9l-4-2"/>';
+  if(n.includes('Ø·Ø§ÙˆÙ„Ø©')||n.includes('Ø£Ø«Ø§Ø«'))return'<path d="M3 7h18M5 7v13M19 7v13M3 13h18"/>';
   return'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/>';
 }
 function barcode(seed){
@@ -663,6 +710,8 @@ function animateNum(el,to){
   function f(t){const p=Math.min(1,(t-st)/dur);el.textContent=fmt(Math.round(to*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(f)}
   requestAnimationFrame(f);
 }
+
+// ===== AGGREGATES =====
 function getBranchAgg(){
   const m={};
   allAssets.forEach(d=>{
@@ -672,6 +721,7 @@ function getBranchAgg(){
   return m;
 }
 
+// ===== NAV =====
 const NAV=[
   ['overview','Overview','<svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>'],
   ['branches','Branches','<svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg>'],
@@ -695,22 +745,21 @@ function switchTab(tab){
   else if(tab==='all'){currentPage=1;renderAll()}
   else if(tab==='analytics')renderAnalytics();
 }
-function renderTab(tab){
-  buildNav();
+function renderTab(tab){buildNav();
   if(tab==='overview')renderOverview();
   else if(tab==='branches')renderBranches();
   else if(tab==='all')renderAll();
   else if(tab==='analytics')renderAnalytics();
 }
 
+// ===== OVERVIEW =====
 function renderOverview(){
   const agg=getBranchAgg();const branches=Object.keys(agg);
   const units=allAssets.reduce((s,d)=>s+d.qty,0);
   const value=allAssets.reduce((s,d)=>s+d.amount*d.qty,0);
-  const inUse=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('استخدام')||v.includes('قيد')}).reduce((s,d)=>s+d.qty,0);
+  const inUse=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('Ø§Ø³ØªØ®Ø¯Ø§Ù…')||v.includes('Ù‚ÙŠØ¯')}).reduce((s,d)=>s+d.qty,0);
   const cats=new Set(allAssets.map(d=>d.category)).size;
   const top=branches.map(b=>({b,u:agg[b].units})).sort((x,y)=>y.u-x.u).slice(0,6);
-
   document.getElementById('page-overview').innerHTML=`
     <div class="topbar">
       <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">DASHBOARD</div><div style="font-size:20px;font-weight:700">Asset Overview</div></div>
@@ -728,14 +777,14 @@ function renderOverview(){
       <div class="stat-card c6"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div><div class="stat-num" id="s-ca">0</div><div class="stat-label">Categories</div></div>
     </div>
     <div class="kpi-strip">
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('صيان')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Under Maintenance</div></div>
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('متوقف')||v.includes('تالف')}).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Stopped/Damaged</div></div>
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('مخزن')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">In Storage</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('ØµÙŠØ§Ù†')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Under Maintenance</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('Ù…ØªÙˆÙ‚Ù')||v.includes('ØªØ§Ù„Ù')}).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Stopped/Damaged</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('Ù…Ø®Ø²Ù†')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">In Storage</div></div>
       <div class="kpi-box"><div class="kpi-val">${Math.round(inUse/(units||1)*100)}%</div><div class="kpi-lbl">Utilization Rate</div></div>
     </div>
     <div class="topbar" style="margin-bottom:16px">
       <div style="font-size:14px;font-weight:700">Top Branches by Units</div>
-      <button class="btn btn-ghost" onclick="switchTab('branches')" style="font-size:11px;padding:6px 12px">View All →</button>
+      <button class="btn btn-ghost" onclick="switchTab('branches')" style="font-size:11px;padding:6px 12px">View All â†’</button>
     </div>
     <div class="branch-grid">${top.map(({b})=>renderBranchCard(b,agg[b])).join('')}</div>
     <div class="table-card">
@@ -744,7 +793,7 @@ function renderOverview(){
         <thead><tr><th>#</th><th>Photo</th><th>Asset</th><th>Branch</th><th>Category</th><th>Qty</th><th>Status</th><th></th></tr></thead>
         <tbody>${allAssets.slice(0,10).map(d=>`<tr>
           <td><span class="id-tag">#${d.id}</span></td>
-          <td>${d.photo?`<img src="${esc(d.photo)}" class="photo-thumb" onerror="this.style.display='none'"/>`:''}</td>
+          <td>${d.photo?`<img src="${esc(d.photo)}" class="photo-thumb" onerror="this.style.display='none'" crossorigin="anonymous"/>`:''}</td>
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
@@ -754,7 +803,6 @@ function renderOverview(){
         </tr>`).join('')}</tbody>
       </table></div>
     </div>`;
-
   setTimeout(()=>{
     [['s-br',branches.length],['s-ty',allAssets.length],['s-un',units],['s-iu',inUse],['s-va',value],['s-ca',cats]]
     .forEach(([id,n])=>{const el=document.getElementById(id);if(el)animateNum(el,n)});
@@ -768,12 +816,13 @@ function renderBranchCard(name,a){
     <span class="brand-badge" style="background:${brandColor(a.brand)}">${esc(a.brand)}</span>
     <h3>${esc(name)}</h3>${barcode(name)}
     <div class="branch-footer">
-      <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(c)} · ${k}</span>`).join('')}</div>
+      <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(c)} Â· ${k}</span>`).join('')}</div>
       <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)">${a.types} types</span>
     </div>
   </div>`;
 }
 
+// ===== BRANCHES =====
 function renderBranches(){
   const host=document.getElementById('page-branches');
   if(activeBranch){renderBranchDetail(host);return}
@@ -784,7 +833,7 @@ function renderBranches(){
     <div class="topbar">
       <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">BRANCHES</div><div style="font-size:20px;font-weight:700">All Branches</div></div>
       <div class="filter-row" style="margin:0">
-        <input class="flt-input" placeholder="Search branches…" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
+        <input class="flt-input" placeholder="Search branchesâ€¦" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
         <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
       </div>
     </div>
@@ -800,7 +849,7 @@ function openBranch(name){
 }
 function renderBranchDetail(host){
   const all=allAssets.filter(d=>d.branch===activeBranch);
-  const agg=getBranchAgg()[activeBranch]||{brand:'—',types:0,units:0,value:0,cats:{}};
+  const agg=getBranchAgg()[activeBranch]||{brand:'â€”',types:0,units:0,value:0,cats:{}};
   const catList=['All',...new Set(all.map(d=>d.category))];
   let items=all.filter(d=>activeCat==='All'||d.category===activeCat);
   if(assetSearchQ){const q=assetSearchQ.toLowerCase();items=items.filter(d=>(d.name+d.model+d.category+d.color+d.notes).toLowerCase().includes(q))}
@@ -823,7 +872,7 @@ function renderBranchDetail(host){
       </div>
     </div>
     <div class="filter-row" style="margin-bottom:14px">
-      <input class="flt-input" placeholder="Search assets…" oninput="assetSearchQ=this.value;renderBranchDetail(document.getElementById('page-branches'))" value="${esc(assetSearchQ)}" style="min-width:220px"/>
+      <input class="flt-input" placeholder="Search assetsâ€¦" oninput="assetSearchQ=this.value;renderBranchDetail(document.getElementById('page-branches'))" value="${esc(assetSearchQ)}" style="min-width:220px"/>
     </div>
     <div class="pills">${catList.map(c=>{
       const n=c==='All'?all.length:all.filter(d=>d.category===c).length;
@@ -832,7 +881,7 @@ function renderBranchDetail(host){
     ${Object.keys(groups).length?Object.entries(groups).map(([cat,arr])=>{
       const u=arr.reduce((s,d)=>s+d.qty,0);
       return`<div class="cat-section">
-        <div class="cat-bar"><span class="cat-dot" style="background:${catColor(cat)}"></span><h4>${esc(cat)}</h4><span class="meta">${arr.length} types · ${u} units</span></div>
+        <div class="cat-bar"><span class="cat-dot" style="background:${catColor(cat)}"></span><h4>${esc(cat)}</h4><span class="meta">${arr.length} types Â· ${u} units</span></div>
         <div class="asset-grid">${arr.map(renderAssetCard).join('')}</div>
       </div>`;
     }).join(''):'<div class="empty">No matching assets</div>'}`;
@@ -840,9 +889,9 @@ function renderBranchDetail(host){
 
 function renderAssetCard(d){
   const ic=`<svg viewBox="0 0 24 24" style="width:44px;height:44px;stroke:var(--muted);fill:none;stroke-width:1.5">${assetIcon(d.category,d.name)}</svg>`;
-  const isUrl=d.photo && /^https?:/i.test(d.photo);
+  // âœ… Fixed image with auth token for SharePoint
   const imgHtml=d.photo
-    ?`<img src="${esc(d.photo)}" alt="${esc(d.name)}" class="sp-img" ${isUrl?`data-src="${esc(d.photo)}"`:''} ${isUrl?`onerror="handleImgError(this,'${ic.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')"`:''} style="width:100%;height:100%;object-fit:cover;display:block"/>`
+    ?`<img src="${esc(d.photo)}" alt="" class="sp-img" data-src="${esc(d.photo)}" onerror="handleImgError(this,'${ic.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')" style="width:100%;height:100%;object-fit:cover"/>`
     :`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${ic}</div>`;
   return`<div class="asset-card" onclick="openDetail(${d.id})">
     <div class="asset-thumb">
@@ -851,42 +900,31 @@ function renderAssetCard(d){
     </div>
     <div class="asset-body">
       <h5>${esc(d.name)}</h5>
-      <div class="asset-model">${esc(d.model||'—')}</div>
+      <div class="asset-model">${esc(d.model||'â€”')}</div>
       <div class="asset-row">
         <span class="color-dot" style="background:${colorHex(d.color)}"></span>
-        <span style="font-size:12px;color:var(--muted2)">${esc(d.color||'—')}</span>
+        <span style="font-size:12px;color:var(--muted2)">${esc(d.color||'â€”')}</span>
         ${statusBadge(d.status)}
       </div>
     </div>
   </div>`;
 }
 
-async function handleImgError(img,fallback){
-  if(!img)return;
-  if(img.dataset.tried==='1'){
-    img.outerHTML=`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${fallback||''}</div>`;
-    return;
-  }
+function handleImgError(img,fallback){
+  // Try fetching with auth token for SharePoint images
+  if(img.dataset.tried)return;
   img.dataset.tried='1';
-  let src=img.dataset.src||img.getAttribute('src')||'';
-  if(!src){
-    img.outerHTML=`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${fallback||''}</div>`;
-    return;
-  }
-  if(src.startsWith('/')) src=SITE_BASE+src;
-  if(src.startsWith('data:image/')) return;
-  try{
-    if(!accessToken) await getToken();
-    const r=await fetch(src,{headers:{Authorization:`Bearer ${accessToken}`}});
-    if(!r.ok) throw new Error('Image fetch failed: '+r.status);
-    const blob=await r.blob();
-    img.src=URL.createObjectURL(blob);
-  }catch(e){
-    console.warn('Image fallback failed',e);
-    img.outerHTML=`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${fallback||''}</div>`;
+  const src=img.dataset.src;
+  if(src&&accessToken){
+    fetch(src,{headers:{Authorization:`Bearer ${accessToken}`}})
+      .then(r=>r.blob()).then(blob=>{img.src=URL.createObjectURL(blob)})
+      .catch(()=>{img.outerHTML=`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${fallback}</div>`});
+  }else{
+    img.outerHTML=`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${fallback}</div>`;
   }
 }
 
+// ===== ALL ASSETS =====
 function renderAll(){
   const host=document.getElementById('page-all');
   let rows=allAssets.slice();
@@ -894,13 +932,14 @@ function renderAll(){
   const sc=document.getElementById('all-company')?.value||'';
   const scat=document.getElementById('all-cat')?.value||'';
   const sst=document.getElementById('all-status')?.value||'';
+  // âœ… ADVANCED FILTERS
   const dateFrom=document.getElementById('adv-date-from')?.value||'';
   const dateTo=document.getElementById('adv-date-to')?.value||'';
   const amtMin=document.getElementById('adv-amt-min')?.value||'';
   const amtMax=document.getElementById('adv-amt-max')?.value||'';
   const colorFlt=document.getElementById('adv-color')?.value||'';
 
-  if(sq){const q=sq.toLowerCase();rows=rows.filter(d=>(d.name+d.model+d.category+d.branch+d.status+d.color+d.invoice+d.uniqueCode).toLowerCase().includes(q))}
+  if(sq){const q=sq.toLowerCase();rows=rows.filter(d=>(d.name+d.model+d.category+d.branch+d.status+d.color+d.invoice).toLowerCase().includes(q))}
   if(sc)rows=rows.filter(d=>d.branch===sc);
   if(scat)rows=rows.filter(d=>d.category===scat);
   if(sst)rows=rows.filter(d=>(d.status||'').toLowerCase().includes(sst.toLowerCase()));
@@ -915,7 +954,6 @@ function renderAll(){
     const v=i=>k==='id'?i.id:k==='name'?i.name:k==='branch'?i.branch:k==='cat'?i.category:k==='qty'?i.qty:k==='amount'?i.amount:i.status;
     rows.sort((a,b)=>(v(a)<v(b)?-1:v(a)>v(b)?1:0)*dir);
   }
-
   const total=Math.ceil(rows.length/PAGE_SIZE);
   const sliced=rows.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
   const cats=[...new Set(allAssets.map(d=>d.category))].sort();
@@ -927,17 +965,19 @@ function renderAll(){
       <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">REGISTRY</div><div style="font-size:20px;font-weight:700">All Assets</div></div>
       <div class="topbar-actions">
         <button class="btn btn-ghost" onclick="toggleAdvFilters()"><svg class="ico" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg> Advanced Filters</button>
-        <button class="btn btn-ghost" onclick="clearAllFilters()">✕ Clear</button>
+        <button class="btn btn-ghost" onclick="clearAllFilters()">âœ• Clear</button>
         <button class="btn btn-ghost" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
         <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
       </div>
     </div>
     <div class="filter-row">
-      <div class="flt-group"><div class="flt-label">Search</div><input class="flt-input" id="all-q" placeholder="Search…" oninput="currentPage=1;renderAll()" value="${esc(sq)}" style="min-width:180px"/></div>
+      <div class="flt-group"><div class="flt-label">Search</div><input class="flt-input" id="all-q" placeholder="Searchâ€¦" oninput="currentPage=1;renderAll()" value="${esc(sq)}" style="min-width:180px"/></div>
       <div class="flt-group"><div class="flt-label">Branch</div><select class="flt-select" id="all-company" onchange="currentPage=1;renderAll()"><option value="">All Branches</option>${allBranches.map(b=>`<option value="${esc(b)}"${sc===b?' selected':''}>${esc(b)}</option>`).join('')}</select></div>
       <div class="flt-group"><div class="flt-label">Category</div><select class="flt-select" id="all-cat" onchange="currentPage=1;renderAll()"><option value="">All Categories</option>${cats.map(c=>`<option value="${esc(c)}"${scat===c?' selected':''}>${esc(c)}</option>`).join('')}</select></div>
-      <div class="flt-group"><div class="flt-label">Status</div><select class="flt-select" id="all-status" onchange="currentPage=1;renderAll()"><option value="">All Status</option><option value="استخدام">قيد الاستخدام</option><option value="مخزن">مخزن</option><option value="صيان">صيانة</option><option value="متوقف">متوقف</option></select></div>
+      <div class="flt-group"><div class="flt-label">Status</div><select class="flt-select" id="all-status" onchange="currentPage=1;renderAll()"><option value="">All Status</option><option value="Ø§Ø³ØªØ®Ø¯Ø§Ù…">Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…</option><option value="Ù…Ø®Ø²Ù†">Ù…Ø®Ø²Ù†</option><option value="ØµÙŠØ§Ù†">ØµÙŠØ§Ù†Ø©</option><option value="Ù…ØªÙˆÙ‚Ù">Ù…ØªÙˆÙ‚Ù</option></select></div>
     </div>
+
+    <!-- âœ… ADVANCED FILTERS PANEL -->
     <div class="adv-filter-panel${advOpen?' open':''}" id="adv-filter-panel">
       <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'Space Mono',monospace">Advanced Filters</div>
       <div class="adv-filter-grid">
@@ -945,99 +985,127 @@ function renderAll(){
         <div class="flt-group"><div class="flt-label">Date To</div><input type="date" class="flt-input" id="adv-date-to" onchange="currentPage=1;renderAll()" value="${dateTo}"/></div>
         <div class="flt-group"><div class="flt-label">Amount Min (SAR)</div><input type="number" class="flt-input" id="adv-amt-min" placeholder="0" oninput="currentPage=1;renderAll()" value="${amtMin}"/></div>
         <div class="flt-group"><div class="flt-label">Amount Max (SAR)</div><input type="number" class="flt-input" id="adv-amt-max" placeholder="99999" oninput="currentPage=1;renderAll()" value="${amtMax}"/></div>
-        <div class="flt-group"><div class="flt-label">Color</div><input class="flt-input" id="adv-color" placeholder="أسود، رمادي…" oninput="currentPage=1;renderAll()" value="${colorFlt}"/></div>
+        <div class="flt-group"><div class="flt-label">Color</div><input class="flt-input" id="adv-color" placeholder="Ø£Ø³ÙˆØ¯ØŒ Ø±Ù…Ø§Ø¯ÙŠâ€¦" oninput="currentPage=1;renderAll()" value="${colorFlt}"/></div>
       </div>
     </div>
+
     <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:10px">${rows.length} result${rows.length!==1?'s':''} found</div>
     <div class="table-card">
       <div class="tbl-wrap"><table>
         <thead><tr>
-          <th onclick="sortAll('id')" style="cursor:pointer"># ↕</th>
+          <th onclick="sortAll('id')" style="cursor:pointer"># â†•</th>
           <th>Photo</th>
-          <th onclick="sortAll('name')" style="cursor:pointer">Asset ↕</th>
-          <th onclick="sortAll('branch')" style="cursor:pointer">Branch ↕</th>
-          <th onclick="sortAll('cat')" style="cursor:pointer">Category ↕</th>
+          <th onclick="sortAll('name')" style="cursor:pointer">Asset â†•</th>
+          <th onclick="sortAll('branch')" style="cursor:pointer">Branch â†•</th>
+          <th onclick="sortAll('cat')" style="cursor:pointer">Category â†•</th>
           <th>Model</th>
-          <th onclick="sortAll('qty')" style="cursor:pointer">Qty ↕</th>
-          <th onclick="sortAll('status')" style="cursor:pointer">Status ↕</th>
+          <th onclick="sortAll('qty')" style="cursor:pointer">Qty â†•</th>
+          <th onclick="sortAll('status')" style="cursor:pointer">Status â†•</th>
           <th>Color</th>
-          <th onclick="sortAll('amount')" style="cursor:pointer">Amount ↕</th>
-          <th>Code</th>
+          <th onclick="sortAll('amount')" style="cursor:pointer">Amount â†•</th>
           <th>Actions</th>
         </tr></thead>
         <tbody>${sliced.map(d=>`<tr>
           <td><span class="id-tag">#${d.id}</span></td>
-          <td>${d.photo?`<img src="${esc(d.photo)}" class="photo-thumb" ${/^https?:/i.test(d.photo)?`onerror="handleImgError(this,'<svg viewBox=\\'0 0 24 24\\' style=\\'width:24px;height:24px;stroke:var(--muted)\\' fill=\\'none\\' stroke-width=\\'2\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg>')" data-src="${esc(d.photo)}"`:''}/>`:''}</td>
+          <td>${d.photo?`<img src="${esc(d.photo)}" class="photo-thumb" onerror="handleImgError(this,'<svg viewBox=\\'0 0 24 24\\' style=\\'width:24px;height:24px;stroke:var(--muted)\\' fill=\\'none\\' stroke-width=\\'2\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg>')" data-src="${esc(d.photo)}" crossorigin="anonymous"/>`:''}</td>
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
-          <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2)">${esc(d.model||'—')}</td>
+          <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2)">${esc(d.model||'â€”')}</td>
           <td style="font-family:'Space Mono',monospace;font-weight:700">${d.qty}</td>
           <td>${statusBadge(d.status)}</td>
-          <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'—')}</td>
+          <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'â€”')}</td>
           <td style="font-family:'Space Mono',monospace;font-size:12px">${fmtMoney(d.amount)}</td>
-          <td><span class="id-tag">${esc(d.uniqueCode)}</span></td>
           <td>
             <div style="display:flex;gap:4px;flex-wrap:wrap">
               <button class="view-btn" onclick="openDetail(${d.id})">View</button>
               <button class="view-btn" style="border-color:rgba(0,217,255,.3);color:var(--accent)" onclick="openEditAsset(${d.id})">Edit</button>
               <button class="view-btn" style="border-color:rgba(255,51,102,.3);color:var(--red)" onclick="askDeleteAsset(${d.id},'${esc(d.name)}')">Del</button>
-              <button class="view-btn" style="border-color:rgba(139,92,246,.3);color:var(--purple)" onclick="openQR(${d.id})">Label</button>
+              <button class="view-btn" style="border-color:rgba(139,92,246,.3);color:var(--purple)" onclick="openQR(${d.id})">QR</button>
             </div>
           </td>
-        </tr>`).join('')||'<tr><td colspan="12"><div class="empty">No assets found</div></td></tr>'}</tbody>
+        </tr>`).join('')||'<tr><td colspan="11"><div class="empty">No assets found</div></td></tr>'}</tbody>
       </table></div>
     </div>
     <div class="pagination">${buildPagination(total)}</div>`;
 }
+
 function toggleAdvFilters(){advFiltersOpen=!advFiltersOpen;renderAll()}
 function sortAll(k){if(sortState.key===k)sortState.dir*=-1;else{sortState.key=k;sortState.dir=1}currentPage=1;renderAll()}
 function buildPagination(total){
   if(total<=1)return'';
   let h='';
-  if(currentPage>1)h+=`<button class="pg-btn" onclick="goPg(${currentPage-1})">←</button>`;
+  if(currentPage>1)h+=`<button class="pg-btn" onclick="goPg(${currentPage-1})">â†</button>`;
   for(let i=1;i<=Math.min(total,7);i++)h+=`<button class="pg-btn${i===currentPage?' active':''}" onclick="goPg(${i})">${i}</button>`;
   if(total>7)h+=`<span style="color:var(--muted);font-size:11px">... ${total}</span>`;
-  if(currentPage<total)h+=`<button class="pg-btn" onclick="goPg(${currentPage+1})">→</button>`;
+  if(currentPage<total)h+=`<button class="pg-btn" onclick="goPg(${currentPage+1})">â†’</button>`;
   return h;
 }
 function goPg(p){currentPage=p;renderAll()}
 function clearAllFilters(){sortState={key:null,dir:1};currentPage=1;advFiltersOpen=false;renderAll()}
 function globalSearch(v){switchTab('all');setTimeout(()=>{const el=document.getElementById('all-q');if(el){el.value=v;currentPage=1;renderAll()}},50)}
 
+// ===== ANALYTICS =====
+function renderAnalytics(){
+  document.getElementById('page-analytics').innerHTML=`
+    <div class="topbar"><div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">ANALYTICS</div><div style="font-size:20px;font-weight:700">Asset Distribution</div></div></div>
+    <div class="charts-grid">
+      <div class="chart-card"><div class="chart-header">Units by Branch</div><div class="chart-wrap"><canvas id="c-branch"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">By Category</div><div class="chart-wrap"><canvas id="c-cat"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">By Status</div><div class="chart-wrap"><canvas id="c-status"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">By Brand</div><div class="chart-wrap"><canvas id="c-brand"></canvas></div></div>
+    </div>`;
+  Object.values(chartInstances).forEach(c=>{try{c.destroy()}catch(e){}});
+  chartInstances={};
+  const css=getComputedStyle(document.documentElement);
+  const txt=css.getPropertyValue('--muted2').trim();
+  const grid=css.getPropertyValue('--border').trim();
+  Chart.defaults.color=txt;Chart.defaults.font.family='Space Grotesk';
+  const agg=getBranchAgg();const bn=Object.keys(agg);
+  chartInstances.branch=new Chart(document.getElementById('c-branch'),{type:'bar',data:{labels:bn,datasets:[{data:bn.map(b=>agg[b].units),backgroundColor:bn.map(b=>brandColor(agg[b].brand)),borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
+  const cats={};allAssets.forEach(d=>cats[d.category]=(cats[d.category]||0)+d.qty);const ck=Object.keys(cats);
+  chartInstances.cat=new Chart(document.getElementById('c-cat'),{type:'doughnut',data:{labels:ck,datasets:[{data:ck.map(c=>cats[c]),backgroundColor:ck.map(catColor),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
+  const st={};allAssets.forEach(d=>{const k=d.status||'ØºÙŠØ± Ù…Ø­Ø¯Ø¯';st[k]=(st[k]||0)+d.qty});const sk=Object.keys(st);
+  const stc={'Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…':'#00FF88','ÙÙŠ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…':'#00FF88','Ù…ØªÙˆÙ‚Ù':'#FF3366','ØªØ§Ù„Ù':'#FF3366','ØµÙŠØ§Ù†Ø©':'#FFB020','Ù…Ø®Ø²Ù†':'#60A5FA'};
+  chartInstances.status=new Chart(document.getElementById('c-status'),{type:'doughnut',data:{labels:sk,datasets:[{data:sk.map(k=>st[k]),backgroundColor:sk.map(k=>stc[k]||'#8B5CF6'),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
+  const br={};allAssets.forEach(d=>br[d.brand]=(br[d.brand]||0)+d.qty);const bk=Object.keys(br);
+  chartInstances.brand=new Chart(document.getElementById('c-brand'),{type:'bar',data:{labels:bk,datasets:[{data:bk.map(b=>br[b]),backgroundColor:bk.map(brandColor),borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
+}
+
+// ===== DETAIL MODAL =====
 function openDetail(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
-  const photoHtml=d.photo?`<div style="margin-bottom:16px"><img src="${esc(d.photo)}" style="width:100%;max-height:220px;object-fit:cover;border-radius:12px;border:1px solid var(--border)" ${/^https?:/i.test(d.photo)?`data-src="${esc(d.photo)}" onerror="handleImgError(this,'')"`:''}/></div>`:'';
+  const rows=[['Branch',d.branch],['Category',d.category],['Model',d.model||'â€”'],['Status',d.status||'â€”'],['Color',d.color||'â€”'],['Quantity',d.qty],['Amount',fmtMoney(d.amount)],['Total Value',fmtMoney(d.amount*d.qty)],['Invoice',d.invoice||'â€”'],['Purchase Date',fmtDate(d.purchaseDate)],['Created',fmtDate(d.created)]];
   document.getElementById('modal-detail-body').innerHTML=`
-    ${photoHtml}
+    ${d.photo?`<img src="${esc(d.photo)}" style="width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:16px" onerror="this.style.display='none'" crossorigin="anonymous" data-src="${esc(d.photo)}" id="detail-hero-img"/>`:''}
     <div class="modal-info">
-      <div class="modal-info-row"><div class="modal-info-label">ID</div><div class="modal-info-val">#${d.id}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Unique Code</div><div class="modal-info-val">${esc(d.uniqueCode)}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Name</div><div class="modal-info-val">${esc(d.name)}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Branch</div><div class="modal-info-val">${esc(d.branch)}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Category</div><div class="modal-info-val">${esc(d.category)}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Model</div><div class="modal-info-val">${esc(d.model||'—')}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Qty</div><div class="modal-info-val">${d.qty}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Status</div><div class="modal-info-val">${esc(d.status||'—')}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Color</div><div class="modal-info-val">${esc(d.color||'—')}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Amount</div><div class="modal-info-val">${fmtMoney(d.amount)}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Invoice</div><div class="modal-info-val">${esc(d.invoice||'—')}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Added</div><div class="modal-info-val">${fmtDate(d.created)}</div></div>
-      <div class="modal-info-row"><div class="modal-info-label">Notes</div><div class="modal-info-val">${esc(d.notes||'—')}</div></div>
-    </div>`;
+      <div class="modal-info-row"><span class="modal-info-label">Asset Name</span><span class="modal-info-val">${esc(d.name)}</span></div>
+      ${rows.map(([k,v])=>`<div class="modal-info-row"><span class="modal-info-label">${k}</span><span class="modal-info-val">${esc(String(v))}</span></div>`).join('')}
+    </div>
+    ${d.notes?`<div class="modal-label">Notes</div><div style="background:var(--surface2);border-radius:10px;padding:12px;font-size:13px;line-height:1.6">${esc(d.notes)}</div>`:''}`;
+  // fix hero image auth
+  setTimeout(()=>{
+    const hi=document.getElementById('detail-hero-img');
+    if(hi&&d.photo&&accessToken){
+      fetch(d.photo,{headers:{Authorization:`Bearer ${accessToken}`}})
+        .then(r=>r.blob()).then(blob=>{hi.src=URL.createObjectURL(blob)})
+        .catch(()=>{hi.style.display='none'});
+    }
+  },100);
   document.getElementById('modal-detail-footer').innerHTML=`
     <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Close</button>
-    <button class="btn btn-primary" onclick="openQR(${d.id})">Label</button>
-    <button class="btn btn-ghost" onclick="printAsset(${d.id})">Print Asset</button>
-  `;
+    <button class="btn btn-warn" onclick="closeModal('modal-detail');openEditAsset(${id})"><svg class="ico" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+    <button class="btn btn-ghost" onclick="openQR(${id})"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3M17 17h3M14 17h.01M17 14h.01"/></svg> QR</button>
+    <button class="btn btn-ghost" onclick="printAsset(${id})"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></svg> Print</button>
+    <button class="btn btn-danger" onclick="closeModal('modal-detail');askDeleteAsset(${id},'${esc(d.name)}')"><svg class="ico" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg> Delete</button>`;
   document.getElementById('modal-detail').classList.add('open');
 }
 
+// ===== ADD ASSET =====
 function populateBranchSelect(){
-  const sel=document.getElementById('add-branch');
-  if(!sel)return;
-  const branches=[...new Set(allAssets.map(d=>d.branch).filter(Boolean))].sort();
-  sel.innerHTML=`<option value="">Select Branch</option>`+branches.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
+  const sel=document.getElementById('add-branch');if(!sel)return;
+  const branches=[...new Set(allAssets.map(d=>d.branch))].sort();
+  sel.innerHTML='<option value="">Select Branch</option>'+branches.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
 }
 
 function openAddAsset(){
@@ -1049,12 +1117,13 @@ function openAddAsset(){
   ['add-name','add-model','add-color','add-invoice','add-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   document.getElementById('add-qty').value='1';
   document.getElementById('add-amount').value='';
-  document.getElementById('add-status').value='قيد الاستخدام';
+  document.getElementById('add-status').value='Ù‚ÙŠØ¯ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…';
   document.getElementById('add-category').value='';
   populateBranchSelect();
   document.getElementById('modal-add').classList.add('open');
 }
 
+// âœ… EDIT ASSET
 function openEditAsset(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   uploadedPhotoBase64=null;
@@ -1084,6 +1153,7 @@ function openEditAsset(id){
   document.getElementById('modal-add').classList.add('open');
 }
 
+// ===== PHOTO UPLOAD =====
 function handlePhotoSelect(event){
   const file=event.target.files[0];if(!file)return;
   processPhotoFile(file);
@@ -1114,6 +1184,7 @@ function resetPhotoPreview(){
   if(fi)fi.value='';
 }
 
+// ===== SUBMIT (ADD OR EDIT) =====
 async function submitAsset(){
   const name=document.getElementById('add-name').value.trim();
   const branch=document.getElementById('add-branch').value;
@@ -1130,8 +1201,7 @@ async function submitAsset(){
     const digest=(await digestR.json()).d.GetContextWebInformation.FormDigestValue;
     const body={
       "__metadata":{"type":"SP.Data.ListItem"},
-      Title:name,
-      AssetType:category,
+      Title:name, AssetType:category,
       Status:document.getElementById('add-status').value,
       Color:document.getElementById('add-color').value,
       SerialNumber:String(qty),
@@ -1141,31 +1211,33 @@ async function submitAsset(){
       ConditionNotes:document.getElementById('add-notes').value,
       [BRANCH_KEY]:branch
     };
+    // If photo uploaded, store base64 in PhotoUrl (you can also use attachments separately)
     if(uploadedPhotoBase64)body.PhotoUrl=uploadedPhotoBase64;
 
     let r;
     if(isEdit){
-      r=await fetch(`${SITE}/_api/web/lists/getbyid('${LIST_ID}')/items(${editId})`,{
-        method:'POST',
+      r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${editId})`,{
+        method:'PATCH',
         headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},
         body:JSON.stringify(body)
       });
-      if(r.status===204||r.ok){toast(`✓ Asset #${editId} updated!`,'success');closeModal('modal-add');await loadAll();}
+      if(r.status===204||r.ok){toast(`âœ“ Asset #${editId} updated!`,'success');closeModal('modal-add');await loadAll();}
       else{const t=await r.text();toast('Update failed: '+t.slice(0,100),'error')}
     }else{
-      r=await fetch(`${SITE}/_api/web/lists/getbyid('${LIST_ID}')/items`,{
+      r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items`,{
         method:'POST',
         headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},
         body:JSON.stringify(body)
       });
       const d2=await r.json();
-      if(d2.d?.ID){toast(`✓ Asset #${d2.d.ID} added!`,'success');closeModal('modal-add');await loadAll();}
+      if(d2.d?.ID){toast(`âœ“ Asset #${d2.d.ID} added!`,'success');closeModal('modal-add');await loadAll();}
       else{toast('Add failed: '+(d2.error?.message?.value||JSON.stringify(d2)),'error')}
     }
   }catch(e){toast('Error: '+e.message,'error')}
   finally{btn.disabled=false;btn.querySelector('span').textContent=editId?'Save Changes':'Add Asset'}
 }
 
+// ===== DELETE ASSET =====
 function askDeleteAsset(id,name){
   pendingDeleteId=id;
   document.getElementById('confirm-delete-msg').textContent=`"${name}" will be permanently removed from SharePoint.`;
@@ -1179,39 +1251,24 @@ async function confirmDeleteAsset(){
     await getToken();
     const digestR=await fetch(`${SITE}/_api/contextinfo`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`}});
     const digest=(await digestR.json()).d.GetContextWebInformation.FormDigestValue;
-    const r=await fetch(`${SITE}/_api/web/lists/getbyid('${LIST_ID}')/items(${id})`,{
+    const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${id})`,{
       method:'DELETE',
       headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*'}
     });
-    if(r.status===200||r.status===204){toast(`✓ Asset #${id} deleted`,'success');await loadAll();}
+    if(r.status===200||r.status===204){toast(`âœ“ Asset #${id} deleted`,'success');await loadAll();}
     else{const t=await r.text();toast('Delete failed: '+t.slice(0,100),'error')}
   }catch(e){toast('Error: '+e.message,'error')}
 }
 
+// ===== QR CODE =====
 function openQR(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
-  activeLabelAsset=d;
-  const qrData=JSON.stringify({id:d.id,code:d.uniqueCode,name:d.name,branch:d.branch,category:d.category,qty:d.qty,status:d.status});
+  const qrData=JSON.stringify({id:d.id,name:d.name,branch:d.branch,category:d.category,qty:d.qty,status:d.status});
   document.getElementById('qr-name').textContent=d.name;
-  document.getElementById('qr-branch').textContent=`${d.branch} · ${d.uniqueCode}`;
+  document.getElementById('qr-branch').textContent=d.branch+' Â· #'+d.id;
   const canvas=document.getElementById('qr-canvas');
-  const svg=document.getElementById('barcode-svg');
-  canvas.style.display='block';
-  svg.style.display='none';
   QRCode.toCanvas(canvas,qrData,{width:200,margin:2,color:{dark:'#0E1117',light:'#F6F9FF'}},err=>{if(err)console.error(err)});
   document.getElementById('modal-qr').classList.add('open');
-}
-function showBarcode(){
-  if(!activeLabelAsset)return;
-  const canvas=document.getElementById('qr-canvas');
-  const svg=document.getElementById('barcode-svg');
-  canvas.style.display='none';
-  svg.style.display='block';
-  JsBarcode('#barcode-svg', activeLabelAsset.uniqueCode, {format:'CODE128',lineColor:'#111',width:2,height:60,displayValue:true,fontSize:14,margin:10});
-}
-function showQRCanvas(){
-  document.getElementById('qr-canvas').style.display='block';
-  document.getElementById('barcode-svg').style.display='none';
 }
 function downloadQR(){
   const canvas=document.getElementById('qr-canvas');
@@ -1222,45 +1279,21 @@ function downloadQR(){
   toast('QR downloaded!','success');
 }
 function printQR(){
-  if(!activeLabelAsset)return;
-  const d=activeLabelAsset;
-  const img=document.getElementById('qr-canvas').toDataURL();
-  const code=d.uniqueCode;
-  const w=window.open('','_blank','width=500,height=700');
-  w.document.write(`<!DOCTYPE html><html><head><title>Asset Label</title>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script>
-  <style>
-    body{font-family:Arial,sans-serif;padding:20px}
-    .label{border:1px solid #333;border-radius:12px;padding:18px;max-width:360px}
-    h2{margin:0 0 6px;font-size:18px}
-    .sub{font-size:12px;color:#555;margin-bottom:10px}
-    table{width:100%;border-collapse:collapse;margin-top:10px}
-    td{padding:6px 4px;border-bottom:1px solid #ddd;font-size:12px}
-    svg,img{width:100%;height:auto}
-  </style></head><body>
-    <div class="label">
-      <h2>${esc(d.name||'')}</h2>
-      <div class="sub">${esc(d.branch||'')} · ${esc(code)}</div>
-      <svg id="print-barcode"></svg>
-      <div style="margin:14px 0;text-align:center"><img src="${img}" style="width:160px"/></div>
-      <table>
-        <tr><td>Code</td><td>${esc(code)}</td></tr>
-        <tr><td>ID</td><td>${esc(String(d.id))}</td></tr>
-        <tr><td>Category</td><td>${esc(d.category||'')}</td></tr>
-        <tr><td>Qty</td><td>${esc(String(d.qty||1))}</td></tr>
-        <tr><td>Status</td><td>${esc(d.status||'')}</td></tr>
-      </table>
-    </div>
-    <script>
-      window.onload=function(){
-        JsBarcode('#print-barcode', ${JSON.stringify(code)}, {format:'CODE128',lineColor:'#111',width:2,height:70,displayValue:true,fontSize:14,margin:10});
-        window.print();
-      }
-    <\/script>
+  const canvas=document.getElementById('qr-canvas');
+  const img=canvas.toDataURL();
+  const name=document.getElementById('qr-name').textContent;
+  const branch=document.getElementById('qr-branch').textContent;
+  const w=window.open('','_blank');
+  w.document.write(`<html><body style="font-family:sans-serif;text-align:center;padding:40px">
+    <img src="${img}" style="width:200px"/><br/>
+    <h2 style="margin:16px 0 4px">${name}</h2>
+    <p style="color:#666">${branch}</p>
+    <script>window.onload=()=>window.print()<\/script>
   </body></html>`);
   w.document.close();
 }
 
+// ===== PRINT ASSET =====
 function printAsset(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   const w=window.open('','_blank');
@@ -1271,23 +1304,23 @@ function printAsset(id){
     table{width:100%;border-collapse:collapse;margin-top:16px}
     td{padding:9px 12px;border-bottom:1px solid #eee;font-size:13px}
     td:first-child{color:#666;font-weight:500;width:40%}
+    .badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700}
     @media print{body{padding:0}}
   </style></head><body>
     <h2>${esc(d.name)}</h2>
-    <div class="sub">Asset #${d.id} · ${esc(d.branch)} · ${esc(d.uniqueCode)}</div>
+    <div class="sub">Asset #${d.id} Â· ${esc(d.branch)}</div>
     <hr/>
     <table>
       <tr><td>Branch</td><td>${esc(d.branch)}</td></tr>
       <tr><td>Category</td><td>${esc(d.category)}</td></tr>
-      <tr><td>Unique Code</td><td>${esc(d.uniqueCode)}</td></tr>
-      <tr><td>Model</td><td>${esc(d.model||'—')}</td></tr>
-      <tr><td>Status</td><td>${esc(d.status||'—')}</td></tr>
-      <tr><td>Color</td><td>${esc(d.color||'—')}</td></tr>
+      <tr><td>Model</td><td>${esc(d.model||'â€”')}</td></tr>
+      <tr><td>Status</td><td>${esc(d.status||'â€”')}</td></tr>
+      <tr><td>Color</td><td>${esc(d.color||'â€”')}</td></tr>
       <tr><td>Quantity</td><td>${d.qty}</td></tr>
       <tr><td>Purchase Amount</td><td>${fmtMoney(d.amount)}</td></tr>
       <tr><td>Total Value</td><td>${fmtMoney(d.amount*d.qty)}</td></tr>
-      <tr><td>Invoice</td><td>${esc(d.invoice||'—')}</td></tr>
-      <tr><td>Notes</td><td>${esc(d.notes||'—')}</td></tr>
+      <tr><td>Invoice</td><td>${esc(d.invoice||'â€”')}</td></tr>
+      <tr><td>Notes</td><td>${esc(d.notes||'â€”')}</td></tr>
       <tr><td>Added</td><td>${fmtDate(d.created)}</td></tr>
     </table>
     <div style="margin-top:24px;font-size:11px;color:#aaa">Printed: ${new Date().toLocaleString()}</div>
@@ -1296,17 +1329,16 @@ function printAsset(id){
   w.document.close();
 }
 
+// ===== EXPORT =====
 function exportExcel(){
-  const data=allAssets.map(d=>({ID:d.id,Code:d.uniqueCode,Name:d.name,Branch:d.branch,Brand:d.brand,Category:d.category,Model:d.model,Qty:d.qty,Status:d.status,Color:d.color,'Amount SAR':d.amount,'Total SAR':d.amount*d.qty,Invoice:d.invoice,'Purchase Date':fmtDate(d.purchaseDate),Notes:d.notes}));
+  const data=allAssets.map(d=>({ID:d.id,Name:d.name,Branch:d.branch,Brand:d.brand,Category:d.category,Model:d.model,Qty:d.qty,Status:d.status,Color:d.color,'Amount SAR':d.amount,'Total SAR':d.amount*d.qty,Invoice:d.invoice,'Purchase Date':fmtDate(d.purchaseDate),Notes:d.notes}));
   const ws=XLSX.utils.json_to_sheet(data);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Inventory');
   XLSX.writeFile(wb,`Swag_Inventory_${new Date().toISOString().slice(0,10)}.xlsx`);
-  toast('✓ Excel exported!','success');
+  toast('âœ“ Excel exported!','success');
 }
 
-function renderAnalytics(){
-  document.getElementById('page-analytics').innerHTML=`<div class="empty">Analytics section ready. Current focus was image + barcode fixes.</div>`;
-}
-
+// ===== THEME =====
+let currentTheme='dark';
 function toggleTheme(){
   currentTheme=currentTheme==='dark'?'light':'dark';
   document.documentElement.setAttribute('data-theme',currentTheme);
@@ -1320,12 +1352,13 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelec
 function toast(msg,type='info'){
   const wrap=document.getElementById('toast-wrap');if(!wrap)return;
   const el=document.createElement('div');el.className=`toast ${type}`;
-  const icons={success:'✅',error:'❌',info:'ℹ️',warn:'⚠️'};
-  el.innerHTML=`<span>${icons[type]||'ℹ️'}</span><span>${esc(msg)}</span>`;
+  const icons={success:'âœ…',error:'âŒ',info:'â„¹ï¸',warn:'âš ï¸'};
+  el.innerHTML=`<span>${icons[type]||'â„¹ï¸'}</span><span>${esc(msg)}</span>`;
   wrap.appendChild(el);
   setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300)},3500);
 }
 
+// ===== BOOT =====
 window.onload=async()=>{
   await initMsal();
   if(!msalInstance)return;
@@ -1344,6 +1377,7 @@ window.onload=async()=>{
     if(tm&&!tm.textContent.includes('Sync'))tm.textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
   },60000);
 };
+// Auto-refresh every 2 min
 setInterval(()=>{if(document.getElementById('dashboard').style.display!=='none')loadAll()},120000);
 </script>
 </body>
