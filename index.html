@@ -150,8 +150,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .branch-footer{border-top:1px dashed var(--border);padding-top:12px;margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .cat-chips{display:flex;gap:5px;flex-wrap:wrap}
 .cat-chip{font-size:10px;background:var(--surface2);border:1px solid var(--border);color:var(--muted2);padding:2px 8px;border-radius:6px}
-.barcode{display:flex;gap:2px;height:22px;margin:12px 0 10px;opacity:.4}
-.barcode i{display:block;background:var(--text);border-radius:1px}
+.barcode{display:flex;gap:1px;height:26px;margin:12px 0 10px;opacity:.6;align-items:stretch;overflow:hidden}
+.barcode i{display:block;height:100%;background:var(--text);flex:none}
 
 /* ====== ASSET CARDS ====== */
 .asset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:20px}
@@ -702,7 +702,7 @@ function assetIcon(cat,name){
 }
 function barcode(seed){
   let h=0;for(const c of String(seed))h=(h*33+c.charCodeAt(0))>>>0;
-  let s='';for(let i=0;i<28;i++){h=(h*1103515245+12345)>>>0;s+=`<i style="flex:${1+(h%3)}"></i>`}
+  let s='';for(let i=0;i<44;i++){h=(h*1103515245+12345)>>>0;s+=`<i style="width:${1+(h%4)}px"></i>`}
   return`<div class="barcode">${s}</div>`;
 }
 function animateNum(el,to){
@@ -793,7 +793,7 @@ function renderOverview(){
         <thead><tr><th>#</th><th>Photo</th><th>Asset</th><th>Branch</th><th>Category</th><th>Qty</th><th>Status</th><th></th></tr></thead>
         <tbody>${allAssets.slice(0,10).map(d=>`<tr>
           <td><span class="id-tag">#${d.id}</span></td>
-          <td>${d.photo?`<img src="${esc(d.photo)}" class="photo-thumb" onerror="this.style.display='none'" crossorigin="anonymous"/>`:''}</td>
+          <td>${d.photo?`<img src="${BLANK}" data-src="${esc(d.photo)}" class="photo-thumb"/>`:''}</td>
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
@@ -891,7 +891,7 @@ function renderAssetCard(d){
   const ic=`<svg viewBox="0 0 24 24" style="width:44px;height:44px;stroke:var(--muted);fill:none;stroke-width:1.5">${assetIcon(d.category,d.name)}</svg>`;
   // ✅ Fixed image with auth token for SharePoint
   const imgHtml=d.photo
-    ?`<img src="${esc(d.photo)}" alt="" class="sp-img" data-src="${esc(d.photo)}" onerror="handleImgError(this,'${ic.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')" style="width:100%;height:100%;object-fit:cover"/>`
+    ?`<img src="${BLANK}" alt="" class="sp-img" data-src="${esc(d.photo)}" data-fb="${encodeURIComponent('<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">'+ic+'</div>')}" style="width:100%;height:100%;object-fit:cover"/>`
     :`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${ic}</div>`;
   return`<div class="asset-card" onclick="openDetail(${d.id})">
     <div class="asset-thumb">
@@ -910,19 +910,35 @@ function renderAssetCard(d){
   </div>`;
 }
 
-function handleImgError(img,fallback){
-  // Try fetching with auth token for SharePoint images
-  if(img.dataset.tried)return;
-  img.dataset.tried='1';
-  const src=img.dataset.src;
-  if(src&&accessToken){
-    fetch(src,{headers:{Authorization:`Bearer ${accessToken}`}})
-      .then(r=>r.blob()).then(blob=>{img.src=URL.createObjectURL(blob)})
-      .catch(()=>{img.outerHTML=`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${fallback}</div>`});
-  }else{
-    img.outerHTML=`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${fallback}</div>`;
+/* ===== Authenticated image loader =====
+   SharePoint images need the bearer token; <img src> can't send it.
+   So we fetch each image as a blob with the token, then show it. */
+const BLANK='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+const _imgCache={};
+async function hydrateImages(root){
+  root=root||document;
+  const list=[...root.querySelectorAll('img[data-src]')].filter(i=>!i.dataset.hy);
+  for(const img of list){
+    img.dataset.hy='1';
+    const u=img.dataset.src; if(!u)continue;
+    if(_imgCache[u]){ img.src=_imgCache[u]; continue; }
+    try{
+      if(!accessToken) await getToken();
+      const r=await fetch(u,{headers:{Authorization:`Bearer ${accessToken}`}});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const ct=r.headers.get('content-type')||'';
+      if(!/image|octet-stream/i.test(ct)) throw new Error('not image ('+ct+')');
+      const o=URL.createObjectURL(await r.blob()); _imgCache[u]=o; img.src=o;
+    }catch(e){
+      const fb=img.getAttribute('data-fb');
+      if(fb){ img.outerHTML=decodeURIComponent(fb); } else { img.style.display='none'; }
+    }
   }
 }
+// auto-hydrate whenever images are added to the DOM (covers all render paths)
+let _hyT; new MutationObserver(()=>{ clearTimeout(_hyT); _hyT=setTimeout(()=>hydrateImages(),60); })
+  .observe(document.documentElement,{childList:true,subtree:true});
+function handleImgError(img){ img.style.display='none'; } // legacy, unused
 
 // ===== ALL ASSETS =====
 function renderAll(){
@@ -1007,7 +1023,7 @@ function renderAll(){
         </tr></thead>
         <tbody>${sliced.map(d=>`<tr>
           <td><span class="id-tag">#${d.id}</span></td>
-          <td>${d.photo?`<img src="${esc(d.photo)}" class="photo-thumb" onerror="handleImgError(this,'<svg viewBox=\\'0 0 24 24\\' style=\\'width:24px;height:24px;stroke:var(--muted)\\' fill=\\'none\\' stroke-width=\\'2\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg>')" data-src="${esc(d.photo)}" crossorigin="anonymous"/>`:''}</td>
+          <td>${d.photo?`<img src="${BLANK}" data-src="${esc(d.photo)}" class="photo-thumb"/>`:''}</td>
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
@@ -1077,21 +1093,14 @@ function openDetail(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   const rows=[['Branch',d.branch],['Category',d.category],['Model',d.model||'—'],['Status',d.status||'—'],['Color',d.color||'—'],['Quantity',d.qty],['Amount',fmtMoney(d.amount)],['Total Value',fmtMoney(d.amount*d.qty)],['Invoice',d.invoice||'—'],['Purchase Date',fmtDate(d.purchaseDate)],['Created',fmtDate(d.created)]];
   document.getElementById('modal-detail-body').innerHTML=`
-    ${d.photo?`<img src="${esc(d.photo)}" style="width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:16px" onerror="this.style.display='none'" crossorigin="anonymous" data-src="${esc(d.photo)}" id="detail-hero-img"/>`:''}
+    ${d.photo?`<img src="${BLANK}" data-src="${esc(d.photo)}" style="width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:16px" id="detail-hero-img"/>`:''}
     <div class="modal-info">
       <div class="modal-info-row"><span class="modal-info-label">Asset Name</span><span class="modal-info-val">${esc(d.name)}</span></div>
       ${rows.map(([k,v])=>`<div class="modal-info-row"><span class="modal-info-label">${k}</span><span class="modal-info-val">${esc(String(v))}</span></div>`).join('')}
     </div>
     ${d.notes?`<div class="modal-label">Notes</div><div style="background:var(--surface2);border-radius:10px;padding:12px;font-size:13px;line-height:1.6">${esc(d.notes)}</div>`:''}`;
-  // fix hero image auth
-  setTimeout(()=>{
-    const hi=document.getElementById('detail-hero-img');
-    if(hi&&d.photo&&accessToken){
-      fetch(d.photo,{headers:{Authorization:`Bearer ${accessToken}`}})
-        .then(r=>r.blob()).then(blob=>{hi.src=URL.createObjectURL(blob)})
-        .catch(()=>{hi.style.display='none'});
-    }
-  },100);
+  // load hero image with auth token
+  hydrateImages(document.getElementById('modal-detail-body'));
   document.getElementById('modal-detail-footer').innerHTML=`
     <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Close</button>
     <button class="btn btn-warn" onclick="closeModal('modal-detail');openEditAsset(${id})"><svg class="ico" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
