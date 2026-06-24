@@ -373,6 +373,7 @@ td{font-size:14.5px;font-weight:600}
     <div class="page" id="page-branches"></div>
     <div class="page" id="page-all"></div>
     <div class="page" id="page-analytics"></div>
+    <div class="page" id="page-access"></div>
   </div>
 </div>
 
@@ -506,6 +507,8 @@ const TENANT_ID  = 'fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
 const CLIENT_ID  = 'b74353f0-ec73-4a69-ac7d-a7dbb9166b95';
 const SITE       = 'https://netorg20570594.sharepoint.com/sites/-484';
 const LIST_ID    = 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
+const ADMIN_EMAILS = ['tareq.mahmood@swag.sa']; // always admin (bootstrap)
+const ACCESS_LIST  = 'DashboardAccess';
 let BRANCH_KEY   = 'OData__x0627__x0644__x0641__x0631__x0639_'; // الفرع — auto-detected on load
 const SCOPES     = [
   'https://netorg20570594.sharepoint.com/AllSites.Read',
@@ -545,6 +548,7 @@ function colorHex(c){return COLOR_HEX[c]||'#5a6b7c'}
 
 let msalInstance=null, accessToken=null, currentUser=null;
 let allAssets=[], currentTab='overview';
+let allAssetsRaw=[]; let myAccess={role:'none',branches:[],all:false};
 let sortState={key:null,dir:1}, currentPage=1;
 let activeBranch=null, activeCat='All', branchSearchQ='', assetSearchQ='';
 let chartInstances={};
@@ -648,6 +652,7 @@ async function spFetch(url){
 async function loadAll(refresh){
   try{
     setLive('Syncing...');
+    await loadAccess();
     let items=[], url=`${SITE}/_api/web/lists(guid'${LIST_ID}')/items?$top=500&$orderby=ID desc`;
     while(url){
       const d=await spFetch(url);
@@ -655,7 +660,9 @@ async function loadAll(refresh){
       url=d['odata.nextLink']||null;
     }
     if(items[0]){ const bk=Object.keys(items[0]).find(k=>k.startsWith('OData__x0627__x0644__x0641__x0631')); if(bk) BRANCH_KEY=bk; }
-    allAssets=items.map(mapItem);
+    allAssetsRaw=items.map(mapItem);
+    allAssets=filterByAccess(allAssetsRaw);
+    applyAccessUI();
     if(refresh)toast(`✓ ${allAssets.length} assets loaded`,'success');
     setLive(new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}));
     populateBranchSelect();
@@ -772,6 +779,111 @@ function getBranchAgg(){
   return m;
 }
 
+
+// ===== ACCESS CONTROL =====
+async function getAccessItems(){
+  try{ const j=await spFetch(`${SITE}/_api/web/lists/getbytitle('${ACCESS_LIST}')/items?$top=500`); return j.value||[]; }
+  catch(e){ return null; } // null = list missing
+}
+async function loadAccess(){
+  const email=(currentUser&&currentUser.email||'').toLowerCase().trim();
+  if(ADMIN_EMAILS.map(x=>x.toLowerCase()).includes(email)){ myAccess={role:'admin',branches:[],all:true}; return; }
+  const items=await getAccessItems();
+  if(items){
+    const row=items.find(it=>String(it.Title||'').toLowerCase().trim()===email);
+    if(row){
+      const role=String(row.Role||'viewer').toLowerCase();
+      const br=String(row.Branches||'').trim();
+      const all=br==='*'||br.toLowerCase()==='all'||role==='admin'||br==='';
+      myAccess={role,branches:all?[]:br.split(',').map(x=>x.trim()).filter(Boolean),all};
+      return;
+    }
+  }
+  myAccess={role:'none',branches:[],all:false};
+}
+function filterByAccess(arr){ return myAccess.all?arr:arr.filter(d=>myAccess.branches.includes(d.branch)); }
+function canEdit(){ return myAccess.role==='admin'||myAccess.role==='editor'; }
+function isAdmin(){ return myAccess.role==='admin'; }
+function applyRoleUI(){
+  const hide=!canEdit();
+  document.querySelectorAll('[onclick*="openAddAsset"],[onclick*="openEditAsset"],[onclick*="askDeleteAsset"]').forEach(el=>{el.style.display=hide?'none':'';});
+}
+function applyAccessUI(){
+  document.body.dataset.role=myAccess.role;
+  let blk=document.getElementById('access-block');
+  if(myAccess.role==='none'){
+    if(!blk){
+      blk=document.createElement('div'); blk.id='access-block';
+      blk.style.cssText='position:fixed;inset:0;z-index:150;display:grid;place-items:center;background:var(--bg);padding:24px;text-align:center';
+      blk.innerHTML='<div style="max-width:440px"><div style="font-size:52px">&#128274;</div><h2 style="font-size:26px;font-weight:800;margin:12px 0">No access yet</h2><p style="color:var(--muted2);font-size:16px;line-height:1.8">Your account <b>'+esc(currentUser&&currentUser.email||'')+'</b> has not been granted access to this dashboard. Ask the administrator to add you.</p><button class="btn btn-primary" style="margin-top:18px;font-size:15px" onclick="signOut()">Sign out</button></div>';
+      document.body.appendChild(blk);
+    }
+    blk.style.display='grid';
+  }else if(blk){ blk.style.display='none'; }
+  applyRoleUI();
+}
+async function getEntityTypeT(title){
+  try{const r=await fetch(`${SITE}/_api/web/lists/getbytitle('${title}')?$select=ListItemEntityTypeFullName`,{headers:{'Accept':'application/json;odata=nometadata','Authorization':`Bearer ${accessToken}`}});if(r.ok){const j=await r.json();if(j.ListItemEntityTypeFullName)return j.ListItemEntityTypeFullName;}}catch(_){}return'SP.Data.ListItem';}
+async function _digest(){ const r=await fetch(`${SITE}/_api/contextinfo`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`}}); return (await r.json()).d.GetContextWebInformation.FormDigestValue; }
+async function renderAccess(){
+  const host=document.getElementById('page-access');
+  host.innerHTML='<div style="margin-bottom:18px"><h2 style="font-size:24px;font-weight:800">Access Control</h2><div style="color:var(--muted2);font-size:14px">Grant each person a role and the branches they can see.</div></div><div id="access-content" style="font-size:15px">Loading&hellip;</div>';
+  await getToken();
+  const items=await getAccessItems();
+  const branches=[...new Set(allAssetsRaw.map(d=>d.branch))].sort();
+  const c=document.getElementById('access-content');
+  if(items===null){
+    c.innerHTML='<div class="table-card" style="padding:22px"><p style="font-size:15px;margin-bottom:14px">Access list <b>'+ACCESS_LIST+'</b> not found. Create it once to start managing permissions.</p><button class="btn btn-primary" onclick="createAccessList()">Create access list</button></div>';
+    return;
+  }
+  const opts=branches.map(b=>'<label style="display:flex;gap:8px;align-items:center;font-size:14px;padding:5px 0;cursor:pointer"><input type="checkbox" class="acc-br" value="'+esc(b)+'"> '+esc(b)+'</label>').join('');
+  c.innerHTML=
+   '<div class="table-card" style="padding:22px;margin-bottom:18px">'
+   +'<div class="modal-grid2" style="gap:14px">'
+   +'<div><div class="modal-label">User email</div><input class="modal-input" id="acc-email" placeholder="name@swag.sa"></div>'
+   +'<div><div class="modal-label">Role</div><select class="modal-select" id="acc-role"><option value="viewer">Viewer (read only)</option><option value="editor">Editor (add / edit)</option><option value="admin">Admin (full + access)</option></select></div>'
+   +'</div>'
+   +'<div class="modal-label">Branches &mdash; tick which branches this user can see (none ticked = all branches)</div>'
+   +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:2px;margin:6px 0 16px">'+(opts||'<span style="color:var(--muted)">No branches loaded yet</span>')+'</div>'
+   +'<button class="btn btn-primary" onclick="addAccess()">Grant access</button>'
+   +'</div>'
+   +'<div class="table-card"><div class="tbl-wrap"><table><thead><tr><th>Email</th><th>Role</th><th>Branches</th><th></th></tr></thead><tbody>'
+   +(items.map(it=>'<tr><td style="font-weight:700">'+esc(it.Title)+'</td><td>'+esc(it.Role||'viewer')+'</td><td style="font-size:13px">'+esc(it.Branches==='*'||!it.Branches?'All':it.Branches)+'</td><td><button class="view-btn" onclick="removeAccess('+it.ID+')">Remove</button></td></tr>').join('')||'<tr><td colspan="4" style="padding:22px;color:var(--muted)">No users added yet</td></tr>')
+   +'</tbody></table></div></div>';
+}
+async function addAccess(){
+  const email=document.getElementById('acc-email').value.trim();
+  if(!email){toast('Enter an email','error');return}
+  const role=document.getElementById('acc-role').value;
+  const brs=[...document.querySelectorAll('.acc-br:checked')].map(c=>c.value);
+  const branches=brs.length?brs.join(','):'*';
+  try{
+    await getToken(); const digest=await _digest(); const et=await getEntityTypeT(ACCESS_LIST);
+    const r=await fetch(`${SITE}/_api/web/lists/getbytitle('${ACCESS_LIST}')/items`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},body:JSON.stringify({"__metadata":{"type":et},Title:email,Role:role,Branches:branches})});
+    if(r.ok){toast('Access granted to '+email,'success');renderAccess();}
+    else{const t=await r.text();toast('Failed: '+t.slice(0,120),'error')}
+  }catch(e){toast(e.message,'error')}
+}
+async function removeAccess(id){
+  if(!confirm('Remove access for this user?'))return;
+  try{
+    await getToken(); const digest=await _digest();
+    const r=await fetch(`${SITE}/_api/web/lists/getbytitle('${ACCESS_LIST}')/items(${id})`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'DELETE'}});
+    if(r.ok||r.status===204){toast('Removed','success');renderAccess();}else{toast('Failed to remove','error')}
+  }catch(e){toast(e.message,'error')}
+}
+async function createAccessList(){
+  try{
+    await getToken(); const digest=await _digest();
+    const h={'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest};
+    let r=await fetch(`${SITE}/_api/web/lists`,{method:'POST',headers:h,body:JSON.stringify({"__metadata":{"type":"SP.List"},Title:ACCESS_LIST,BaseTemplate:100,Description:'Dashboard access control'})});
+    if(!r.ok){const t=await r.text();throw new Error(t.slice(0,140))}
+    await fetch(`${SITE}/_api/web/lists/getbytitle('${ACCESS_LIST}')/fields`,{method:'POST',headers:h,body:JSON.stringify({"__metadata":{"type":"SP.Field"},Title:'Role',FieldTypeKind:2})});
+    await fetch(`${SITE}/_api/web/lists/getbytitle('${ACCESS_LIST}')/fields`,{method:'POST',headers:h,body:JSON.stringify({"__metadata":{"type":"SP.Field"},Title:'Branches',FieldTypeKind:3})});
+    toast('Access list created','success'); renderAccess();
+  }catch(e){toast('Create failed: '+e.message,'error')}
+}
+
 // ===== NAV =====
 const NAV=[
   ['overview','Overview','<svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>'],
@@ -781,10 +893,16 @@ const NAV=[
 ];
 function buildNav(){
   const agg=getBranchAgg();
-  document.getElementById('nav-bar').innerHTML=NAV.map(([id,label,svg])=>{
+  let html=NAV.map(([id,label,svg])=>{
     const cnt=id==='branches'?Object.keys(agg).length:id==='analytics'?'':allAssets.length;
     return`<div class="nav-item${currentTab===id?' active':''}" onclick="switchTab('${id}')">${svg} ${label}<span class="nav-badge">${cnt}</span></div>`;
   }).join('');
+  if(isAdmin()){
+    const svg='<svg class="ico" viewBox="0 0 24 24"><path d="M12 1l9 4v6c0 5-3.8 9.4-9 11-5.2-1.6-9-6-9-11V5z"/><path d="M9 12l2 2 4-4"/></svg>';
+    html+=`<div class="nav-item${currentTab==='access'?' active':''}" onclick="switchTab('access')">${svg} Access</div>`;
+  }
+  document.getElementById('nav-bar').innerHTML=html;
+  applyRoleUI();
 }
 function switchTab(tab){
   currentTab=tab;
@@ -794,12 +912,14 @@ function switchTab(tab){
   if(tab==='overview')renderOverview();
   else if(tab==='branches'){if(!activeBranch){renderBranches()}else{renderBranchDetail(document.getElementById('page-branches'))}}
   else if(tab==='all'){currentPage=1;renderAll()}
+  else if(tab==='access')renderAccess();
   else if(tab==='analytics')renderAnalytics();
 }
 function renderTab(tab){buildNav();
   if(tab==='overview')renderOverview();
   else if(tab==='branches')renderBranches();
   else if(tab==='all')renderAll();
+  else if(tab==='access')renderAccess();
   else if(tab==='analytics')renderAnalytics();
 }
 
@@ -1166,7 +1286,7 @@ function openDetail(id){
     <button class="btn btn-ghost" onclick="openQR(${id})"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3M17 17h3M14 17h.01M17 14h.01"/></svg> QR</button>
     <button class="btn btn-ghost" onclick="printAsset(${id})"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></svg> Print</button>
     <button class="btn btn-danger" onclick="closeModal('modal-detail');askDeleteAsset(${id},'${esc(d.name)}')"><svg class="ico" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg> Delete</button>`;
-  document.getElementById('modal-detail').classList.add('open');
+  document.getElementById('modal-detail').classList.add('open');applyRoleUI();
 }
 
 // ===== ADD ASSET =====
