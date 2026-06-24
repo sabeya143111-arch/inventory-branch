@@ -1,514 +1,505 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" data-theme="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>جرد الأدوات والموارد — الفروع</title>
-<script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.4.0/lib/msal-browser.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0a0e16; --bg2:#0f1623; --card:#121a29; --card2:#161f31; --line:rgba(255,255,255,.08);
-    --text:#e7edf5; --muted:#8a97a8; --muted2:#aab6c6;
-    --accent:#3fb9c4; --accent2:#7c5cff; --gold:#d4a84b;
-    --green:#34d399; --red:#f87171; --amber:#fbbf24; --blue:#60a5fa;
-    --shadow:0 10px 30px rgba(0,0,0,.35);
-    --r:16px;
-  }
-  :root[data-theme="light"]{
-    --bg:#eef2f7; --bg2:#e6ecf3; --card:#ffffff; --card2:#f7f9fc; --line:rgba(20,40,60,.1);
-    --text:#16222e; --muted:#6b7888; --muted2:#41505f; --shadow:0 10px 30px rgba(20,40,60,.1);
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{font-family:'Tajawal',system-ui,sans-serif;background:
-    radial-gradient(900px 500px at 100% -10%, rgba(63,185,196,.12), transparent 55%),
-    radial-gradient(900px 500px at -10% 110%, rgba(124,92,255,.12), transparent 55%),
-    var(--bg); color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased; transition:background .3s}
-  .gr{font-family:'Space Grotesk',sans-serif}
-  .mono{font-family:'IBM Plex Mono',monospace;font-feature-settings:"tnum"}
-  button{font-family:inherit}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    :root,[data-theme="light"]{
+      --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;
+      --color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;
+      --color-text:#28251d;--color-text-muted:#7a7974;--color-text-faint:#bab9b4;
+      --color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-highlight:#cedcd8;
+      --color-success:#437a22;--color-success-highlight:#d4dfcc;
+      --color-warning:#964219;--color-warning-highlight:#ddcfc6;
+      --color-error:#a12c7b;--color-error-highlight:#e0ced7;
+      --color-notification:#a13544;--color-notification-highlight:#dececb;
+      --shadow-sm:0 1px 2px oklch(0.2 0.01 80/0.06);
+      --shadow-md:0 4px 12px oklch(0.2 0.01 80/0.08);
+      --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;--radius-full:9999px;
+      --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;
+      --space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;
+      --text-xs:clamp(.75rem,.7rem+.25vw,.875rem);--text-sm:clamp(.875rem,.8rem+.35vw,1rem);
+      --text-base:clamp(1rem,.95rem+.25vw,1.125rem);--text-lg:clamp(1.125rem,1rem+.75vw,1.5rem);
+      --text-xl:clamp(1.5rem,1.2rem+1.25vw,2.25rem);
+      --font-body:'Inter','Helvetica Neue',sans-serif;
+      --font-display:'Space Grotesk','Helvetica Neue',sans-serif;
+      --transition:180ms cubic-bezier(0.16,1,0.3,1);
+    }
+    [data-theme="dark"]{
+      --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
+      --color-surface-offset:#1d1c1a;--color-border:#393836;--color-divider:#262523;
+      --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
+      --color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-highlight:#313b3b;
+      --color-success:#6daa45;--color-success-highlight:#3a4435;
+      --color-warning:#bb653b;--color-warning-highlight:#564942;
+      --color-error:#d163a7;--color-error-highlight:#4c3d46;
+      --color-notification:#dd6974;--color-notification-highlight:#574848;
+      --shadow-sm:0 1px 2px oklch(0 0 0/.2);--shadow-md:0 4px 12px oklch(0 0 0/.3);
+    }
+    @media(prefers-color-scheme:dark){:root:not([data-theme]){
+      --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
+      --color-surface-offset:#1d1c1a;--color-border:#393836;--color-divider:#262523;
+      --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
+      --color-primary:#4f98a3;--color-primary-hover:#227f8b;
+    }}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    body{min-height:100dvh;font-family:var(--font-body);font-size:var(--text-base);color:var(--color-text);background:var(--color-bg);transition:background var(--transition),color var(--transition)}
+    img,svg{display:block;max-width:100%}
+    button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
+    input,select{font:inherit;color:inherit}
+    :focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm)}
 
-  /* ===== LOGIN ===== */
-  #login{position:fixed;inset:0;display:grid;place-items:center;padding:20px;z-index:50}
-  .login-card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:40px 36px;max-width:400px;width:100%;text-align:center;box-shadow:var(--shadow)}
-  .logo{width:64px;height:64px;border-radius:18px;margin:0 auto 18px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;box-shadow:0 12px 30px rgba(63,185,196,.4)}
-  .logo svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:1.8}
-  .login-card h1{font-family:'Space Grotesk';font-size:22px;margin:0 0 6px}
-  .login-card p{color:var(--muted);font-size:14px;margin:0 0 26px}
-  .ms-btn{display:inline-flex;align-items:center;gap:11px;background:#fff;color:#1b1b1b;border:0;border-radius:12px;padding:13px 22px;font-size:15px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(0,0,0,.25)}
-  .ms-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.35)}
-  .ms-btn .ms-logo{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px}
-  .ms-logo i{display:block}.ms-logo i:nth-child(1){background:#f25022}.ms-logo i:nth-child(2){background:#7fba00}.ms-logo i:nth-child(3){background:#00a4ef}.ms-logo i:nth-child(4){background:#ffb900}
+    .app-shell{display:grid;grid-template-columns:240px 1fr;min-height:100dvh}
+    @media(max-width:768px){.app-shell{grid-template-columns:1fr}}
 
-  /* ===== APP SHELL ===== */
-  #app{display:none}
-  header{position:sticky;top:0;z-index:30;background:rgba(10,14,22,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-  :root[data-theme="light"] header{background:rgba(238,242,247,.85)}
-  .topbar{display:flex;align-items:center;gap:16px;padding:12px clamp(14px,3vw,32px);flex-wrap:wrap}
-  .brand{display:flex;align-items:center;gap:11px}
-  .brand .logo{width:40px;height:40px;border-radius:11px;margin:0;box-shadow:0 6px 16px rgba(63,185,196,.35)}
-  .brand .logo svg{width:22px;height:22px}
-  .brand h1{font-family:'Space Grotesk';font-size:16px;margin:0}
-  .brand .sub{font-size:11.5px;color:var(--muted)}
-  .nav{display:flex;gap:4px;margin-inline-start:8px;flex-wrap:wrap}
-  .nav button{background:transparent;border:0;color:var(--muted);font-weight:500;font-size:14px;padding:9px 15px;border-radius:10px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:7px}
-  .nav button svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9}
-  .nav button:hover{color:var(--text);background:var(--card)}
-  .nav button.active{color:var(--text);background:linear-gradient(135deg,rgba(63,185,196,.2),rgba(124,92,255,.2));box-shadow:inset 0 0 0 1px var(--line)}
-  .spacer{margin-inline-start:auto}
-  .icobtn{background:var(--card);border:1px solid var(--line);color:var(--muted2);width:38px;height:38px;border-radius:10px;cursor:pointer;display:grid;place-items:center;transition:.15s}
-  .icobtn:hover{color:var(--text);border-color:var(--accent)}
-  .icobtn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9}
-  .user{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;font-size:13px}
-  .user .av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:700;font-size:12px;color:#fff}
-  .user .nm{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .sidebar{background:var(--color-surface);border-right:1px solid var(--color-border);padding:var(--space-6) var(--space-4);display:flex;flex-direction:column;gap:var(--space-2);position:sticky;top:0;height:100dvh;overflow-y:auto}
+    @media(max-width:768px){.sidebar{display:none}}
+    .sidebar-logo{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-4)}
+    .logo-mark{width:32px;height:32px;background:var(--color-primary);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+    .logo-text{font-family:var(--font-display);font-weight:700;font-size:var(--text-sm);color:var(--color-text)}
+    .nav-label{font-size:var(--text-xs);font-weight:600;color:var(--color-text-faint);text-transform:uppercase;letter-spacing:.08em;padding:var(--space-4) var(--space-3) var(--space-2)}
+    .nav-item{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);color:var(--color-text-muted);font-size:var(--text-sm);text-decoration:none;transition:background var(--transition),color var(--transition);cursor:pointer}
+    .nav-item:hover{background:var(--color-surface-offset);color:var(--color-text)}
+    .nav-item.active{background:var(--color-primary-highlight);color:var(--color-primary);font-weight:600}
 
-  main{padding:clamp(16px,3vw,30px) clamp(14px,3vw,32px) 60px;max-width:1320px;margin:0 auto}
-  .page{display:none}.page.active{display:block;animation:fade .35s ease both}
-  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .main-content{display:flex;flex-direction:column;min-height:100dvh;overflow:hidden}
 
-  .head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:20px}
-  .eyebrow{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
-  .head h2{font-family:'Space Grotesk';font-size:24px;margin:5px 0 0}
-  .search{position:relative;min-width:min(320px,70vw)}
-  .search input{width:100%;background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:11px 40px 11px 14px;font-family:'Tajawal';font-size:14px;outline:none;transition:.15s}
-  .search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(63,185,196,.2)}
-  .search svg{position:absolute;inset-inline-end:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;stroke:var(--muted);fill:none;stroke-width:2}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:var(--space-4) var(--space-6);border-bottom:1px solid var(--color-border);background:var(--color-surface);position:sticky;top:0;z-index:10;gap:var(--space-4)}
+    .topbar-left{display:flex;align-items:center;gap:var(--space-3)}
+    .topbar-title{font-family:var(--font-display);font-weight:700;font-size:var(--text-lg)}
+    .topbar-right{display:flex;align-items:center;gap:var(--space-3)}
+    .search-box{display:flex;align-items:center;gap:var(--space-2);background:var(--color-surface-offset);border:1px solid var(--color-border);border-radius:var(--radius-full);padding:var(--space-2) var(--space-4);min-width:220px}
+    .search-box input{background:none;border:none;outline:none;font-size:var(--text-sm);color:var(--color-text);width:100%}
+    .search-box input::placeholder{color:var(--color-text-faint)}
+    .icon-btn{width:36px;height:36px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);transition:background var(--transition),color var(--transition)}
+    .icon-btn:hover{background:var(--color-surface-offset);color:var(--color-text)}
 
-  /* counters */
-  .stats{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:24px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden}
-  .stat::after{content:"";position:absolute;inset-inline-end:-20px;top:-20px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,var(--c,var(--accent)),transparent 70%);opacity:.18}
-  .stat .lab{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:7px}
-  .stat .lab svg{width:15px;height:15px;stroke:var(--c,var(--accent));fill:none;stroke-width:2}
-  .stat .num{font-family:'IBM Plex Mono';font-weight:600;font-size:30px;margin-top:8px}
-  .stat .unit{font-size:13px;color:var(--muted);font-family:'Tajawal'}
+    .page{padding:var(--space-8) var(--space-6);display:flex;flex-direction:column;gap:var(--space-8);max-width:1200px;width:100%}
 
-  /* branch tags */
-  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(255px,1fr))}
-  .tag{position:relative;background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:var(--r);padding:18px 20px 16px;cursor:pointer;text-align:start;color:var(--text);overflow:hidden;transition:transform .16s,box-shadow .16s,border-color .16s}
-  .tag:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:rgba(63,185,196,.4)}
-  .tag:focus-visible{outline:3px solid rgba(63,185,196,.5);outline-offset:2px}
-  .badge{font-family:'Space Grotesk';font-weight:700;font-size:11px;color:#fff;padding:3px 11px;border-radius:999px;white-space:nowrap}
-  .tag h3{font-family:'Space Grotesk';font-size:18px;margin:13px 0 2px}
-  .qstamp{position:absolute;top:16px;inset-inline-end:18px;text-align:center}
-  .qstamp b{font-family:'IBM Plex Mono';font-weight:600;font-size:26px;display:block;line-height:1;color:var(--accent)}
-  .qstamp span{font-size:10px;color:var(--muted)}
-  .barcode{display:flex;gap:2px;height:24px;margin:14px 0 12px;opacity:.5}
-  .barcode i{display:block;background:var(--text);border-radius:1px}
-  .tagfoot{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px dashed var(--line);padding-top:11px}
-  .chips{display:flex;gap:5px;flex-wrap:wrap}
-  .chip{font-size:11px;background:var(--card2);border:1px solid var(--line);color:var(--muted2);padding:3px 9px;border-radius:7px}
-  .types{font-family:'IBM Plex Mono';font-size:12px;color:var(--muted)}.types b{color:var(--text)}
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:var(--space-4)}
+    .kpi-card{background:var(--color-surface);border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--space-5) var(--space-6);display:flex;flex-direction:column;gap:var(--space-3);box-shadow:var(--shadow-sm);transition:box-shadow var(--transition)}
+    .kpi-card:hover{box-shadow:var(--shadow-md)}
+    .kpi-icon{width:36px;height:36px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center}
+    .kpi-label{font-size:var(--text-xs);color:var(--color-text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+    .kpi-value{font-family:var(--font-display);font-size:var(--text-xl);font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+    .kpi-change{font-size:var(--text-xs);font-weight:600}
+    .kpi-up{color:var(--color-success)}.kpi-down{color:var(--color-error)}.kpi-neutral{color:var(--color-text-muted)}
 
-  /* branch detail */
-  .back{display:inline-flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);color:var(--muted2);font-size:13px;font-weight:500;padding:8px 13px;border-radius:10px;cursor:pointer;margin-bottom:16px;transition:.15s}
-  .back:hover{border-color:var(--accent);color:var(--text)}
-  .back svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;transform:scaleX(-1)}
-  .bhead{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin-bottom:18px;display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
-  .bhead .l{flex:1;min-width:200px}.bhead h2{font-family:'Space Grotesk';font-size:23px;margin:8px 0 3px}
-  .ministats{display:flex;gap:22px;flex-wrap:wrap;margin-inline-start:auto}
-  .ms{text-align:center}.ms b{font-family:'IBM Plex Mono';font-weight:600;font-size:22px;color:var(--accent);display:block}.ms span{font-size:11px;color:var(--muted)}
-  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-  .pill{background:var(--card);border:1px solid var(--line);color:var(--muted2);font-size:13px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:.15s}
-  .pill:hover{border-color:var(--accent)}.pill.active{background:var(--accent);border-color:var(--accent);color:#04222a}
-  .pill .n{font-family:'IBM Plex Mono';opacity:.6;margin-inline-start:5px;font-size:12px}
-  .catsec{margin-bottom:24px}
-  .catbar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-  .catdot{width:11px;height:11px;border-radius:3px;flex:none}
-  .catbar h4{font-family:'Space Grotesk';font-size:15px;margin:0}
-  .catbar .meta{font-family:'IBM Plex Mono';font-size:12px;color:var(--muted);margin-inline-start:auto}
-  .cards{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
-  .asset{background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden;cursor:pointer;text-align:start;color:var(--text);padding:0;transition:transform .15s,box-shadow .15s,border-color .15s}
-  .asset:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:rgba(63,185,196,.4)}
-  .asset:focus-visible{outline:3px solid rgba(63,185,196,.5);outline-offset:2px}
-  .thumb{height:120px;background:linear-gradient(135deg,var(--card2),var(--bg2));display:grid;place-items:center;position:relative;background-size:cover;background-position:center}
-  .thumb svg{width:46px;height:46px;stroke:var(--muted);fill:none;stroke-width:1.4}
-  .qpill{position:absolute;top:9px;inset-inline-start:9px;background:rgba(0,0,0,.6);color:#fff;font-family:'IBM Plex Mono';font-size:12px;font-weight:600;padding:3px 9px;border-radius:8px;backdrop-filter:blur(4px)}
-  .abody{padding:12px 14px 14px}.abody h5{font-family:'Space Grotesk';font-size:15px;margin:0 0 3px}
-  .model{font-family:'IBM Plex Mono';font-size:12px;color:var(--muted);margin-bottom:10px;word-break:break-all;min-height:15px}
-  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .swatch{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,.25);flex:none}
-  .clr{font-size:12px;color:var(--muted2)}
-  .status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;margin-inline-start:auto}
-  .st-use{background:rgba(52,211,153,.15);color:var(--green)}.st-stop{background:rgba(248,113,113,.15);color:var(--red)}
-  .st-fix{background:rgba(251,191,36,.15);color:var(--amber)}.st-store{background:rgba(96,165,250,.15);color:var(--blue)}.st-x{background:var(--card2);color:var(--muted2)}
+    .section-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4)}
+    .section-title{font-family:var(--font-display);font-size:var(--text-lg);font-weight:700}
 
-  /* table */
-  .tablewrap{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:auto}
-  table{width:100%;border-collapse:collapse;min-width:760px}
-  th,td{padding:12px 14px;text-align:start;font-size:13.5px;border-bottom:1px solid var(--line);white-space:nowrap}
-  th{font-family:'Space Grotesk';font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0;background:var(--card)}
-  tbody tr{cursor:pointer;transition:.12s}tbody tr:hover{background:var(--card2)}
-  .idtag{font-family:'IBM Plex Mono';font-size:12px;color:var(--accent);background:rgba(63,185,196,.1);padding:2px 8px;border-radius:6px}
+    .toolbar{display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap}
+    .filter-select{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);font-size:var(--text-sm);cursor:pointer;appearance:none;padding-right:var(--space-8);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%237a7974' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .5rem center}
 
-  /* charts */
-  .chartgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-  .chartcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
-  .chartcard h4{font-family:'Space Grotesk';font-size:15px;margin:0 0 14px}
-  .chartcard .cwrap{height:260px;position:relative}
+    .btn{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-4);border-radius:var(--radius-md);font-size:var(--text-sm);font-weight:600;transition:background var(--transition),color var(--transition),box-shadow var(--transition);min-height:36px;white-space:nowrap}
+    .btn-primary{background:var(--color-primary);color:#fff;border:none}
+    .btn-primary:hover{background:var(--color-primary-hover)}
+    .btn-ghost{background:none;border:1px solid var(--color-border);color:var(--color-text-muted)}
+    .btn-ghost:hover{background:var(--color-surface-offset);color:var(--color-text)}
+    .btn-danger{background:var(--color-error-highlight);color:var(--color-error);border:none}
+    .btn-danger:hover{background:var(--color-error);color:#fff}
 
-  /* modal */
-  .ov{position:fixed;inset:0;background:rgba(4,8,14,.7);backdrop-filter:blur(4px);display:none;place-items:center;z-index:60;padding:18px}
-  .ov.open{display:grid}
-  .modal{background:var(--card);border:1px solid var(--line);border-radius:18px;max-width:460px;width:100%;overflow:hidden;box-shadow:var(--shadow);animation:pop .2s ease}
-  @keyframes pop{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
-  .mthumb{height:170px;background:linear-gradient(135deg,var(--card2),var(--bg2));display:grid;place-items:center;position:relative;background-size:cover;background-position:center}
-  .mthumb svg{width:60px;height:60px;stroke:var(--muted);fill:none;stroke-width:1.3}
-  .mclose{position:absolute;top:12px;inset-inline-end:12px;width:32px;height:32px;border:0;border-radius:9px;background:rgba(0,0,0,.5);cursor:pointer;display:grid;place-items:center}
-  .mclose svg{width:17px;height:17px;stroke:#fff;stroke-width:2.2;fill:none}
-  .mbody{padding:18px 22px 22px}.mbody h3{font-family:'Space Grotesk';font-size:21px;margin:0 0 2px}
-  .mbody .model{font-size:13px;margin-bottom:14px}
-  .kv{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;font-size:14px}
-  .kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:500}.kv dd.mono{font-family:'IBM Plex Mono';font-weight:600}
+    .table-wrap{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-sm)}
+    table{width:100%;border-collapse:collapse}
+    thead{background:var(--color-surface-offset)}
+    th{padding:var(--space-3) var(--space-4);text-align:left;font-size:var(--text-xs);font-weight:600;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--color-divider);white-space:nowrap}
+    td{padding:var(--space-3) var(--space-4);font-size:var(--text-sm);border-bottom:1px solid oklch(from var(--color-text) l c h/.05);vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:var(--color-surface-offset)}
+    .product-name{font-weight:500;color:var(--color-text)}
+    .product-sku{font-size:var(--text-xs);color:var(--color-text-faint);margin-top:2px;font-variant-numeric:tabular-nums}
+    .stock-pill{display:inline-flex;align-items:center;gap:var(--space-1);padding:.15rem .5rem;border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600}
+    .stock-in{background:var(--color-success-highlight);color:var(--color-success)}
+    .stock-low{background:var(--color-warning-highlight);color:var(--color-warning)}
+    .stock-out{background:var(--color-error-highlight);color:var(--color-error)}
+    .category-tag{display:inline-flex;padding:.15rem .6rem;border-radius:var(--radius-full);font-size:var(--text-xs);background:var(--color-primary-highlight);color:var(--color-primary);font-weight:500}
+    .row-actions{display:flex;gap:var(--space-2);opacity:0;transition:opacity var(--transition)}
+    tr:hover .row-actions{opacity:1}
+    .action-btn{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);transition:background var(--transition),color var(--transition)}
+    .action-btn:hover{background:var(--color-surface-offset);color:var(--color-text)}
+    .action-btn.delete:hover{background:var(--color-error-highlight);color:var(--color-error)}
 
-  .empty{text-align:center;padding:70px 20px;color:var(--muted)}
-  .empty svg{width:46px;height:46px;stroke:var(--line);fill:none;stroke-width:1.4;margin-bottom:12px}
-  .spin{width:42px;height:42px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp 1s linear infinite;margin:60px auto}
-  @keyframes sp{to{transform:rotate(360deg)}}
+    .modal-overlay{position:fixed;inset:0;background:oklch(.1 0 0/.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:var(--space-4);opacity:0;pointer-events:none;transition:opacity .2s}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal{background:var(--color-surface);border-radius:var(--radius-xl);padding:var(--space-8);width:100%;max-width:480px;box-shadow:0 24px 64px oklch(.1 0 0/.2);transform:translateY(20px);transition:transform .25s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;gap:var(--space-6)}
+    .modal-overlay.open .modal{transform:translateY(0)}
+    .modal-header{display:flex;align-items:center;justify-content:space-between}
+    .modal-title{font-family:var(--font-display);font-size:var(--text-lg);font-weight:700}
+    .form-grid{display:flex;flex-direction:column;gap:var(--space-4)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)}
+    @media(max-width:480px){.form-row{grid-template-columns:1fr}}
+    .form-group{display:flex;flex-direction:column;gap:var(--space-2)}
+    label{font-size:var(--text-sm);font-weight:500;color:var(--color-text-muted)}
+    input[type="text"],input[type="number"],select.form-select{width:100%;padding:var(--space-2) var(--space-3);border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface-2);font-size:var(--text-sm);transition:border-color var(--transition)}
+    input[type="text"]:focus,input[type="number"]:focus,select.form-select:focus{border-color:var(--color-primary);outline:none}
+    .modal-footer{display:flex;gap:var(--space-3);justify-content:flex-end}
 
-  /* toast */
-  #toasts{position:fixed;bottom:20px;inset-inline-start:20px;z-index:80;display:flex;flex-direction:column;gap:10px}
-  .toast{background:var(--card);border:1px solid var(--line);border-inline-start:3px solid var(--accent);border-radius:11px;padding:12px 16px;font-size:14px;box-shadow:var(--shadow);animation:slide .25s ease;max-width:340px}
-  .toast.error{border-inline-start-color:var(--red)}.toast.success{border-inline-start-color:var(--green)}
-  @keyframes slide{from{transform:translateX(-20px);opacity:0}to{transform:none;opacity:1}}
+    .toast-container{position:fixed;bottom:var(--space-6);right:var(--space-6);display:flex;flex-direction:column;gap:var(--space-3);z-index:200}
+    .toast{background:var(--color-text);color:var(--color-bg);padding:var(--space-3) var(--space-5);border-radius:var(--radius-lg);font-size:var(--text-sm);font-weight:500;box-shadow:var(--shadow-md);animation:slideUp .25s cubic-bezier(.16,1,.3,1) forwards;display:flex;align-items:center;gap:var(--space-3)}
+    @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .toast.success .toast-dot{background:var(--color-success)}
+    .toast.error .toast-dot{background:var(--color-error)}
+    .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style>
+    .empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;padding:var(--space-16) var(--space-8);color:var(--color-text-muted)}
+    .empty-state h3{font-family:var(--font-display);font-size:var(--text-lg);color:var(--color-text);margin:var(--space-4) 0 var(--space-2)}
+    .empty-state p{max-width:36ch;margin-bottom:var(--space-6);font-size:var(--text-sm)}
+    .empty-icon{color:var(--color-text-faint)}
+
+    @media(max-width:768px){
+      .page{padding:var(--space-4)}.topbar{padding:var(--space-3) var(--space-4)}
+      .search-box{min-width:140px}.kpi-grid{grid-template-columns:repeat(2,1fr)}
+      th:nth-child(4),td:nth-child(4),th:nth-child(5),td:nth-child(5){display:none}
+    }
+  </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-  <div class="login-card">
-    <div class="logo"><svg viewBox="0 0 24 24"><path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/></svg></div>
-    <h1 class="gr">جرد الأدوات والموارد</h1>
-    <p>سجّل الدخول بحساب Microsoft لعرض أصول الفروع</p>
-    <button class="ms-btn" onclick="signIn()">
-      <span class="ms-logo"><i></i><i></i><i></i><i></i></span>
-      تسجيل الدخول عبر Microsoft
-    </button>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="logo-text">InvenTrack</span>
+    </div>
+    <span class="nav-label">Main Menu</span>
+    <a class="nav-item active" onclick="setActiveNav(this)">
+      <i data-lucide="package" style="width:16px;height:16px"></i> Inventory
+    </a>
+    <a class="nav-item" onclick="setActiveNav(this)">
+      <i data-lucide="bar-chart-2" style="width:16px;height:16px"></i> Reports
+    </a>
+    <a class="nav-item" onclick="setActiveNav(this)">
+      <i data-lucide="shopping-cart" style="width:16px;height:16px"></i> Purchase Orders
+    </a>
+    <a class="nav-item" onclick="setActiveNav(this)">
+      <i data-lucide="truck" style="width:16px;height:16px"></i> Suppliers
+    </a>
+    <span class="nav-label">Settings</span>
+    <a class="nav-item" onclick="setActiveNav(this)">
+      <i data-lucide="settings" style="width:16px;height:16px"></i> Configuration
+    </a>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-title">Inventory</span>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <i data-lucide="search" style="width:14px;height:14px;color:var(--color-text-faint);flex-shrink:0"></i>
+          <input type="text" placeholder="Search products…" id="globalSearch" oninput="filterTable()">
+        </div>
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode">
+          <i data-lucide="sun" style="width:16px;height:16px"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="page">
+      <div class="kpi-grid" id="kpiGrid"></div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+        <div class="section-header">
+          <h2 class="section-title">Products</h2>
+          <div class="toolbar">
+            <select class="filter-select" id="categoryFilter" onchange="filterTable()">
+              <option value="">All Categories</option>
+            </select>
+            <select class="filter-select" id="stockFilter" onchange="filterTable()">
+              <option value="">All Stock</option>
+              <option value="in">In Stock</option>
+              <option value="low">Low Stock</option>
+              <option value="out">Out of Stock</option>
+            </select>
+            <button class="btn btn-primary" onclick="openModal()">
+              <i data-lucide="plus" style="width:14px;height:14px"></i> Add Product
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Warehouse</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="productTableBody"></tbody>
+          </table>
+          <div id="emptyState" style="display:none" class="empty-state">
+            <i data-lucide="package-open" style="width:48px;height:48px" class="empty-icon"></i>
+            <h3>No products found</h3>
+            <p>Try adjusting your filters or add a new product to get started.</p>
+            <button class="btn btn-primary" onclick="openModal()">
+              <i data-lucide="plus" style="width:14px;height:14px"></i> Add Product
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app">
-  <header>
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo"><svg viewBox="0 0 24 24"><path d="M3 9l9-6 9 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/></svg></div>
-        <div><h1 class="gr">جرد الأدوات</h1><div class="sub">أصول الفروع</div></div>
-      </div>
-      <nav class="nav" id="nav">
-        <button data-tab="overview" class="active" onclick="switchTab('overview')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>نظرة عامة</button>
-        <button data-tab="branches" onclick="switchTab('branches')"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>الفروع</button>
-        <button data-tab="all" onclick="switchTab('all')"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>كل الأصول</button>
-        <button data-tab="analytics" onclick="switchTab('analytics')"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>التحليلات</button>
-      </nav>
-      <div class="spacer"></div>
-      <button class="icobtn" onclick="loadData(true)" title="تحديث"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
-      <button class="icobtn" onclick="toggleTheme()" title="الوضع"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
-      <div class="user"><div class="av" id="av">?</div><span class="nm" id="uname">…</span></div>
-      <button class="icobtn" onclick="signOut()" title="خروج"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></button>
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalTitle">Add Product</h3>
+      <button class="icon-btn" onclick="closeModal()"><i data-lucide="x" style="width:16px;height:16px"></i></button>
     </div>
-  </header>
-
-  <main>
-    <div class="page active" id="page-overview"></div>
-    <div class="page" id="page-branches"></div>
-    <div class="page" id="page-all"></div>
-    <div class="page" id="page-analytics"></div>
-  </main>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Product Name *</label>
+        <input type="text" id="fieldName" placeholder="e.g. Polo Shirt — Navy Blue">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>SKU *</label>
+          <input type="text" id="fieldSku" placeholder="SKU-001">
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select class="form-select" id="fieldCategory">
+            <option value="">Select…</option>
+            <option>Shirts</option>
+            <option>Trousers</option>
+            <option>Dresses</option>
+            <option>Accessories</option>
+            <option>Footwear</option>
+            <option>Outerwear</option>
+            <option>Sportswear</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Price (SAR)</label>
+          <input type="number" id="fieldPrice" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Quantity *</label>
+          <input type="number" id="fieldQty" placeholder="0" min="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Reorder Level</label>
+          <input type="number" id="fieldReorder" placeholder="10" min="0">
+        </div>
+        <div class="form-group">
+          <label>Warehouse</label>
+          <select class="form-select" id="fieldWarehouse">
+            <option>Jeddah Main</option>
+            <option>Riyadh Hub</option>
+            <option>Mecca Store</option>
+            <option>Dammam</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
 </div>
 
-<div class="ov" id="ov" role="dialog" aria-modal="true"><div class="modal" id="modal"></div></div>
-<div id="toasts"></div>
+<div class="toast-container" id="toastContainer"></div>
 
 <script>
-/* ===================== CONFIG (real list) ===================== */
-const SITE   = 'https://netorg20570594.sharepoint.com/sites/-484';
-const ORIGIN = 'https://netorg20570594.sharepoint.com';
-const LIST   = 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';            // المواد الزيادة بالفروع
-const CLIENT = 'b459fb3f-d16d-484b-aa16-1e26dc9f2129';            // SwagLock app
-const TENANT = 'fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
-const SCOPES = ['https://netorg20570594.sharepoint.com/AllSites.Read', 'User.Read'];
-// branch field internal name (الفرع) — auto-detected from data, this is the fallback
-let BRANCH_KEY = 'OData__x0627__x0644__x0641__x0631__x0639_';
+lucide.createIcons();
 
-/* ===================== MSAL ===================== */
-const msalInstance = new msal.PublicClientApplication({
-  auth:{ clientId:CLIENT, authority:`https://login.microsoftonline.com/${TENANT}`, redirectUri: window.location.origin + window.location.pathname },
-  cache:{ cacheLocation:'localStorage' }
-});
-let accessToken=null, currentUser=null;
-
-function signIn(){ msalInstance.loginRedirect({ scopes:SCOPES }); }
-function signOut(){ msalInstance.logoutRedirect(); }
-async function getToken(){
-  const acc = msalInstance.getAllAccounts()[0]; if(!acc) return false;
-  try{ const r = await msalInstance.acquireTokenSilent({ scopes:SCOPES, account:acc }); accessToken=r.accessToken; return true; }
-  catch(e){ await msalInstance.acquireTokenRedirect({ scopes:SCOPES }); return false; }
-}
-function setUser(acc){
-  currentUser={ name:acc.name||acc.username, email:acc.username };
-  document.getElementById('uname').textContent = currentUser.name;
-  document.getElementById('av').textContent = (currentUser.name||'?').trim().charAt(0).toUpperCase();
-}
-function showApp(){ document.getElementById('login').style.display='none'; document.getElementById('app').style.display='block'; }
-
-/* ===================== MAPS / HELPERS ===================== */
-const BRAND_COLOR={'سواج':'#d4322c','لاروش':'#2f9aa3','جولد':'#c9a227','اوتفيت':'#7c5cff','أوتفيت':'#7c5cff'};
-const CAT_COLOR={'كمبيوتر':'#3fb9c4','أخرى':'#8a97a8','كراسي':'#d4a84b','أثاث':'#b07a3a','شبكات':'#60a5fa','كاميرات':'#f87171'};
-const COLOR_HEX={'أسود':'#1c1c1e','رمادي':'#8a8f98','أبيض':'#f3f4f6','فضي':'#cfd4d9','بني':'#6b4a2b','ذهبي':'#c9a227','أزرق':'#2f6fed','أحمر':'#d6473e','أخضر':'#1f9e6a'};
-function catColor(c){ if(CAT_COLOR[c])return CAT_COLOR[c]; let h=0; for(const ch of (c||'')) h=(h*31+ch.charCodeAt(0))%360; return `hsl(${h} 55% 55%)`; }
-function brandColor(b){ return BRAND_COLOR[b]||'#3fb9c4'; }
-function colorHex(c){ return COLOR_HEX[c]||'#5a6b7c'; }
-function statusClass(s){ s=s||''; if(s.includes('متوقف')||s.includes('تالف'))return'st-stop'; if(s.includes('صيان'))return'st-fix'; if(s.includes('مخزن')||s.includes('احتياط'))return'st-store'; if(s.includes('استخدام'))return'st-use'; return s?'st-x':'st-x'; }
-const fmt=n=>new Intl.NumberFormat('en-US').format(n||0);
-const fmtMoney=n=>n?fmt(n)+' ر.س':'—';
-function fmtDate(d){ if(!d)return'—'; try{return new Date(d).toLocaleDateString('ar-SA',{day:'numeric',month:'short',year:'numeric'});}catch(_){return d;} }
-const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-
-function icon(cat,name){
-  const n=(name||'')+(cat||'');
-  if(n.includes('كاشير')||n.includes('كمبيوتر')||n.includes('cpu')) return '<path d="M3 5h18v11H3z"/><path d="M8 21h8M12 16v5"/>';
-  if(n.includes('لابتوب')) return '<path d="M4 5h16v10H4z"/><path d="M2 19h20l-2-2H4z"/>';
-  if(n.includes('شاشة')) return '<path d="M3 4h18v12H3z"/><path d="M9 20h6M12 16v4"/>';
-  if(n.includes('طابعة')) return '<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>';
-  if(n.includes('جرد')||n.includes('سكانر')||n.includes('باركود')) return '<path d="M3 5v14M7 5v14M11 5v14M15 5v14M19 5v14"/>';
-  if(n.includes('كرسي')) return '<path d="M6 18v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6"/><path d="M6 18v3M18 18v3M4 12h16"/>';
-  if(n.includes('كاميرا')) return '<path d="M2 7h13l3 3v7H2z"/><circle cx="9" cy="13" r="3"/><path d="M18 9l4-2v9l-4-2"/>';
-  if(n.includes('طاولة')||n.includes('رف')||n.includes('أثاث')) return '<path d="M3 7h18M5 7v13M19 7v13M3 13h18"/>';
-  if(n.includes('ميزان')) return '<path d="M12 3v18M5 7h14"/><path d="M5 7l-2 6h4zM19 7l-2 6h4z"/>';
-  if(n.includes('خزنة')) return '<rect x="3" y="4" width="18" height="16" rx="1"/><circle cx="12" cy="12" r="3"/>';
-  return '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/>';
-}
-
-/* ===================== DATA ===================== */
-let DATA=[], state={branch:null, cat:'الكل', q:''};
-
-function mapItem(it){
-  const branch = (it[BRANCH_KEY]||'غير محدد').toString().trim();
-  const brand = (branch.split(/[-–]/)[0]||'').trim() || '—';
-  let photo='';
-  try{ const p=JSON.parse(it.DevicePhoto); if(p&&p.serverRelativeUrl) photo=(p.serverUrl||ORIGIN)+p.serverRelativeUrl; }catch(_){}
-  const qn = parseInt(String(it.SerialNumber).replace(/[^\d]/g,''),10);
-  return {
-    id: it.ID, branch, brand,
-    name: it.Title || '—',
-    category: it.AssetType || 'أخرى',
-    model: it.Model || '',
-    status: it.Status || '',
-    color: it.Color || '',
-    qty: Number.isFinite(qn) && qn>0 ? qn : 1,
-    notes: it.ConditionNotes || '',
-    purchaseDate: it.PurchaseDate || '',
-    amount: Number(it.PurchasePrice)||0,
-    invoice: it.OrderNumber || '',
-    photo,
-    created: it.Created || ''
-  };
-}
-
-async function loadData(refresh){
-  if(!await getToken()) return;
-  const host=document.getElementById('page-'+currentTab);
-  if(refresh) toast('جارٍ التحديث…','');
-  try{
-    const url=`${SITE}/_api/web/lists(guid'${LIST}')/items?$top=2000&$orderby=ID desc`;
-    const r=await fetch(url,{headers:{'Accept':'application/json;odata=nometadata','Authorization':`Bearer ${accessToken}`}});
-    if(!r.ok){ const t=await r.text(); throw new Error('HTTP '+r.status+(r.status===403?' — صلاحية القراءة (AllSites.Read) غير ممنوحة':'')); }
-    const j=await r.json(); const raw=j.value||[];
-    // auto-detect branch key (encoded Arabic name) once
-    if(raw[0]){ const k=Object.keys(raw[0]).find(k=>k.startsWith('OData__x0627__x0644__x0641__x0631')); if(k) BRANCH_KEY=k; }
-    DATA=raw.map(mapItem);
-    if(refresh) toast(`تم تحميل ${DATA.length} قطعة`,'success');
-    render();
-  }catch(e){ toast('فشل التحميل: '+e.message,'error'); console.error(e); }
-}
-
-/* ===================== AGGREGATES ===================== */
-function branchAgg(){
-  const m={};
-  DATA.forEach(d=>{ (m[d.branch]??=({brand:d.brand,types:0,units:0,value:0,cats:{},last:d.created}));
-    const b=m[d.branch]; b.types++; b.units+=d.qty; b.value+=d.amount*d.qty; b.cats[d.category]=(b.cats[d.category]||0)+1; });
-  return m;
-}
-function barcode(seed){ let h=0; for(const c of String(seed)) h=(h*33+c.charCodeAt(0))>>>0; let s=''; for(let i=0;i<32;i++){ h=(h*1103515245+12345)>>>0; s+=`<i style="flex:${1+(h%4)}"></i>`; } return `<div class="barcode">${s}</div>`; }
-
-/* ===================== COUNTERS ===================== */
-function animate(el,to){ const dur=700,st=performance.now(),from=0; function f(t){ const p=Math.min(1,(t-st)/dur); el.textContent=fmt(Math.round(from+(to-from)*(1-Math.pow(1-p,3)))); if(p<1)requestAnimationFrame(f); } requestAnimationFrame(f); }
-
-/* ===================== RENDER ===================== */
-let currentTab='overview';
-function render(){ renderOverview(); if(currentTab==='branches') renderBranches(); if(currentTab==='all') renderAll(); if(currentTab==='analytics') renderAnalytics(); }
-
-function renderOverview(){
-  const agg=branchAgg(); const branches=Object.keys(agg);
-  const units=DATA.reduce((s,d)=>s+d.qty,0), value=DATA.reduce((s,d)=>s+d.amount*d.qty,0);
-  const inUse=DATA.filter(d=>statusClass(d.status)==='st-use').reduce((s,d)=>s+d.qty,0);
-  const cats=new Set(DATA.map(d=>d.category)).size;
-  const top=branches.map(b=>({b,u:agg[b].units})).sort((x,y)=>y.u-x.u).slice(0,6);
-  document.getElementById('page-overview').innerHTML=`
-    <div class="head"><div><div class="eyebrow">لوحة المعلومات</div><h2 class="gr">نظرة عامة على الأصول</h2></div></div>
-    <div class="stats">
-      <div class="stat" style="--c:#3fb9c4"><div class="lab"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg> الفروع</div><div class="num" data-n="${branches.length}">0</div></div>
-      <div class="stat" style="--c:#7c5cff"><div class="lab"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg> أنواع القطع</div><div class="num" data-n="${DATA.length}">0</div></div>
-      <div class="stat" style="--c:#34d399"><div class="lab"><svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg> إجمالي الوحدات</div><div class="num" data-n="${units}">0</div></div>
-      <div class="stat" style="--c:#d4a84b"><div class="lab"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9h4a2 2 0 0 1 0 4H9"/></svg> القيمة التقديرية</div><div class="num" data-n="${value}">0</div><div class="unit">ريال سعودي</div></div>
-      <div class="stat" style="--c:#60a5fa"><div class="lab"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg> قيد الاستخدام</div><div class="num" data-n="${inUse}">0</div><div class="unit">وحدة</div></div>
-      <div class="stat" style="--c:#fbbf24"><div class="lab"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg> الفئات</div><div class="num" data-n="${cats}">0</div></div>
-    </div>
-    <div class="head"><div><div class="eyebrow">الأكثر تجهيزًا</div><h2 class="gr" style="font-size:18px">أعلى الفروع بالوحدات</h2></div>
-      <button class="back" style="margin:0" onclick="switchTab('branches')">عرض كل الفروع</button></div>
-    <div class="grid">${top.map(({b})=>branchTag(b,agg[b])).join('')}</div>`;
-  document.querySelectorAll('#page-overview .num').forEach(el=>animate(el,+el.dataset.n));
-}
-
-function branchTag(name,a){
-  const cats=Object.entries(a.cats).sort((x,y)=>y[1]-x[1]).slice(0,3);
-  return `<button class="tag" onclick="openBranch('${esc(name)}')">
-    <div class="qstamp"><b>${a.units}</b><span>وحدة</span></div>
-    <span class="badge" style="background:${brandColor(a.brand)}">${esc(a.brand)}</span>
-    <h3 class="gr">${esc(name)}</h3>
-    ${barcode(name)}
-    <div class="tagfoot"><div class="chips">${cats.map(([c,k])=>`<span class="chip">${esc(c)} · ${k}</span>`).join('')}</div><div class="types"><b>${a.types}</b> نوع</div></div>
-  </button>`;
-}
-
-function renderBranches(){
-  const host=document.getElementById('page-branches');
-  if(state.branch){ return renderBranchDetail(host); }
-  const agg=branchAgg(); const names=Object.keys(agg).sort((a,b)=>agg[b].units-agg[a].units);
-  host.innerHTML=`
-    <div class="head"><div><div class="eyebrow">الفروع</div><h2 class="gr">اختر فرعًا لعرض محتوياته</h2></div>
-      <div class="search"><input id="bq" type="search" placeholder="ابحث عن فرع…" oninput="state.q=this.value.trim();renderBranches()" value="${esc(state.q)}"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div></div>
-    <div class="grid">${names.filter(n=>!state.q||n.includes(state.q)||agg[n].brand.includes(state.q)).map(n=>branchTag(n,agg[n])).join('')||'<div class="empty">لا فروع مطابقة</div>'}</div>`;
-}
-
-function renderBranchDetail(host){
-  const all=DATA.filter(d=>d.branch===state.branch); const a=branchAgg()[state.branch];
-  const catList=['الكل',...Array.from(new Set(all.map(d=>d.category)))];
-  let items=all.filter(d=>state.cat==='الكل'||d.category===state.cat);
-  if(state.q){ const q=state.q.toLowerCase(); items=items.filter(d=>(d.name+d.model+d.category+d.notes+d.color).toLowerCase().includes(q)); }
-  const groups={}; items.forEach(d=>(groups[d.category]??=[]).push(d));
-  host.innerHTML=`
-    <button class="back" onclick="state.branch=null;state.cat='الكل';state.q='';renderBranches()"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>كل الفروع</button>
-    <div class="bhead">
-      <div class="l"><span class="badge" style="background:${brandColor(a.brand)}">${esc(a.brand)}</span><h2 class="gr">${esc(state.branch)}</h2><div style="color:var(--muted);font-size:13px">آخر تحديث: ${fmtDate(all[0]?.created)}</div></div>
-      <div class="ministats">
-        <div class="ms"><b>${a.types}</b><span>نوع</span></div>
-        <div class="ms"><b>${a.units}</b><span>وحدة</span></div>
-        <div class="ms"><b>${Object.keys(a.cats).length}</b><span>فئة</span></div>
-        <div class="ms"><b>${fmt(a.value)}</b><span>ر.س</span></div>
-      </div>
-    </div>
-    <div class="search" style="margin-bottom:14px"><input type="search" placeholder="ابحث داخل الفرع…" oninput="state.q=this.value.trim();renderBranches()" value="${esc(state.q)}"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
-    <div class="pills">${catList.map(c=>{ const n=c==='الكل'?all.length:all.filter(d=>d.category===c).length; return `<button class="pill ${state.cat===c?'active':''}" onclick="state.cat='${esc(c)}';renderBranches()">${esc(c)}<span class="n">${n}</span></button>`; }).join('')}</div>
-    ${Object.keys(groups).length?Object.entries(groups).map(([cat,arr])=>{ const u=arr.reduce((s,d)=>s+d.qty,0);
-      return `<div class="catsec"><div class="catbar"><span class="catdot" style="background:${catColor(cat)}"></span><h4 class="gr">${esc(cat)}</h4><span class="meta">${arr.length} نوع · ${u} وحدة</span></div><div class="cards">${arr.map(assetCard).join('')}</div></div>`;
-    }).join(''):'<div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>لا قطع مطابقة</div>'}`;
-}
-
-function assetCard(d){
-  const bg = d.photo ? `style="background-image:url('${esc(d.photo)}')"` : '';
-  const ic = d.photo ? '' : `<svg viewBox="0 0 24 24">${icon(d.category,d.name)}</svg>`;
-  return `<button class="asset" onclick="openAsset(${d.id})">
-    <div class="thumb" ${bg}><span class="qpill">×${d.qty}</span>${ic}</div>
-    <div class="abody"><h5 class="gr">${esc(d.name)}</h5><div class="model">${esc(d.model||'—')}</div>
-      <div class="row"><span class="swatch" style="background:${colorHex(d.color)}"></span><span class="clr">${esc(d.color||'—')}</span><span class="status ${statusClass(d.status)}">${esc(d.status||'—')}</span></div></div>
-  </button>`;
-}
-
-function renderAll(){
-  const host=document.getElementById('page-all');
-  let rows=DATA.slice();
-  if(state.q){ const q=state.q.toLowerCase(); rows=rows.filter(d=>(d.name+d.model+d.category+d.branch+d.notes+d.color+d.status).toLowerCase().includes(q)); }
-  host.innerHTML=`
-    <div class="head"><div><div class="eyebrow">السجل الكامل</div><h2 class="gr">كل الأصول</h2></div>
-      <div style="display:flex;gap:10px;align-items:center">
-        <div class="search"><input type="search" placeholder="ابحث…" oninput="state.q=this.value.trim();renderAll()" value="${esc(state.q)}"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
-        <button class="back" style="margin:0" onclick="exportXlsx()"><svg viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg>تصدير Excel</button>
-      </div></div>
-    <div class="tablewrap"><table><thead><tr>
-      <th>#</th><th>القطعة</th><th>الفرع</th><th>الفئة</th><th>الموديل</th><th>الكمية</th><th>الحالة</th><th>اللون</th><th>المبلغ</th><th>التاريخ</th>
-    </tr></thead><tbody>${rows.map(d=>`<tr onclick="openAsset(${d.id})">
-      <td><span class="idtag">#${d.id}</span></td><td>${esc(d.name)}</td><td>${esc(d.branch)}</td><td>${esc(d.category)}</td>
-      <td class="mono">${esc(d.model||'—')}</td><td class="mono">${d.qty}</td><td><span class="status ${statusClass(d.status)}">${esc(d.status||'—')}</span></td>
-      <td><span class="swatch" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'—')}</td>
-      <td class="mono">${fmtMoney(d.amount)}</td><td style="color:var(--muted)">${fmtDate(d.purchaseDate)}</td>
-    </tr>`).join('')||'<tr><td colspan="10"><div class="empty">لا نتائج</div></td></tr>'}</tbody></table></div>`;
-}
-
-let charts={};
-function renderAnalytics(){
-  const host=document.getElementById('page-analytics');
-  host.innerHTML=`<div class="head"><div><div class="eyebrow">التحليلات</div><h2 class="gr">توزيع الأصول</h2></div></div>
-    <div class="chartgrid">
-      <div class="chartcard"><h4 class="gr">الوحدات حسب الفرع</h4><div class="cwrap"><canvas id="c-branch"></canvas></div></div>
-      <div class="chartcard"><h4 class="gr">حسب الفئة</h4><div class="cwrap"><canvas id="c-cat"></canvas></div></div>
-      <div class="chartcard"><h4 class="gr">حسب الحالة</h4><div class="cwrap"><canvas id="c-status"></canvas></div></div>
-    </div>`;
-  Object.values(charts).forEach(c=>c&&c.destroy()); charts={};
-  const css=getComputedStyle(document.documentElement); const txt=css.getPropertyValue('--muted2').trim(); const grid=css.getPropertyValue('--line').trim();
-  Chart.defaults.color=txt; Chart.defaults.font.family='Tajawal';
-  const agg=branchAgg(); const bn=Object.keys(agg);
-  charts.branch=new Chart(document.getElementById('c-branch'),{type:'bar',data:{labels:bn,datasets:[{data:bn.map(b=>agg[b].units),backgroundColor:bn.map(b=>brandColor(agg[b].brand)),borderRadius:7}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
-  const cats={}; DATA.forEach(d=>cats[d.category]=(cats[d.category]||0)+d.qty); const ck=Object.keys(cats);
-  charts.cat=new Chart(document.getElementById('c-cat'),{type:'doughnut',data:{labels:ck,datasets:[{data:ck.map(c=>cats[c]),backgroundColor:ck.map(catColor),borderWidth:0}]},options:{plugins:{legend:{position:'bottom'}},cutout:'62%',maintainAspectRatio:false}});
-  const st={}; DATA.forEach(d=>{ const k=d.status||'غير محدد'; st[k]=(st[k]||0)+d.qty; }); const sk=Object.keys(st);
-  const stc={'st-use':'#34d399','st-stop':'#f87171','st-fix':'#fbbf24','st-store':'#60a5fa','st-x':'#8a97a8'};
-  charts.status=new Chart(document.getElementById('c-status'),{type:'doughnut',data:{labels:sk,datasets:[{data:sk.map(k=>st[k]),backgroundColor:sk.map(k=>stc[statusClass(k)]),borderWidth:0}]},options:{plugins:{legend:{position:'bottom'}},cutout:'62%',maintainAspectRatio:false}});
-}
-
-/* ===================== NAV / MODAL / EXPORT / THEME ===================== */
-function switchTab(t){ currentTab=t; document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('page-'+t).classList.add('active'); document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t)); state.q=''; if(t==='branches')renderBranches(); if(t==='all')renderAll(); if(t==='analytics')renderAnalytics(); if(t==='overview')renderOverview(); window.scrollTo(0,0); }
-function openBranch(n){ state.branch=n; state.cat='الكل'; state.q=''; switchTab('branches'); }
-
-const ov=document.getElementById('ov'),modal=document.getElementById('modal');
-function openAsset(id){ const d=DATA.find(x=>x.id===id); if(!d)return;
-  const bg=d.photo?`style="background-image:url('${esc(d.photo)}')"`:''; const ic=d.photo?'':`<svg viewBox="0 0 24 24">${icon(d.category,d.name)}</svg>`;
-  modal.innerHTML=`<div class="mthumb" ${bg}>${ic}<button class="mclose" onclick="closeM()" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-    <div class="mbody"><h3 class="gr">${esc(d.name)}</h3><div class="model">${esc(d.model||'—')}</div>
-      <dl class="kv">
-        <dt>الفرع</dt><dd>${esc(d.branch)}</dd>
-        <dt>الفئة</dt><dd>${esc(d.category)}</dd>
-        <dt>الحالة</dt><dd><span class="status ${statusClass(d.status)}">${esc(d.status||'—')}</span></dd>
-        <dt>اللون</dt><dd><span class="swatch" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'—')}</dd>
-        <dt>الكمية</dt><dd class="mono">${d.qty}</dd>
-        <dt>تاريخ الشراء</dt><dd>${fmtDate(d.purchaseDate)}</dd>
-        <dt>مبلغ الشراء</dt><dd class="mono">${fmtMoney(d.amount)}</dd>
-        <dt>الإجمالي</dt><dd class="mono">${fmtMoney(d.amount*d.qty)}</dd>
-        <dt>فاتورة رقم</dt><dd class="mono">${esc(d.invoice||'—')}</dd>
-        <dt>ملاحظات</dt><dd>${esc(d.notes||'—')}</dd>
-      </dl></div>`;
-  ov.classList.add('open');
-}
-function closeM(){ ov.classList.remove('open'); }
-ov.addEventListener('click',e=>{ if(e.target===ov)closeM(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeM(); });
-
-function exportXlsx(){
-  const rows=DATA.map(d=>({'#':d.id,'القطعة':d.name,'الفرع':d.branch,'الفئة':d.category,'الموديل':d.model,'الكمية':d.qty,'الحالة':d.status,'اللون':d.color,'مبلغ الشراء':d.amount,'الإجمالي':d.amount*d.qty,'فاتورة':d.invoice,'تاريخ الشراء':d.purchaseDate,'ملاحظات':d.notes}));
-  const ws=XLSX.utils.json_to_sheet(rows); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'الأصول'); XLSX.writeFile(wb,'جرد_الأصول.xlsx');
-}
-function toggleTheme(){ const r=document.documentElement; const cur=r.getAttribute('data-theme'); r.setAttribute('data-theme',cur==='light'?'dark':'light'); if(currentTab==='analytics')renderAnalytics(); }
-
-let toastTimers=[];
-function toast(msg,type){ const el=document.createElement('div'); el.className='toast '+(type||''); el.textContent=msg; document.getElementById('toasts').appendChild(el); setTimeout(()=>el.remove(),3500); }
-
-/* ===================== BOOT ===================== */
-(async()=>{
-  try{
-    const resp=await msalInstance.handleRedirectPromise();
-    let acc = resp?.account || msalInstance.getAllAccounts()[0];
-    if(acc){ msalInstance.setActiveAccount(acc); setUser(acc); showApp(); await loadData(); }
-  }catch(e){ console.error('MSAL init', e); toast('خطأ في تسجيل الدخول: '+e.message,'error'); }
+(function(){
+  const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
+  let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  r.setAttribute('data-theme',d);
+  updateToggleIcon(t,d);
+  t&&t.addEventListener('click',()=>{
+    d=d==='dark'?'light':'dark';
+    r.setAttribute('data-theme',d);
+    updateToggleIcon(t,d);
+  });
+  function updateToggleIcon(btn,theme){
+    if(!btn)return;
+    btn.innerHTML=theme==='dark'
+      ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+      :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  }
 })();
+
+let products=[
+  {id:1,name:'Polo Shirt — White',sku:'SHT-001',category:'Shirts',price:89,qty:142,reorder:20,warehouse:'Jeddah Main'},
+  {id:2,name:'Slim Fit Trousers',sku:'TRS-002',category:'Trousers',price:145,qty:7,reorder:15,warehouse:'Jeddah Main'},
+  {id:3,name:'Floral Summer Dress',sku:'DRS-003',category:'Dresses',price:199,qty:0,reorder:10,warehouse:'Riyadh Hub'},
+  {id:4,name:'Leather Belt',sku:'ACC-004',category:'Accessories',price:55,qty:89,reorder:25,warehouse:'Jeddah Main'},
+  {id:5,name:'Running Sneakers',sku:'SHO-005',category:'Footwear',price:320,qty:4,reorder:8,warehouse:'Mecca Store'},
+  {id:6,name:'Denim Jacket',sku:'OUT-006',category:'Outerwear',price:275,qty:31,reorder:12,warehouse:'Dammam'},
+  {id:7,name:'Sports Shorts',sku:'SPT-007',category:'Sportswear',price:65,qty:0,reorder:20,warehouse:'Riyadh Hub'},
+  {id:8,name:'Linen Shirt — Beige',sku:'SHT-008',category:'Shirts',price:110,qty:58,reorder:15,warehouse:'Jeddah Main'},
+];
+let editId=null;
+let nextId=9;
+
+function getStockStatus(qty,reorder){
+  if(qty===0)return'out';
+  if(qty<=reorder)return'low';
+  return'in';
+}
+function stockPill(qty,reorder){
+  const s=getStockStatus(qty,reorder);
+  const labels={in:'In Stock',low:'Low Stock',out:'Out of Stock'};
+  const cls={in:'stock-in',low:'stock-low',out:'stock-out'};
+  return`<span class="stock-pill ${cls[s]}">${labels[s]}</span>`;
+}
+
+function renderKPIs(){
+  const total=products.length;
+  const totalQty=products.reduce((a,p)=>a+p.qty,0);
+  const lowStock=products.filter(p=>getStockStatus(p.qty,p.reorder)==='low').length;
+  const outStock=products.filter(p=>p.qty===0).length;
+  const totalVal=products.reduce((a,p)=>a+p.price*p.qty,0);
+  const kpis=[
+    {label:'Total SKUs',value:total,icon:'layers',bg:'var(--color-primary-highlight)',color:'var(--color-primary)',change:'',changeClass:'kpi-neutral'},
+    {label:'Total Quantity',value:totalQty.toLocaleString(),icon:'boxes',bg:'var(--color-primary-highlight)',color:'var(--color-primary)',change:'',changeClass:'kpi-neutral'},
+    {label:'Low Stock Items',value:lowStock,icon:'alert-triangle',bg:'var(--color-warning-highlight)',color:'var(--color-warning)',change:'Needs reorder',changeClass:'kpi-down'},
+    {label:'Out of Stock',value:outStock,icon:'x-circle',bg:'var(--color-error-highlight)',color:'var(--color-error)',change:'Action required',changeClass:'kpi-down'},
+    {label:'Inventory Value',value:'SAR '+totalVal.toLocaleString(),icon:'trending-up',bg:'var(--color-success-highlight)',color:'var(--color-success)',change:'',changeClass:'kpi-neutral'},
+  ];
+  document.getElementById('kpiGrid').innerHTML=kpis.map(k=>`
+    <div class="kpi-card">
+      <div class="kpi-icon" style="background:${k.bg};color:${k.color}">
+        <i data-lucide="${k.icon}" style="width:18px;height:18px"></i>
+      </div>
+      <span class="kpi-label">${k.label}</span>
+      <span class="kpi-value">${k.value}</span>
+      ${k.change?`<span class="kpi-change ${k.changeClass}">${k.change}</span>`:''}
+    </div>`).join('');
+  lucide.createIcons();
+}
+
+function populateCategoryFilter(){
+  const cats=[...new Set(products.map(p=>p.category))].sort();
+  const sel=document.getElementById('categoryFilter');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">All Categories</option>'+cats.map(c=>`<option${c===cur?' selected':''}>${c}</option>`).join('');
+}
+
+function filterTable(){
+  const search=document.getElementById('globalSearch').value.toLowerCase();
+  const cat=document.getElementById('categoryFilter').value;
+  const stock=document.getElementById('stockFilter').value;
+  const filtered=products.filter(p=>{
+    const matchSearch=!search||(p.name.toLowerCase().includes(search)||p.sku.toLowerCase().includes(search)||p.category.toLowerCase().includes(search));
+    const matchCat=!cat||p.category===cat;
+    const matchStock=!stock||getStockStatus(p.qty,p.reorder)===stock;
+    return matchSearch&&matchCat&&matchStock;
+  });
+  renderTable(filtered);
+}
+
+function renderTable(data){
+  const tbody=document.getElementById('productTableBody');
+  const empty=document.getElementById('emptyState');
+  if(!data||!data.length){tbody.innerHTML='';empty.style.display='flex';lucide.createIcons();return;}
+  empty.style.display='none';
+  tbody.innerHTML=data.map(p=>`
+    <tr>
+      <td>
+        <div class="product-name">${escHtml(p.name)}</div>
+        <div class="product-sku">${escHtml(p.sku)}</div>
+      </td>
+      <td><span class="category-tag">${escHtml(p.category)}</span></td>
+      <td style="font-variant-numeric:tabular-nums">SAR ${p.price.toFixed(2)}</td>
+      <td style="font-variant-numeric:tabular-nums;font-weight:600">${p.qty}</td>
+      <td style="color:var(--color-text-muted)">${escHtml(p.warehouse)}</td>
+      <td>${stockPill(p.qty,p.reorder)}</td>
+      <td>
+        <div class="row-actions">
+          <button class="action-btn" onclick="editProduct(${p.id})" title="Edit"><i data-lucide="pencil" style="width:14px;height:14px"></i></button>
+          <button class="action-btn delete" onclick="deleteProduct(${p.id})" title="Delete"><i data-lucide="trash-2" style="width:14px;height:14px"></i></button>
+        </div>
+      </td>
+    </tr>`).join('');
+  lucide.createIcons();
+}
+
+function escHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function openModal(p=null){
+  editId=p?p.id:null;
+  document.getElementById('modalTitle').textContent=p?'Edit Product':'Add Product';
+  document.getElementById('fieldName').value=p?p.name:'';
+  document.getElementById('fieldSku').value=p?p.sku:'';
+  document.getElementById('fieldCategory').value=p?p.category:'';
+  document.getElementById('fieldPrice').value=p?p.price:'';
+  document.getElementById('fieldQty').value=p?p.qty:'';
+  document.getElementById('fieldReorder').value=p?p.reorder:'';
+  document.getElementById('fieldWarehouse').value=p?p.warehouse:'Jeddah Main';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open')}
+function closeModalOnOverlay(e){if(e.target===document.getElementById('modalOverlay'))closeModal()}
+
+function saveProduct(){
+  const name=document.getElementById('fieldName').value.trim();
+  const sku=document.getElementById('fieldSku').value.trim();
+  const category=document.getElementById('fieldCategory').value;
+  const price=parseFloat(document.getElementById('fieldPrice').value)||0;
+  const qty=parseInt(document.getElementById('fieldQty').value)||0;
+  const reorder=parseInt(document.getElementById('fieldReorder').value)||10;
+  const warehouse=document.getElementById('fieldWarehouse').value;
+  if(!name||!sku||!category){showToast('Please fill required fields.','error');return;}
+  if(editId){
+    const i=products.findIndex(p=>p.id===editId);
+    if(i>-1)products[i]={id:editId,name,sku,category,price,qty,reorder,warehouse};
+    showToast('Product updated!','success');
+  }else{
+    products.push({id:nextId++,name,sku,category,price,qty,reorder,warehouse});
+    showToast('Product added!','success');
+  }
+  closeModal();
+  renderKPIs();populateCategoryFilter();filterTable();
+}
+
+function editProduct(id){const p=products.find(x=>x.id===id);if(p)openModal(p)}
+
+function deleteProduct(id){
+  if(!confirm('Delete this product?'))return;
+  products=products.filter(p=>p.id!==id);
+  renderKPIs();populateCategoryFilter();filterTable();
+  showToast('Product deleted.','error');
+}
+
+function showToast(msg,type='success'){
+  const tc=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<span class="toast-dot"></span>${msg}`;
+  tc.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+
+function setActiveNav(el){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+renderKPIs();
+populateCategoryFilter();
+filterTable();
 </script>
 </body>
 </html>
