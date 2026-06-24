@@ -1,613 +1,942 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SWAG Inventory Manager</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-  <style>
-    :root,[data-theme="light"]{
-      --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;
-      --color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;
-      --color-text:#28251d;--color-text-muted:#7a7974;--color-text-faint:#bab9b4;
-      --color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-highlight:#cedcd8;
-      --color-success:#437a22;--color-success-highlight:#d4dfcc;
-      --color-warning:#964219;--color-warning-highlight:#ddcfc6;
-      --color-error:#a12c7b;--color-error-highlight:#e0ced7;
-      --color-notification:#a13544;--color-notification-highlight:#dececb;
-      --shadow-sm:0 1px 2px oklch(0.2 0.01 80/0.06);
-      --shadow-md:0 4px 12px oklch(0.2 0.01 80/0.08);
-      --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;--radius-full:9999px;
-      --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;
-      --space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;
-      --text-xs:clamp(.75rem,.7rem+.25vw,.875rem);--text-sm:clamp(.875rem,.8rem+.35vw,1rem);
-      --text-base:clamp(1rem,.95rem+.25vw,1.125rem);--text-lg:clamp(1.125rem,1rem+.75vw,1.5rem);
-      --text-xl:clamp(1.5rem,1.2rem+1.25vw,2.25rem);
-      --font-body:'Inter','Helvetica Neue',sans-serif;
-      --font-display:'Space Grotesk','Helvetica Neue',sans-serif;
-      --transition:180ms cubic-bezier(0.16,1,0.3,1);
-    }
-    [data-theme="dark"]{
-      --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
-      --color-surface-offset:#1d1c1a;--color-border:#393836;--color-divider:#262523;
-      --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
-      --color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-highlight:#313b3b;
-      --color-success:#6daa45;--color-success-highlight:#3a4435;
-      --color-warning:#bb653b;--color-warning-highlight:#564942;
-      --color-error:#d163a7;--color-error-highlight:#4c3d46;
-      --color-notification:#dd6974;--color-notification-highlight:#574848;
-      --shadow-sm:0 1px 2px oklch(0 0 0/.2);--shadow-md:0 4px 12px oklch(0 0 0/.3);
-    }
-    @media(prefers-color-scheme:dark){:root:not([data-theme]){
-      --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
-      --color-surface-offset:#1d1c1a;--color-border:#393836;--color-divider:#262523;
-      --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
-      --color-primary:#4f98a3;--color-primary-hover:#227f8b;
-    }}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-    body{min-height:100dvh;font-family:var(--font-body);font-size:var(--text-base);color:var(--color-text);background:var(--color-bg);transition:background var(--transition),color var(--transition)}
-    img,svg{display:block;max-width:100%}
-    button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
-    input,select{font:inherit;color:inherit}
-    :focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm)}
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Swag Inventory — Control Center</title>
+<script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.4.0/lib/msal-browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#080A0E;--surface:#0E1117;--surface2:#151B24;--surface3:#1C2433;
+  --border:#1E2A3A;--border2:#243040;--text:#F6F9FF;--muted:#4A6080;--muted2:#6A8090;
+  --accent:#00D9FF;--accent2:#0099CC;--green:#00FF88;--red:#FF3366;--amber:#FFB020;
+  --purple:#8B5CF6;--gold:#D4A84B;--card-glass:rgba(14,17,23,0.70);
+}
+[data-theme="light"] {
+  --bg:#F4F6FB;--surface:#FFFFFF;--surface2:#F0F3F9;--surface3:#E4E9F2;
+  --border:#DCE3EF;--border2:#C9D3E3;--text:#16202E;--muted:#6A7A92;--muted2:#4A5A72;
+  --accent:#0091B5;--accent2:#006C88;--green:#00A35A;--red:#D6224A;--amber:#C77F00;
+  --purple:#6D44C9;--gold:#A9821F;--card-glass:rgba(255,255,255,0.82);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
+body::before{content:'';position:fixed;top:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(0,217,255,.04),transparent 70%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.04),transparent 70%);pointer-events:none;z-index:0}
 
-    .app-shell{display:grid;grid-template-columns:240px 1fr;min-height:100dvh}
-    @media(max-width:768px){.app-shell{grid-template-columns:1fr}}
+/* LOGIN */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;position:relative;z-index:10}
+.login-card{position:relative;z-index:3;background:var(--card-glass);backdrop-filter:blur(16px);border:1px solid var(--border2);border-radius:24px;padding:48px 48px 56px;text-align:center;max-width:420px;width:90%;box-shadow:0 0 90px rgba(0,217,255,.08),0 40px 80px rgba(0,0,0,.45);animation:loginFade .6s ease}
+@keyframes loginFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.login-logo{width:70px;height:70px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 12px 30px rgba(0,217,255,.3)}
+.login-logo svg{width:36px;height:36px;stroke:#080A0E;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.login-brand{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.login-title{font-size:26px;font-weight:300;margin-bottom:8px;letter-spacing:.5px}
+.login-divider{width:40px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto 24px}
+.login-sub{font-size:14px;color:var(--muted2);margin-bottom:34px;line-height:1.7}
+.login-btn{width:100%;padding:15px;background:rgba(0,217,255,.05);border:1px solid rgba(0,217,255,.2);border-radius:9999px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s}
+.login-btn:hover{background:rgba(0,217,255,.1);border-color:rgba(0,217,255,.45);box-shadow:0 0 24px rgba(0,217,255,.12)}
+[data-theme="light"] .login-logo svg{stroke:#fff}
 
-    .sidebar{background:var(--color-surface);border-right:1px solid var(--color-border);padding:var(--space-6) var(--space-4);display:flex;flex-direction:column;gap:var(--space-2);position:sticky;top:0;height:100dvh;overflow-y:auto}
-    @media(max-width:768px){.sidebar{display:none}}
-    .sidebar-logo{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-4)}
-    .logo-mark{width:32px;height:32px;background:var(--color-primary);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
-    .logo-text{font-family:var(--font-display);font-weight:700;font-size:var(--text-sm);color:var(--color-text)}
-    .nav-label{font-size:var(--text-xs);font-weight:600;color:var(--color-text-faint);text-transform:uppercase;letter-spacing:.08em;padding:var(--space-4) var(--space-3) var(--space-2)}
-    .nav-item{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);color:var(--color-text-muted);font-size:var(--text-sm);text-decoration:none;transition:background var(--transition),color var(--transition);cursor:pointer}
-    .nav-item:hover{background:var(--color-surface-offset);color:var(--color-text)}
-    .nav-item.active{background:var(--color-primary-highlight);color:var(--color-primary);font-weight:600}
+/* HEADER */
+.header{background:var(--card-glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;transition:background .3s}
+.header-left{display:flex;align-items:center;gap:16px}
+.header-brand{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--text);letter-spacing:.5px}
+.header-sep{width:1px;height:20px;background:var(--border2)}
+.header-sub{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:livePulse 2s infinite;box-shadow:0 0 8px var(--green)}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.header-right{display:flex;align-items:center;gap:10px}
+.user-chip{background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:6px 14px 6px 10px;font-size:12px;color:var(--muted2);display:flex;align-items:center;gap:8px}
+.user-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#080A0E}
+.hdr-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;color:var(--muted2);font-size:12px;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+.hdr-btn:hover{border-color:var(--accent);color:var(--accent)}
+.hdr-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.ico{width:1em;height:1em;display:inline-block;vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
-    .main-content{display:flex;flex-direction:column;min-height:100dvh;overflow:hidden}
+/* NAV */
+.nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;padding:0 28px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-item{padding:14px 18px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:7px;letter-spacing:.3px}
+.nav-item:hover{color:var(--text)}
+.nav-item.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-badge{background:var(--surface3);border-radius:10px;padding:1px 7px;font-size:10px;font-family:'Space Mono',monospace;color:var(--muted2)}
+.nav-item.active .nav-badge{background:rgba(0,217,255,.1);color:var(--accent)}
 
-    .topbar{display:flex;align-items:center;justify-content:space-between;padding:var(--space-4) var(--space-6);border-bottom:1px solid var(--color-border);background:var(--color-surface);position:sticky;top:0;z-index:10;gap:var(--space-4)}
-    .topbar-left{display:flex;align-items:center;gap:var(--space-3)}
-    .topbar-title{font-family:var(--font-display);font-weight:700;font-size:var(--text-lg)}
-    .topbar-right{display:flex;align-items:center;gap:var(--space-3)}
-    .search-box{display:flex;align-items:center;gap:var(--space-2);background:var(--color-surface-offset);border:1px solid var(--color-border);border-radius:var(--radius-full);padding:var(--space-2) var(--space-4);min-width:220px}
-    .search-box input{background:none;border:none;outline:none;font-size:var(--text-sm);color:var(--color-text);width:100%}
-    .search-box input::placeholder{color:var(--color-text-faint)}
-    .icon-btn{width:36px;height:36px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);transition:background var(--transition),color var(--transition)}
-    .icon-btn:hover{background:var(--color-surface-offset);color:var(--color-text)}
+/* MAIN */
+.main{padding:24px 28px;max-width:1500px;margin:0 auto;position:relative;z-index:1}
+.page{display:none}.page.active{display:block;animation:pageIn .2s ease}
+@keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-    .page{padding:var(--space-8) var(--space-6);display:flex;flex-direction:column;gap:var(--space-8);max-width:1200px;width:100%}
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.topbar-title{font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px}
+.topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;border:none}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#080A0E;box-shadow:0 4px 15px rgba(0,217,255,.2)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,217,255,.35)}
+.btn-ghost{background:var(--surface2);border:1px solid var(--border2);color:var(--muted2)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
 
-    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:var(--space-4)}
-    .kpi-card{background:var(--color-surface);border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--space-5) var(--space-6);display:flex;flex-direction:column;gap:var(--space-3);box-shadow:var(--shadow-sm);transition:box-shadow var(--transition)}
-    .kpi-card:hover{box-shadow:var(--shadow-md)}
-    .kpi-icon{width:36px;height:36px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center}
-    .kpi-label{font-size:var(--text-xs);color:var(--color-text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
-    .kpi-value{font-family:var(--font-display);font-size:var(--text-xl);font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
-    .kpi-change{font-size:var(--text-xs);font-weight:600}
-    .kpi-up{color:var(--color-success)}.kpi-down{color:var(--color-error)}.kpi-neutral{color:var(--color-text-muted)}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;transition:opacity .2s}
+.stat-card.c1::after{background:var(--accent)}.stat-card.c2::after{background:var(--amber)}.stat-card.c3::after{background:var(--purple)}
+.stat-card.c4::after{background:var(--green)}.stat-card.c5::after{background:var(--gold)}.stat-card.c6::after{background:var(--red)}
+.stat-card:hover{transform:translateY(-3px);border-color:var(--border2)}
+.stat-icon{font-size:20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.stat-num{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;line-height:1;margin-bottom:6px}
+.c1 .stat-num{color:var(--accent)}.c2 .stat-num{color:var(--amber)}.c3 .stat-num{color:var(--purple)}
+.c4 .stat-num{color:var(--green)}.c5 .stat-num{color:var(--gold)}.c6 .stat-num{color:var(--red)}
+.stat-label{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.3px}
 
-    .section-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4)}
-    .section-title{font-family:var(--font-display);font-size:var(--text-lg);font-weight:700}
+/* TABLE */
+.table-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px}
+.table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.table-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.table-count{background:var(--surface3);border-radius:20px;padding:2px 10px;font-size:11px;font-family:'Space Mono',monospace;color:var(--muted2)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:600px}
+thead{background:var(--surface2)}
+th{padding:11px 16px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;font-family:'Space Mono',monospace}
+td{padding:13px 16px;font-size:13px;border-top:1px solid var(--border);vertical-align:middle}
+tr{transition:background .1s}tr:hover td{background:rgba(0,217,255,.02)}
+[data-theme="dark"] td{color:#FFFFFF!important;font-weight:700;font-size:14px}
+[data-theme="dark"] th{color:#AEBED2}
 
-    .toolbar{display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap}
-    .filter-select{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);font-size:var(--text-sm);cursor:pointer;appearance:none;padding-right:var(--space-8);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%237a7974' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .5rem center}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Space Mono',monospace}
+.b-dot{width:4px;height:4px;border-radius:50%}
+.b-use{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.2)}.b-use .b-dot{background:var(--green)}
+.b-stop{background:rgba(255,51,102,.1);color:var(--red);border:1px solid rgba(255,51,102,.2)}.b-stop .b-dot{background:var(--red)}
+.b-fix{background:rgba(255,176,32,.1);color:var(--amber);border:1px solid rgba(255,176,32,.2)}.b-fix .b-dot{background:var(--amber)}
+.b-store{background:rgba(96,165,250,.1);color:#60A5FA;border:1px solid rgba(96,165,250,.2)}.b-store .b-dot{background:#60A5FA}
+.b-def{background:var(--surface3);color:var(--muted);border:1px solid var(--border)}
+.id-tag{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2);background:var(--surface2);padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
+.view-btn{background:transparent;border:1px solid var(--border2);border-radius:7px;padding:4px 10px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Space Grotesk',sans-serif;display:inline-flex;align-items:center;gap:4px}
+.view-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-    .btn{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-4);border-radius:var(--radius-md);font-size:var(--text-sm);font-weight:600;transition:background var(--transition),color var(--transition),box-shadow var(--transition);min-height:36px;white-space:nowrap}
-    .btn-primary{background:var(--color-primary);color:#fff;border:none}
-    .btn-primary:hover{background:var(--color-primary-hover)}
-    .btn-ghost{background:none;border:1px solid var(--color-border);color:var(--color-text-muted)}
-    .btn-ghost:hover{background:var(--color-surface-offset);color:var(--color-text)}
-    .btn-danger{background:var(--color-error-highlight);color:var(--color-error);border:none}
-    .btn-danger:hover{background:var(--color-error);color:#fff}
-    .btn-export{background:var(--color-success-highlight);color:var(--color-success);border:none}
-    .btn-export:hover{background:var(--color-success);color:#fff}
+/* FILTERS */
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end}
+.flt-group{display:flex;flex-direction:column;gap:5px}
+.flt-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-family:'Space Mono',monospace}
+.flt-input,.flt-select{background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:12px;padding:8px 12px;outline:none;min-width:130px;transition:border-color .15s}
+.flt-input:focus,.flt-select:focus{border-color:var(--accent)}
+.flt-select option{background:var(--surface2)}
 
-    .table-wrap{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-sm)}
-    .table-scroll{overflow-x:auto}
-    table{width:100%;border-collapse:collapse}
-    thead{background:var(--color-surface-offset)}
-    th{padding:var(--space-3) var(--space-4);text-align:left;font-size:var(--text-xs);font-weight:600;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--color-divider);white-space:nowrap}
-    td{padding:var(--space-3) var(--space-4);font-size:var(--text-sm);border-bottom:1px solid oklch(from var(--color-text) l c h/.05);vertical-align:middle}
-    tr:last-child td{border-bottom:none}
-    tr:hover td{background:var(--color-surface-offset)}
-    .product-name{font-weight:500;color:var(--color-text)}
-    .product-sku{font-size:var(--text-xs);color:var(--color-text-faint);margin-top:2px;font-variant-numeric:tabular-nums}
-    .stock-pill{display:inline-flex;align-items:center;gap:var(--space-1);padding:.15rem .5rem;border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600}
-    .stock-in{background:var(--color-success-highlight);color:var(--color-success)}
-    .stock-low{background:var(--color-warning-highlight);color:var(--color-warning)}
-    .stock-out{background:var(--color-error-highlight);color:var(--color-error)}
-    .category-tag{display:inline-flex;padding:.15rem .6rem;border-radius:var(--radius-full);font-size:var(--text-xs);background:var(--color-primary-highlight);color:var(--color-primary);font-weight:500}
-    .row-actions{display:flex;gap:var(--space-2);opacity:0;transition:opacity var(--transition)}
-    tr:hover .row-actions{opacity:1}
-    .action-btn{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);transition:background var(--transition),color var(--transition)}
-    .action-btn:hover{background:var(--color-surface-offset);color:var(--color-text)}
-    .action-btn.delete:hover{background:var(--color-error-highlight);color:var(--color-error)}
+/* BRANCH CARDS */
+.branch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:20px}
+.branch-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.branch-card:hover{transform:translateY(-4px);border-color:rgba(0,217,255,.4);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.branch-card .brand-badge{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff}
+.branch-card h3{font-size:17px;font-weight:700;margin:12px 0 4px}
+.branch-qty{position:absolute;top:16px;right:18px;text-align:right}
+.branch-qty b{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--accent);display:block;line-height:1}
+.branch-qty span{font-size:10px;color:var(--muted)}
+.branch-footer{border-top:1px dashed var(--border);padding-top:12px;margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.cat-chips{display:flex;gap:5px;flex-wrap:wrap}
+.cat-chip{font-size:10px;background:var(--surface2);border:1px solid var(--border);color:var(--muted2);padding:2px 8px;border-radius:6px}
+.barcode{display:flex;gap:2px;height:22px;margin:12px 0 10px;opacity:.4}
+.barcode i{display:block;background:var(--text);border-radius:1px}
 
-    .table-footer{display:flex;align-items:center;justify-content:space-between;padding:var(--space-3) var(--space-4);border-top:1px solid var(--color-divider);font-size:var(--text-xs);color:var(--color-text-muted);flex-wrap:wrap;gap:var(--space-2)}
+/* ASSET CARDS */
+.asset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:20px}
+.asset-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
+.asset-card:hover{transform:translateY(-3px);border-color:rgba(0,217,255,.4);box-shadow:0 15px 35px rgba(0,0,0,.25)}
+.asset-thumb{height:120px;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative}
+.asset-thumb svg{width:44px;height:44px;stroke:var(--muted);fill:none;stroke-width:1.5}
+.asset-qty-pill{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.6);color:#fff;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;backdrop-filter:blur(4px)}
+.asset-body{padding:12px 14px 14px}
+.asset-body h5{font-size:14px;font-weight:700;margin-bottom:3px}
+.asset-model{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:10px;min-height:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.asset-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.color-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.2);flex:none}
 
-    .modal-overlay{position:fixed;inset:0;background:oklch(.1 0 0/.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:var(--space-4);opacity:0;pointer-events:none;transition:opacity .2s}
-    .modal-overlay.open{opacity:1;pointer-events:all}
-    .modal{background:var(--color-surface);border-radius:var(--radius-xl);padding:var(--space-8);width:100%;max-width:480px;box-shadow:0 24px 64px oklch(.1 0 0/.2);transform:translateY(20px);transition:transform .25s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;gap:var(--space-6)}
-    .modal-overlay.open .modal{transform:translateY(0)}
-    .modal-header{display:flex;align-items:center;justify-content:space-between}
-    .modal-title{font-family:var(--font-display);font-size:var(--text-lg);font-weight:700}
-    .form-grid{display:flex;flex-direction:column;gap:var(--space-4)}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)}
-    @media(max-width:480px){.form-row{grid-template-columns:1fr}}
-    .form-group{display:flex;flex-direction:column;gap:var(--space-2)}
-    label{font-size:var(--text-sm);font-weight:500;color:var(--color-text-muted)}
-    input[type="text"],input[type="number"],select.form-select{width:100%;padding:var(--space-2) var(--space-3);border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface-2);font-size:var(--text-sm);transition:border-color var(--transition)}
-    input[type="text"]:focus,input[type="number"]:focus,select.form-select:focus{border-color:var(--color-primary);outline:none}
-    .modal-footer{display:flex;gap:var(--space-3);justify-content:flex-end}
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}
+.chart-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;font-family:'Space Mono',monospace}
+.chart-wrap{position:relative;height:200px}
 
-    .toast-container{position:fixed;bottom:var(--space-6);right:var(--space-6);display:flex;flex-direction:column;gap:var(--space-3);z-index:200}
-    .toast{background:var(--color-text);color:var(--color-bg);padding:var(--space-3) var(--space-5);border-radius:var(--radius-lg);font-size:var(--text-sm);font-weight:500;box-shadow:var(--shadow-md);animation:slideUp .25s cubic-bezier(.16,1,.3,1) forwards;display:flex;align-items:center;gap:var(--space-3)}
-    @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-    .toast.success .toast-dot{background:var(--color-success)}
-    .toast.error .toast-dot{background:var(--color-error)}
-    .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+/* KPI */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.kpi-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+.kpi-val{font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:var(--accent);line-height:1}
+.kpi-lbl{font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.3px}
+[data-theme="dark"] .kpi-lbl{color:#B7C3D4;font-weight:600}
 
-    .empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;padding:var(--space-16) var(--space-8);color:var(--color-text-muted)}
-    .empty-state h3{font-family:var(--font-display);font-size:var(--text-lg);color:var(--color-text);margin:var(--space-4) 0 var(--space-2)}
-    .empty-state p{max-width:36ch;margin-bottom:var(--space-6);font-size:var(--text-sm)}
-    .empty-icon{color:var(--color-text-faint)}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(8,10,14,.85);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:32px;min-width:380px;max-width:500px;width:90%;animation:modalIn .25s ease;box-shadow:0 40px 80px rgba(0,0,0,.5)}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.modal-info{background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:16px;font-size:12px}
+.modal-info-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
+.modal-info-row:last-child{border:none}
+.modal-info-label{color:var(--muted)}
+.modal-info-val{font-weight:600;font-family:'Space Mono',monospace}
+[data-theme="dark"] .modal-info-val{color:#FFFFFF!important;font-weight:700}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end}
+.modal-input,.modal-select,.modal-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;padding:11px 14px;outline:none;margin-bottom:14px;transition:border-color .15s}
+.modal-input:focus,.modal-select:focus,.modal-textarea:focus{border-color:var(--accent)}
+.modal-textarea{resize:none;height:80px}
+.modal-select option{background:var(--surface2)}
+.modal-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:'Space Mono',monospace}
 
-    @media(max-width:768px){
-      .page{padding:var(--space-4)}.topbar{padding:var(--space-3) var(--space-4)}
-      .search-box{min-width:140px}.kpi-grid{grid-template-columns:repeat(2,1fr)}
-      th:nth-child(5),td:nth-child(5){display:none}
-    }
-  </style>
+/* LOADING / EMPTY */
+.loading{text-align:center;padding:40px;color:var(--muted)}
+.spin{width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:48px;color:var(--muted)}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:300;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 18px;font-size:13px;min-width:250px;display:flex;align-items:center;gap:10px;animation:toastIn .3s ease;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.toast.success{border-color:rgba(0,255,136,.3)}.toast.error{border-color:rgba(255,51,102,.3)}.toast.info{border-color:rgba(0,217,255,.3)}
+
+/* PAGINATION */
+.pagination{display:flex;gap:6px;justify-content:center;margin-top:14px;align-items:center}
+.pg-btn{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--muted);font-size:12px;padding:6px 12px;cursor:pointer;font-family:'Space Mono',monospace;transition:all .15s}
+.pg-btn.active{background:var(--accent);border-color:var(--accent);color:#080A0E;font-weight:700}
+.pg-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+
+/* BRANCH DETAIL */
+.bdetail-header{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 24px;margin-bottom:20px;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.bdetail-header .l{flex:1;min-width:200px}
+.bdetail-header h2{font-size:22px;font-weight:700;margin:8px 0 4px}
+.mini-stats{display:flex;gap:24px;flex-wrap:wrap}
+.ms-item{text-align:center}
+.ms-item b{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:var(--accent);display:block}
+.ms-item span{font-size:11px;color:var(--muted)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.pill{background:var(--surface);border:1px solid var(--border);color:var(--muted2);font-size:12px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:all .15s}
+.pill:hover{border-color:var(--accent)}.pill.active{background:var(--accent);border-color:var(--accent);color:#04222a}
+.pill .n{font-family:'Space Mono',monospace;opacity:.6;margin-left:5px;font-size:11px}
+.cat-section{margin-bottom:24px}
+.cat-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.cat-dot{width:10px;height:10px;border-radius:3px;flex:none}
+.cat-bar h4{font-size:14px;font-weight:700;margin:0}
+.cat-bar .meta{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);margin-left:auto}
+.back-btn{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);font-size:13px;font-weight:500;padding:8px 14px;border-radius:10px;cursor:pointer;margin-bottom:16px;transition:all .15s;font-family:'Space Grotesk',sans-serif}
+.back-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.kpi-strip{grid-template-columns:repeat(2,1fr)}.branch-grid{grid-template-columns:1fr}.asset-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
 </head>
 <body>
 
-<div class="app-shell">
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-mark">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      </div>
-      <span class="logo-text">SWAG Inventory</span>
+<!-- LOGIN -->
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg>
     </div>
-    <span class="nav-label">Main Menu</span>
-    <a class="nav-item active" onclick="setActiveNav(this)">
-      <i data-lucide="package" style="width:16px;height:16px"></i> Inventory
-    </a>
-    <a class="nav-item" onclick="setActiveNav(this)">
-      <i data-lucide="bar-chart-2" style="width:16px;height:16px"></i> Reports
-    </a>
-    <a class="nav-item" onclick="setActiveNav(this)">
-      <i data-lucide="shopping-cart" style="width:16px;height:16px"></i> Purchase Orders
-    </a>
-    <a class="nav-item" onclick="setActiveNav(this)">
-      <i data-lucide="truck" style="width:16px;height:16px"></i> Suppliers
-    </a>
-    <span class="nav-label">Warehouses</span>
-    <a class="nav-item" onclick="setActiveNav(this)">
-      <i data-lucide="warehouse" style="width:16px;height:16px"></i> Jeddah Main
-    </a>
-    <a class="nav-item" onclick="setActiveNav(this)">
-      <i data-lucide="warehouse" style="width:16px;height:16px"></i> Riyadh Hub
-    </a>
-    <a class="nav-item" onclick="setActiveNav(this)">
-      <i data-lucide="warehouse" style="width:16px;height:16px"></i> Mecca Store
-    </a>
-    <span class="nav-label">Settings</span>
-    <a class="nav-item" onclick="setActiveNav(this)">
-      <i data-lucide="settings" style="width:16px;height:16px"></i> Configuration
-    </a>
-  </aside>
-
-  <div class="main-content">
-    <header class="topbar">
-      <div class="topbar-left">
-        <span class="topbar-title">Inventory</span>
-      </div>
-      <div class="topbar-right">
-        <div class="search-box">
-          <i data-lucide="search" style="width:14px;height:14px;color:var(--color-text-faint);flex-shrink:0"></i>
-          <input type="text" placeholder="Search products…" id="globalSearch" oninput="filterTable()">
-        </div>
-        <button class="btn btn-export" onclick="exportCSV()">
-          <i data-lucide="download" style="width:14px;height:14px"></i> Export
-        </button>
-        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode">
-          <i data-lucide="sun" style="width:16px;height:16px"></i>
-        </button>
-      </div>
-    </header>
-
-    <div class="page">
-      <div class="kpi-grid" id="kpiGrid"></div>
-
-      <div style="display:flex;flex-direction:column;gap:var(--space-4)">
-        <div class="section-header">
-          <h2 class="section-title">Products <span id="productCount" style="font-size:var(--text-sm);color:var(--color-text-muted);font-weight:400"></span></h2>
-          <div class="toolbar">
-            <select class="filter-select" id="categoryFilter" onchange="filterTable()">
-              <option value="">All Categories</option>
-            </select>
-            <select class="filter-select" id="warehouseFilter" onchange="filterTable()">
-              <option value="">All Warehouses</option>
-            </select>
-            <select class="filter-select" id="stockFilter" onchange="filterTable()">
-              <option value="">All Stock</option>
-              <option value="in">In Stock</option>
-              <option value="low">Low Stock</option>
-              <option value="out">Out of Stock</option>
-            </select>
-            <button class="btn btn-primary" onclick="openModal()">
-              <i data-lucide="plus" style="width:14px;height:14px"></i> Add Product
-            </button>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <div class="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Product</th>
-                  <th>Category</th>
-                  <th>Price (SAR)</th>
-                  <th>Qty</th>
-                  <th>Reorder Lvl</th>
-                  <th>Warehouse</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="productTableBody"></tbody>
-            </table>
-          </div>
-          <div id="emptyState" style="display:none" class="empty-state">
-            <i data-lucide="package-open" style="width:48px;height:48px" class="empty-icon"></i>
-            <h3>No products found</h3>
-            <p>Try adjusting your filters or add a new product.</p>
-            <button class="btn btn-primary" onclick="openModal()">
-              <i data-lucide="plus" style="width:14px;height:14px"></i> Add Product
-            </button>
-          </div>
-          <div class="table-footer">
-            <span id="tableFooterInfo"></span>
-            <span style="color:var(--color-text-faint)">SWAG Fashion Retail · Jeddah, Saudi Arabia</span>
-          </div>
-        </div>
-      </div>
+    <div class="login-brand">Swag Group</div>
+    <div class="login-title">Inventory Control Center</div>
+    <div class="login-divider"></div>
+    <div class="login-sub">Sign in with your Microsoft account to access the inventory management dashboard.</div>
+    <button class="login-btn" onclick="doLogin()">
+      <svg width="18" height="18" viewBox="0 0 23 23"><path d="M1 1h10v10H1V1z" fill="#f25022"/><path d="M12 1h10v10H12V1z" fill="#7fba00"/><path d="M1 12h10v10H1V12z" fill="#00a4ef"/><path d="M12 12h10v10H12V12z" fill="#ffb900"/></svg>
+      Continue with Microsoft
+    </button>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:center">
+      <button class="hdr-btn" onclick="toggleTheme()" style="margin-top:0">Toggle Theme</button>
     </div>
   </div>
 </div>
 
-<!-- Add / Edit Modal -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modalTitle">Add Product</h3>
-      <button class="icon-btn" onclick="closeModal()"><i data-lucide="x" style="width:16px;height:16px"></i></button>
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none">
+  <div class="header">
+    <div class="header-left">
+      <div class="header-brand">INVENTORY</div>
+      <div class="header-sep"></div>
+      <div class="header-sub">
+        <div class="live-dot"></div>
+        <span id="live-time">Live</span>
+      </div>
     </div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Product Name *</label>
-        <input type="text" id="fieldName" placeholder="e.g. Polo Shirt — Navy Blue">
+    <div class="header-right">
+      <div class="user-chip">
+        <div class="user-avatar" id="user-initial">T</div>
+        <span id="user-name">Loading...</span>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>SKU *</label>
-          <input type="text" id="fieldSku" placeholder="SWG-001">
-        </div>
-        <div class="form-group">
-          <label>Category *</label>
-          <select class="form-select" id="fieldCategory">
-            <option value="">Select…</option>
-            <option>Shirts</option>
-            <option>T-Shirts</option>
-            <option>Trousers</option>
-            <option>Jeans</option>
-            <option>Dresses</option>
-            <option>Abayas</option>
-            <option>Thobes</option>
-            <option>Accessories</option>
-            <option>Footwear</option>
-            <option>Outerwear</option>
-            <option>Sportswear</option>
-            <option>Bags</option>
-            <option>Underwear</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Price (SAR)</label>
-          <input type="number" id="fieldPrice" placeholder="0.00" min="0" step="0.01">
-        </div>
-        <div class="form-group">
-          <label>Quantity *</label>
-          <input type="number" id="fieldQty" placeholder="0" min="0">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Reorder Level</label>
-          <input type="number" id="fieldReorder" placeholder="10" min="0">
-        </div>
-        <div class="form-group">
-          <label>Warehouse</label>
-          <select class="form-select" id="fieldWarehouse">
-            <option>Jeddah Main</option>
-            <option>Riyadh Hub</option>
-            <option>Mecca Store</option>
-            <option>Dammam</option>
-            <option>Khobar</option>
-            <option>Madinah</option>
-          </select>
-        </div>
-      </div>
+      <input id="global-search" class="flt-input" placeholder="Search assets…" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
+      <button class="hdr-btn" onclick="loadAll()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> Refresh</button>
+      <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
+      <button class="hdr-btn" onclick="toggleTheme()">🌙</button>
+      <button class="hdr-btn danger" onclick="signOut()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="nav" id="nav-bar"></div>
+
+  <div class="main">
+    <div class="page active" id="page-overview"></div>
+    <div class="page" id="page-branches"></div>
+    <div class="page" id="page-all"></div>
+    <div class="page" id="page-analytics"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-detail">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg> Asset Details</div>
+    <div class="modal-body" id="modal-detail-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ASSET MODAL -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal">
+    <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add New Asset</div>
+    <div class="modal-body">
+      <div class="modal-label">Branch *</div>
+      <select class="modal-select" id="add-branch">
+        <option value="">Select Branch</option>
+      </select>
+      <div class="modal-label">Asset Name *</div>
+      <input class="modal-input" id="add-name" placeholder="e.g. Cashier Computer"/>
+      <div class="modal-label">Category *</div>
+      <select class="modal-select" id="add-category">
+        <option value="">Select Category</option>
+        <option>كمبيوتر</option><option>لابتوب</option><option>شاشة</option>
+        <option>طابعة</option><option>كاميرات</option><option>كراسي</option>
+        <option>أثاث</option><option>شبكات</option><option>أخرى</option>
+      </select>
+      <div class="modal-label">Model</div>
+      <input class="modal-input" id="add-model" placeholder="Model number / description"/>
+      <div class="modal-label">Quantity *</div>
+      <input class="modal-input" id="add-qty" type="number" min="1" value="1"/>
+      <div class="modal-label">Status</div>
+      <select class="modal-select" id="add-status">
+        <option value="في الاستخدام">في الاستخدام</option>
+        <option value="مخزن">مخزن</option>
+        <option value="صيانة">صيانة</option>
+        <option value="متوقف">متوقف</option>
+      </select>
+      <div class="modal-label">Color</div>
+      <input class="modal-input" id="add-color" placeholder="e.g. أسود، رمادي"/>
+      <div class="modal-label">Purchase Amount (SAR)</div>
+      <input class="modal-input" id="add-amount" type="number" min="0" placeholder="0"/>
+      <div class="modal-label">Notes</div>
+      <textarea class="modal-textarea" id="add-notes" placeholder="Optional notes..."></textarea>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add')">Cancel</button>
+      <button class="btn btn-primary" id="add-submit-btn" onclick="submitNewAsset()">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset
+      </button>
     </div>
   </div>
 </div>
 
-<div class="toast-container" id="toastContainer"></div>
+<div class="toast-wrap" id="toast-wrap"></div>
 
 <script>
-lucide.createIcons();
+// ===== CONFIG =====
+const TENANT_ID = 'fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
+const CLIENT_ID = 'b459fb3f-d16d-484b-aa16-1e26dc9f2129';
+const SITE      = 'https://netorg20570594.sharepoint.com/sites/-484';
+const LIST_ID   = 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
+const SCOPES    = ['https://netorg20570594.sharepoint.com/AllSites.Read','User.Read'];
 
-(function(){
-  const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
-  let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
-  r.setAttribute('data-theme',d);
-  updateToggleIcon(t,d);
-  t&&t.addEventListener('click',()=>{
-    d=d==='dark'?'light':'dark';
-    r.setAttribute('data-theme',d);
-    updateToggleIcon(t,d);
+// ===== COLOR MAPS =====
+const BRAND_COLOR={'سواج':'#d4322c','لاروش':'#2f9aa3','جولد':'#c9a227','اوتفيت':'#7c5cff','أوتفيت':'#7c5cff'};
+const CAT_COLORS={'كمبيوتر':'#3fb9c4','لابتوب':'#60A5FA','شاشة':'#8B5CF6','طابعة':'#FFB020','كاميرات':'#f87171','كراسي':'#D4A84B','أثاث':'#b07a3a','شبكات':'#34d399','أخرى':'#8a97a8'};
+const COLOR_HEX={'أسود':'#1c1c1e','رمادي':'#8a8f98','أبيض':'#f3f4f6','فضي':'#cfd4d9','بني':'#6b4a2b','ذهبي':'#c9a227','أزرق':'#2f6fed','أحمر':'#d6473e','أخضر':'#1f9e6a'};
+function catColor(c){if(CAT_COLORS[c])return CAT_COLORS[c];let h=0;for(const ch of(c||''))h=(h*31+ch.charCodeAt(0))%360;return`hsl(${h} 55% 55%)`}
+function brandColor(b){return BRAND_COLOR[b]||'#3fb9c4'}
+function colorHex(c){return COLOR_HEX[c]||'#5a6b7c'}
+
+// ===== MSAL =====
+let msalInstance=null, accessToken=null, currentUser=null;
+let allAssets=[], currentTab='overview', sortState={key:null,dir:1}, currentPage=1;
+let activeBranch=null, activeCat='All', branchSearchQ='', assetSearchQ='';
+let chartInstances={};
+const PAGE_SIZE=30;
+
+async function initMsal(){
+  let tries=0;
+  while(typeof msal==='undefined'&&tries<50){await new Promise(r=>setTimeout(r,100));tries++}
+  if(typeof msal==='undefined')return;
+  msalInstance=new msal.PublicClientApplication({
+    auth:{clientId:CLIENT_ID,authority:`https://login.microsoftonline.com/${TENANT_ID}`,redirectUri:window.location.origin+window.location.pathname},
+    cache:{cacheLocation:'sessionStorage'}
   });
-  function updateToggleIcon(btn,theme){
-    if(!btn)return;
-    btn.innerHTML=theme==='dark'
-      ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-      :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-  }
-})();
+}
+function doLogin(){msalInstance?.loginRedirect({scopes:SCOPES})}
+function signOut(){msalInstance?.logoutRedirect()}
+async function getToken(){
+  try{
+    const accounts=msalInstance.getAllAccounts();
+    if(!accounts.length)return;
+    const r=await msalInstance.acquireTokenSilent({scopes:SCOPES,account:accounts[0]});
+    accessToken=r.accessToken;
+    if(!currentUser)setUser(accounts[0]);
+  }catch(e){await msalInstance.acquireTokenRedirect({scopes:SCOPES})}
+}
+function setUser(acc){
+  currentUser={name:acc.name||acc.username,email:acc.username};
+  document.getElementById('user-name').textContent=currentUser.name;
+  document.getElementById('user-initial').textContent=(currentUser.name||'?').charAt(0).toUpperCase();
+}
+function showDashboard(){document.getElementById('login-screen').style.display='none';document.getElementById('dashboard').style.display='block'}
 
-let products = [
-  {id:1,  name:'Classic White Polo Shirt',           sku:'SWG-SHT-001', category:'Shirts',      price:89,   qty:142, reorder:20, warehouse:'Jeddah Main'},
-  {id:2,  name:'Navy Blue Oxford Shirt',             sku:'SWG-SHT-002', category:'Shirts',      price:110,  qty:58,  reorder:15, warehouse:'Jeddah Main'},
-  {id:3,  name:'Linen Shirt — Beige',                sku:'SWG-SHT-003', category:'Shirts',      price:120,  qty:34,  reorder:15, warehouse:'Riyadh Hub'},
-  {id:4,  name:'Checkered Casual Shirt',             sku:'SWG-SHT-004', category:'Shirts',      price:95,   qty:7,   reorder:15, warehouse:'Jeddah Main'},
-  {id:5,  name:'Plain Black T-Shirt',                sku:'SWG-TSH-001', category:'T-Shirts',    price:45,   qty:210, reorder:30, warehouse:'Jeddah Main'},
-  {id:6,  name:'Graphic Print T-Shirt',              sku:'SWG-TSH-002', category:'T-Shirts',    price:55,   qty:0,   reorder:20, warehouse:'Riyadh Hub'},
-  {id:7,  name:'V-Neck T-Shirt — White',             sku:'SWG-TSH-003', category:'T-Shirts',    price:40,   qty:88,  reorder:25, warehouse:'Mecca Store'},
-  {id:8,  name:'Henley T-Shirt — Grey',              sku:'SWG-TSH-004', category:'T-Shirts',    price:50,   qty:12,  reorder:20, warehouse:'Jeddah Main'},
-  {id:9,  name:'Slim Fit Trousers — Black',          sku:'SWG-TRS-001', category:'Trousers',    price:145,  qty:7,   reorder:15, warehouse:'Jeddah Main'},
-  {id:10, name:'Chino Trousers — Khaki',             sku:'SWG-TRS-002', category:'Trousers',    price:135,  qty:43,  reorder:12, warehouse:'Riyadh Hub'},
-  {id:11, name:'Formal Dress Trousers',              sku:'SWG-TRS-003', category:'Trousers',    price:175,  qty:0,   reorder:10, warehouse:'Dammam'},
-  {id:12, name:'Cargo Trousers — Olive',             sku:'SWG-TRS-004', category:'Trousers',    price:155,  qty:19,  reorder:12, warehouse:'Jeddah Main'},
-  {id:13, name:'Slim Fit Jeans — Dark Blue',         sku:'SWG-JNS-001', category:'Jeans',       price:185,  qty:65,  reorder:20, warehouse:'Jeddah Main'},
-  {id:14, name:'Straight Cut Jeans — Light Wash',   sku:'SWG-JNS-002', category:'Jeans',       price:175,  qty:9,   reorder:15, warehouse:'Riyadh Hub'},
-  {id:15, name:'Ripped Jeans — Black',               sku:'SWG-JNS-003', category:'Jeans',       price:210,  qty:0,   reorder:10, warehouse:'Mecca Store'},
-  {id:16, name:'Floral Summer Dress',                sku:'SWG-DRS-001', category:'Dresses',     price:199,  qty:0,   reorder:10, warehouse:'Riyadh Hub'},
-  {id:17, name:'Maxi Dress — Navy',                  sku:'SWG-DRS-002', category:'Dresses',     price:245,  qty:22,  reorder:8,  warehouse:'Jeddah Main'},
-  {id:18, name:'Casual Wrap Dress',                  sku:'SWG-DRS-003', category:'Dresses',     price:185,  qty:5,   reorder:8,  warehouse:'Khobar'},
-  {id:19, name:'Embroidered Abaya — Black',          sku:'SWG-ABY-001', category:'Abayas',      price:320,  qty:47,  reorder:15, warehouse:'Jeddah Main'},
-  {id:20, name:'Premium Nida Abaya',                 sku:'SWG-ABY-002', category:'Abayas',      price:450,  qty:31,  reorder:10, warehouse:'Mecca Store'},
-  {id:21, name:'Open Front Abaya — Camel',           sku:'SWG-ABY-003', category:'Abayas',      price:375,  qty:0,   reorder:10, warehouse:'Riyadh Hub'},
-  {id:22, name:'Classic White Thobe',                sku:'SWG-THB-001', category:'Thobes',      price:280,  qty:95,  reorder:20, warehouse:'Jeddah Main'},
-  {id:23, name:'Premium Thobe — Cream',              sku:'SWG-THB-002', category:'Thobes',      price:350,  qty:52,  reorder:15, warehouse:'Mecca Store'},
-  {id:24, name:'Casual Thobe — Light Blue',          sku:'SWG-THB-003', category:'Thobes',      price:220,  qty:8,   reorder:15, warehouse:'Dammam'},
-  {id:25, name:'Leather Belt — Black',               sku:'SWG-ACC-001', category:'Accessories', price:55,   qty:89,  reorder:25, warehouse:'Jeddah Main'},
-  {id:26, name:'Canvas Belt — Brown',                sku:'SWG-ACC-002', category:'Accessories', price:40,   qty:120, reorder:30, warehouse:'Jeddah Main'},
-  {id:27, name:'Knit Cap — Charcoal',                sku:'SWG-ACC-003', category:'Accessories', price:35,   qty:3,   reorder:20, warehouse:'Riyadh Hub'},
-  {id:28, name:'Silk Scarf — Multi',                 sku:'SWG-ACC-004', category:'Accessories', price:75,   qty:44,  reorder:15, warehouse:'Jeddah Main'},
-  {id:29, name:'Running Sneakers — White',           sku:'SWG-SHO-001', category:'Footwear',    price:320,  qty:4,   reorder:8,  warehouse:'Mecca Store'},
-  {id:30, name:'Leather Oxford Shoes',               sku:'SWG-SHO-002', category:'Footwear',    price:450,  qty:18,  reorder:8,  warehouse:'Jeddah Main'},
-  {id:31, name:'Casual Loafers — Tan',               sku:'SWG-SHO-003', category:'Footwear',    price:280,  qty:0,   reorder:8,  warehouse:'Khobar'},
-  {id:32, name:'Sandals — Brown Leather',            sku:'SWG-SHO-004', category:'Footwear',    price:195,  qty:62,  reorder:12, warehouse:'Jeddah Main'},
-  {id:33, name:'Denim Jacket — Indigo',              sku:'SWG-OUT-001', category:'Outerwear',   price:275,  qty:31,  reorder:12, warehouse:'Dammam'},
-  {id:34, name:'Wool Coat — Camel',                  sku:'SWG-OUT-002', category:'Outerwear',   price:680,  qty:6,   reorder:5,  warehouse:'Riyadh Hub'},
-  {id:35, name:'Sports Shorts — Black',              sku:'SWG-SPT-001', category:'Sportswear',  price:65,   qty:0,   reorder:20, warehouse:'Riyadh Hub'},
-  {id:36, name:'Track Pants — Navy',                 sku:'SWG-SPT-002', category:'Sportswear',  price:95,   qty:78,  reorder:20, warehouse:'Jeddah Main'},
-  {id:37, name:'Zip-Up Hoodie — Grey',               sku:'SWG-SPT-003', category:'Sportswear',  price:135,  qty:11,  reorder:15, warehouse:'Jeddah Main'},
-  {id:38, name:'Leather Tote Bag — Black',           sku:'SWG-BAG-001', category:'Bags',        price:395,  qty:23,  reorder:8,  warehouse:'Jeddah Main'},
-  {id:39, name:'Canvas Backpack — Olive',            sku:'SWG-BAG-002', category:'Bags',        price:185,  qty:2,   reorder:8,  warehouse:'Riyadh Hub'},
+// ===== DATA FETCH =====
+let BRANCH_KEY='OData__x0627__x0644__x0641__x0631__x0639_';
+
+function mapItem(it){
+  let branch=(it[BRANCH_KEY]||'غير محدد').toString().trim();
+  const brand=(branch.split(/[-–]/)[0]||'').trim()||'—';
+  let photo='';
+  try{const p=typeof it.DevicePhoto==='string'?JSON.parse(it.DevicePhoto):it.DevicePhoto;if(p&&p.serverRelativeUrl)photo=(p.serverUrl||'https://netorg20570594.sharepoint.com')+p.serverRelativeUrl}catch(_){}
+  const rawQty=it.SerialNumber||it.Quantity||'1';
+  const qn=parseInt(String(rawQty).replace(/[^\d]/g,''),10);
+  return{
+    id:it.ID,branch,brand,name:it.Title||'—',category:it.AssetType||'أخرى',
+    model:it.Model||'',status:it.Status||'',color:it.Color||'',
+    qty:Number.isFinite(qn)&&qn>0?qn:1,notes:it.ConditionNotes||'',
+    purchaseDate:it.PurchaseDate||'',amount:Number(it.PurchasePrice)||0,
+    invoice:it.OrderNumber||'',photo,created:it.Created||''
+  };
+}
+
+async function spFetch(url){
+  await getToken();
+  const r=await fetch(url,{headers:{'Accept':'application/json;odata=nometadata','Authorization':`Bearer ${accessToken}`}});
+  if(!r.ok)throw new Error(`SP ${r.status}`);
+  const d=await r.json();
+  return d.value||[];
+}
+
+async function loadAll(refresh){
+  try{
+    document.getElementById('live-time').textContent='Syncing...';
+    const raw=await spFetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items?$top=2000&$orderby=ID desc`);
+    if(raw[0]){const k=Object.keys(raw[0]).find(k=>k.startsWith('OData__x0627__x0644__x0641__x0631'));if(k)BRANCH_KEY=k}
+    allAssets=raw.map(mapItem);
+    if(refresh)toast(`✓ Loaded ${allAssets.length} assets`,'success');
+    document.getElementById('live-time').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    renderTab(currentTab);
+    populateBranchSelect();
+  }catch(e){
+    document.getElementById('live-time').textContent='Error';
+    // DEMO MODE — use sample data if SharePoint fails
+    if(!allAssets.length){allAssets=DEMO_DATA;populateBranchSelect()}
+    toast('Using demo data (SP not connected)','info');
+    renderTab(currentTab);
+  }
+}
+
+// ===== DEMO DATA =====
+const DEMO_DATA=[
+  {id:1,branch:'سواج - جدة',brand:'سواج',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'Dell OptiPlex 3090',status:'في الاستخدام',color:'أسود',qty:3,notes:'',purchaseDate:'2023-01-15',amount:4500,invoice:'INV-001',photo:'',created:'2023-01-15T10:00:00Z'},
+  {id:2,branch:'سواج - جدة',brand:'سواج',name:'شاشة كاشير',category:'شاشة',model:'Samsung 22"',status:'في الاستخدام',color:'أسود',qty:3,notes:'',purchaseDate:'2023-01-15',amount:800,invoice:'INV-002',photo:'',created:'2023-01-15T10:00:00Z'},
+  {id:3,branch:'سواج - جدة',brand:'سواج',name:'طابعة إيصالات',category:'طابعة',model:'Epson TM-T88',status:'في الاستخدام',color:'أبيض',qty:2,notes:'',purchaseDate:'2023-02-01',amount:1200,invoice:'INV-003',photo:'',created:'2023-02-01T10:00:00Z'},
+  {id:4,branch:'سواج - جدة',brand:'سواج',name:'جهاز جرد باركود',category:'أخرى',model:'Zebra TC21',status:'في الاستخدام',color:'أسود',qty:2,notes:'',purchaseDate:'2023-02-10',amount:2200,invoice:'INV-004',photo:'',created:'2023-02-10T10:00:00Z'},
+  {id:5,branch:'سواج - الرياض',brand:'سواج',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'HP ProDesk 400',status:'في الاستخدام',color:'رمادي',qty:4,notes:'',purchaseDate:'2023-03-01',amount:4200,invoice:'INV-005',photo:'',created:'2023-03-01T10:00:00Z'},
+  {id:6,branch:'سواج - الرياض',brand:'سواج',name:'كاميرا مراقبة',category:'كاميرات',model:'Hikvision 4MP',status:'في الاستخدام',color:'أبيض',qty:6,notes:'',purchaseDate:'2023-03-05',amount:650,invoice:'INV-006',photo:'',created:'2023-03-05T10:00:00Z'},
+  {id:7,branch:'سواج - الدمام',brand:'سواج',name:'لابتوب مكتبي',category:'لابتوب',model:'Dell Latitude 5521',status:'في الاستخدام',color:'رمادي',qty:2,notes:'',purchaseDate:'2023-04-01',amount:6800,invoice:'INV-007',photo:'',created:'2023-04-01T10:00:00Z'},
+  {id:8,branch:'جدة - سوق 7',brand:'لاروش',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'Lenovo ThinkCentre',status:'في الاستخدام',color:'أسود',qty:5,notes:'',purchaseDate:'2023-01-20',amount:3900,invoice:'INV-008',photo:'',created:'2023-01-20T10:00:00Z'},
+  {id:9,branch:'جدة - سوق 7',brand:'لاروش',name:'طابعة ليبل',category:'طابعة',model:'Zebra ZD420',status:'في الاستخدام',color:'أبيض',qty:3,notes:'',purchaseDate:'2023-02-05',amount:1800,invoice:'INV-009',photo:'',created:'2023-02-05T10:00:00Z'},
+  {id:10,branch:'جدة - الكورنيش',brand:'لاروش',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'Dell OptiPlex',status:'في الاستخدام',color:'أسود',qty:4,notes:'',purchaseDate:'2023-03-10',amount:4500,invoice:'INV-010',photo:'',created:'2023-03-10T10:00:00Z'},
+  {id:11,branch:'جدة - الكورنيش',brand:'لاروش',name:'شاشة LED',category:'شاشة',model:'LG 24"',status:'مخزن',color:'أسود',qty:2,notes:'احتياطي',purchaseDate:'2023-03-10',amount:750,invoice:'INV-011',photo:'',created:'2023-03-10T10:00:00Z'},
+  {id:12,branch:'Gold - جدة',brand:'جولد',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'HP Z2 Mini',status:'في الاستخدام',color:'فضي',qty:3,notes:'',purchaseDate:'2023-05-01',amount:7200,invoice:'INV-012',photo:'',created:'2023-05-01T10:00:00Z'},
+  {id:13,branch:'Gold - جدة',brand:'جولد',name:'ميزان ذهب',category:'أخرى',model:'Ohaus Pioneer',status:'في الاستخدام',color:'فضي',qty:2,notes:'',purchaseDate:'2023-05-15',amount:3500,invoice:'INV-013',photo:'',created:'2023-05-15T10:00:00Z'},
+  {id:14,branch:'Gold - الرياض',brand:'جولد',name:'خزنة',category:'أخرى',model:'Yale 900 Series',status:'في الاستخدام',color:'رمادي',qty:1,notes:'',purchaseDate:'2023-06-01',amount:8500,invoice:'INV-014',photo:'',created:'2023-06-01T10:00:00Z'},
+  {id:15,branch:'الرياض - النسيم',brand:'لاروش',name:'كرسي موظف',category:'كراسي',model:'Ergonomic 360',status:'في الاستخدام',color:'أسود',qty:8,notes:'',purchaseDate:'2023-04-20',amount:850,invoice:'INV-015',photo:'',created:'2023-04-20T10:00:00Z'},
+  {id:16,branch:'الرياض - النسيم',brand:'لاروش',name:'طاولة عرض',category:'أثاث',model:'Custom MDF',status:'في الاستخدام',color:'بني',qty:4,notes:'',purchaseDate:'2023-04-20',amount:1200,invoice:'INV-016',photo:'',created:'2023-04-20T10:00:00Z'},
+  {id:17,branch:'الدمام - اوتفيت',brand:'اوتفيت',name:'كمبيوتر كاشير',category:'كمبيوتر',model:'Lenovo M90',status:'في الاستخدام',color:'أسود',qty:3,notes:'',purchaseDate:'2023-07-01',amount:4100,invoice:'INV-017',photo:'',created:'2023-07-01T10:00:00Z'},
+  {id:18,branch:'الدمام - اوتفيت',brand:'اوتفيت',name:'طابعة رايد',category:'طابعة',model:'Brother HL-L2350',status:'صيانة',color:'رمادي',qty:1,notes:'تحتاج صيانة طباعة',purchaseDate:'2023-07-01',amount:900,invoice:'INV-018',photo:'',created:'2023-07-01T10:00:00Z'},
 ];
 
-let editId=null;
-let nextId=40;
-
-function getStockStatus(qty,reorder){
-  if(qty===0)return'out';
-  if(qty<=reorder)return'low';
-  return'in';
+// ===== HELPERS =====
+function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
+function fmtMoney(n){return n?fmt(n)+' SAR':'—'}
+function fmtDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(_){return d}}
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function statusBadge(s){
+  const v=(s||'').toLowerCase();
+  if(v.includes('استخدام'))return`<span class="badge b-use"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('متوقف')||v.includes('تالف'))return`<span class="badge b-stop"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('صيان'))return`<span class="badge b-fix"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(v.includes('مخزن')||v.includes('احتياط'))return`<span class="badge b-store"><span class="b-dot"></span>${esc(s)}</span>`;
+  if(!s)return`<span class="badge b-def">—</span>`;
+  return`<span class="badge b-def"><span class="b-dot"></span>${esc(s)}</span>`;
 }
-function stockPill(qty,reorder){
-  const s=getStockStatus(qty,reorder);
-  const labels={in:'In Stock',low:'Low Stock',out:'Out of Stock'};
-  const cls={in:'stock-in',low:'stock-low',out:'stock-out'};
-  return`<span class="stock-pill ${cls[s]}">${labels[s]}</span>`;
+function assetIcon(cat,name){
+  const n=(name||'')+(cat||'');
+  if(n.includes('كاشير')||n.includes('كمبيوتر'))return'<path d="M3 5h18v11H3z"/><path d="M8 21h8M12 16v5"/>';
+  if(n.includes('لابتوب'))return'<path d="M4 5h16v10H4z"/><path d="M2 19h20l-2-2H4z"/>';
+  if(n.includes('شاشة'))return'<path d="M3 4h18v12H3z"/><path d="M9 20h6M12 16v4"/>';
+  if(n.includes('طابعة'))return'<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>';
+  if(n.includes('جرد')||n.includes('سكانر')||n.includes('باركود'))return'<path d="M3 5v14M7 5v14M11 5v14M15 5v14M19 5v14"/>';
+  if(n.includes('كرسي'))return'<path d="M6 18v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6"/><path d="M6 18v3M18 18v3M4 12h16"/>';
+  if(n.includes('كاميرا'))return'<path d="M2 7h13l3 3v7H2z"/><circle cx="9" cy="13" r="3"/><path d="M18 9l4-2v9l-4-2"/>';
+  if(n.includes('طاولة')||n.includes('رف')||n.includes('أثاث'))return'<path d="M3 7h18M5 7v13M19 7v13M3 13h18"/>';
+  if(n.includes('ميزان'))return'<path d="M12 3v18M5 7h14"/><path d="M5 7l-2 6h4zM19 7l-2 6h4z"/>';
+  if(n.includes('خزنة'))return'<rect x="3" y="4" width="18" height="16" rx="1"/><circle cx="12" cy="12" r="3"/>';
+  return'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/>';
 }
+function barcode(seed){let h=0;for(const c of String(seed))h=(h*33+c.charCodeAt(0))>>>0;let s='';for(let i=0;i<28;i++){h=(h*1103515245+12345)>>>0;s+=`<i style="flex:${1+(h%3)}"></i>`}return`<div class="barcode">${s}</div>`}
+function animateNum(el,to){const dur=600,st=performance.now(),from=0;function f(t){const p=Math.min(1,(t-st)/dur);el.textContent=fmt(Math.round(from+(to-from)*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)}
 
-function renderKPIs(){
-  const total=products.length;
-  const totalQty=products.reduce((a,p)=>a+p.qty,0);
-  const lowStock=products.filter(p=>getStockStatus(p.qty,p.reorder)==='low').length;
-  const outStock=products.filter(p=>p.qty===0).length;
-  const totalVal=products.reduce((a,p)=>a+p.price*p.qty,0);
-  const kpis=[
-    {label:'Total SKUs',value:total,icon:'layers',bg:'var(--color-primary-highlight)',color:'var(--color-primary)',change:'',changeClass:'kpi-neutral'},
-    {label:'Total Quantity',value:totalQty.toLocaleString(),icon:'boxes',bg:'var(--color-primary-highlight)',color:'var(--color-primary)',change:'',changeClass:'kpi-neutral'},
-    {label:'Low Stock',value:lowStock,icon:'alert-triangle',bg:'var(--color-warning-highlight)',color:'var(--color-warning)',change:'Needs reorder',changeClass:'kpi-down'},
-    {label:'Out of Stock',value:outStock,icon:'x-circle',bg:'var(--color-error-highlight)',color:'var(--color-error)',change:'Action required',changeClass:'kpi-down'},
-    {label:'Inventory Value',value:'SAR '+totalVal.toLocaleString(),icon:'trending-up',bg:'var(--color-success-highlight)',color:'var(--color-success)',change:'',changeClass:'kpi-neutral'},
-  ];
-  document.getElementById('kpiGrid').innerHTML=kpis.map(k=>`
-    <div class="kpi-card">
-      <div class="kpi-icon" style="background:${k.bg};color:${k.color}">
-        <i data-lucide="${k.icon}" style="width:18px;height:18px"></i>
-      </div>
-      <span class="kpi-label">${k.label}</span>
-      <span class="kpi-value">${k.value}</span>
-      ${k.change?`<span class="kpi-change ${k.changeClass}">${k.change}</span>`:''}
-    </div>`).join('');
-  lucide.createIcons();
-}
-
-function populateFilters(){
-  const cats=[...new Set(products.map(p=>p.category))].sort();
-  const warehouses=[...new Set(products.map(p=>p.warehouse))].sort();
-  const catSel=document.getElementById('categoryFilter');
-  const wSel=document.getElementById('warehouseFilter');
-  const curCat=catSel.value, curW=wSel.value;
-  catSel.innerHTML='<option value="">All Categories</option>'+cats.map(c=>`<option${c===curCat?' selected':''}>${c}</option>`).join('');
-  wSel.innerHTML='<option value="">All Warehouses</option>'+warehouses.map(w=>`<option${w===curW?' selected':''}>${w}</option>`).join('');
-}
-
-function filterTable(){
-  const search=document.getElementById('globalSearch').value.toLowerCase();
-  const cat=document.getElementById('categoryFilter').value;
-  const wh=document.getElementById('warehouseFilter').value;
-  const stock=document.getElementById('stockFilter').value;
-  const filtered=products.filter(p=>{
-    const matchSearch=!search||(p.name.toLowerCase().includes(search)||p.sku.toLowerCase().includes(search)||p.category.toLowerCase().includes(search)||p.warehouse.toLowerCase().includes(search));
-    const matchCat=!cat||p.category===cat;
-    const matchWH=!wh||p.warehouse===wh;
-    const matchStock=!stock||getStockStatus(p.qty,p.reorder)===stock;
-    return matchSearch&&matchCat&&matchWH&&matchStock;
+// ===== AGGREGATES =====
+function getBranchAgg(){
+  const m={};
+  allAssets.forEach(d=>{
+    if(!m[d.branch])m[d.branch]={brand:d.brand,types:0,units:0,value:0,cats:{},last:d.created};
+    const b=m[d.branch];b.types++;b.units+=d.qty;b.value+=d.amount*d.qty;b.cats[d.category]=(b.cats[d.category]||0)+1;
   });
-  renderTable(filtered);
+  return m;
 }
 
-function renderTable(data){
-  const tbody=document.getElementById('productTableBody');
-  const empty=document.getElementById('emptyState');
-  const footer=document.getElementById('tableFooterInfo');
-  const count=document.getElementById('productCount');
-  if(!data||!data.length){
-    tbody.innerHTML='';empty.style.display='flex';
-    footer.textContent='';count.textContent='';
-    lucide.createIcons();return;
-  }
-  empty.style.display='none';
-  count.textContent=`(${data.length} of ${products.length})`;
-  const totalVal=data.reduce((a,p)=>a+p.price*p.qty,0);
-  footer.textContent=`Showing ${data.length} product${data.length!==1?'s':''} · Total value: SAR ${totalVal.toLocaleString()}`;
-  tbody.innerHTML=data.map((p,i)=>`
-    <tr>
-      <td style="color:var(--color-text-faint);font-size:var(--text-xs)">${i+1}</td>
-      <td>
-        <div class="product-name">${escHtml(p.name)}</div>
-        <div class="product-sku">${escHtml(p.sku)}</div>
-      </td>
-      <td><span class="category-tag">${escHtml(p.category)}</span></td>
-      <td style="font-variant-numeric:tabular-nums">${p.price.toFixed(2)}</td>
-      <td style="font-variant-numeric:tabular-nums;font-weight:600;${p.qty<=p.reorder&&p.qty>0?'color:var(--color-warning)':p.qty===0?'color:var(--color-error)':''}">${p.qty}</td>
-      <td style="font-variant-numeric:tabular-nums;color:var(--color-text-faint)">${p.reorder}</td>
-      <td style="color:var(--color-text-muted)">${escHtml(p.warehouse)}</td>
-      <td>${stockPill(p.qty,p.reorder)}</td>
-      <td>
-        <div class="row-actions">
-          <button class="action-btn" onclick="editProduct(${p.id})" title="Edit"><i data-lucide="pencil" style="width:14px;height:14px"></i></button>
-          <button class="action-btn delete" onclick="deleteProduct(${p.id})" title="Delete"><i data-lucide="trash-2" style="width:14px;height:14px"></i></button>
+// ===== NAV =====
+const NAV=[
+  ['overview','Overview','<svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>'],
+  ['branches','Branches','<svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg>'],
+  ['all','All Assets','<svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>'],
+  ['analytics','Analytics','<svg class="ico" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>']
+];
+function buildNav(){
+  const bar=document.getElementById('nav-bar');
+  bar.innerHTML=NAV.map(([id,label,svg])=>
+    `<div class="nav-item ${currentTab===id?'active':''}" onclick="switchTab('${id}')">${svg} ${label}<span class="nav-badge">${id==='overview'?allAssets.length:id==='branches'?Object.keys(getBranchAgg()).length:id==='all'?allAssets.length:''}</span></div>`
+  ).join('');
+}
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+tab)?.classList.add('active');
+  buildNav();
+  if(tab==='overview')renderOverview();
+  else if(tab==='branches'){activeBranch=null;activeCat='All';renderBranches()}
+  else if(tab==='all'){currentPage=1;renderAll()}
+  else if(tab==='analytics')renderAnalytics();
+}
+
+// ===== RENDER OVERVIEW =====
+function renderTab(tab){buildNav();if(tab==='overview')renderOverview();else if(tab==='branches')renderBranches();else if(tab==='all')renderAll();else if(tab==='analytics')renderAnalytics()}
+function renderOverview(){
+  const agg=getBranchAgg();const branches=Object.keys(agg);
+  const units=allAssets.reduce((s,d)=>s+d.qty,0);
+  const value=allAssets.reduce((s,d)=>s+d.amount*d.qty,0);
+  const inUse=allAssets.filter(d=>(d.status||'').toLowerCase().includes('استخدام')).reduce((s,d)=>s+d.qty,0);
+  const cats=new Set(allAssets.map(d=>d.category)).size;
+  const top=branches.map(b=>({b,u:agg[b].units})).sort((x,y)=>y.u-x.u).slice(0,6);
+  const host=document.getElementById('page-overview');
+  host.innerHTML=`
+    <div class="topbar">
+      <div>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">DASHBOARD</div>
+        <div style="font-size:20px;font-weight:700">Asset Overview</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
+        <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card c1" onclick="switchTab('branches')">
+        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg></div>
+        <div class="stat-num" id="s-branches">0</div><div class="stat-label">Branches</div>
+      </div>
+      <div class="stat-card c2" onclick="switchTab('all')">
+        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/></svg></div>
+        <div class="stat-num" id="s-types">0</div><div class="stat-label">Asset Types</div>
+      </div>
+      <div class="stat-card c3">
+        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg></div>
+        <div class="stat-num" id="s-units">0</div><div class="stat-label">Total Units</div>
+      </div>
+      <div class="stat-card c4">
+        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div>
+        <div class="stat-num" id="s-inuse">0</div><div class="stat-label">In Use</div>
+      </div>
+      <div class="stat-card c5">
+        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9h4a2 2 0 0 1 0 4H9"/></svg></div>
+        <div class="stat-num" id="s-value">0</div><div class="stat-label">Total Value (SAR)</div>
+      </div>
+      <div class="stat-card c6">
+        <div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
+        <div class="stat-num" id="s-cats">0</div><div class="stat-label">Categories</div>
+      </div>
+    </div>
+    <div class="kpi-strip">
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').toLowerCase().includes('صيان')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Under Maintenance</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').toLowerCase().includes('متوقف')||(d.status||'').toLowerCase().includes('تالف')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Stopped/Damaged</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').toLowerCase().includes('مخزن')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">In Storage</div></div>
+      <div class="kpi-box"><div class="kpi-val">${Math.round(inUse/(units||1)*100)}%</div><div class="kpi-lbl">Utilization Rate</div></div>
+    </div>
+    <div class="topbar" style="margin-bottom:16px">
+      <div style="font-size:14px;font-weight:700">Top Branches by Units</div>
+      <button class="btn btn-ghost" onclick="switchTab('branches')" style="font-size:11px;padding:6px 12px">View All →</button>
+    </div>
+    <div class="branch-grid">${top.map(({b})=>renderBranchCard(b,agg[b])).join('')}</div>
+    <div class="table-card">
+      <div class="table-header"><div class="table-title">Recent Assets <span class="table-count">${allAssets.slice(0,8).length}</span></div></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>ID</th><th>Asset Name</th><th>Branch</th><th>Category</th><th>Qty</th><th>Status</th><th>Amount</th><th></th></tr></thead>
+        <tbody>${allAssets.slice(0,8).map(d=>`<tr>
+          <td><span class="id-tag">#${d.id}</span></td>
+          <td>${esc(d.name)}</td><td>${esc(d.branch)}</td><td>${esc(d.category)}</td>
+          <td><span style="font-family:'Space Mono',monospace">${d.qty}</span></td>
+          <td>${statusBadge(d.status)}</td>
+          <td style="font-family:'Space Mono',monospace;font-size:12px">${fmtMoney(d.amount)}</td>
+          <td><button class="view-btn" onclick="openDetail(${d.id})">View</button></td>
+        </tr>`).join('')}</tbody>
+      </table></div>
+    </div>`;
+  setTimeout(()=>{
+    const nums=[['s-branches',branches.length],['s-types',allAssets.length],['s-units',units],['s-inuse',inUse],['s-value',value],['s-cats',cats]];
+    nums.forEach(([id,n])=>{const el=document.getElementById(id);if(el)animateNum(el,n)});
+  },50);
+}
+
+function renderBranchCard(name,a){
+  const cats=Object.entries(a.cats).sort((x,y)=>y[1]-x[1]).slice(0,3);
+  return`<div class="branch-card" onclick="openBranch('${esc(name)}')">
+    <div class="branch-qty"><b>${a.units}</b><span>units</span></div>
+    <span class="brand-badge" style="background:${brandColor(a.brand)}">${esc(a.brand)}</span>
+    <h3>${esc(name)}</h3>
+    ${barcode(name)}
+    <div class="branch-footer">
+      <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(c)} · ${k}</span>`).join('')}</div>
+      <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)">${a.types} types</span>
+    </div>
+  </div>`;
+}
+
+// ===== BRANCHES =====
+function renderBranches(){
+  const host=document.getElementById('page-branches');
+  if(activeBranch){renderBranchDetail(host);return}
+  const agg=getBranchAgg();
+  const names=Object.keys(agg).sort((a,b)=>agg[b].units-agg[a].units).filter(n=>!branchSearchQ||n.toLowerCase().includes(branchSearchQ.toLowerCase())||agg[n].brand.toLowerCase().includes(branchSearchQ.toLowerCase()));
+  host.innerHTML=`
+    <div class="topbar">
+      <div>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">BRANCHES</div>
+        <div style="font-size:20px;font-weight:700">Select a Branch</div>
+      </div>
+      <div class="filter-row" style="margin:0">
+        <div class="search" style="position:relative">
+          <input class="flt-input" placeholder="Search branches…" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
         </div>
-      </td>
-    </tr>`).join('');
-  lucide.createIcons();
+        <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
+      </div>
+    </div>
+    <div class="branch-grid">${names.map(n=>renderBranchCard(n,agg[n])).join('')||'<div class="empty">No branches found</div>'}</div>`;
 }
 
-function escHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function openBranch(name){activeBranch=name;activeCat='All';assetSearchQ='';switchTab('branches')}
 
-function openModal(p=null){
-  editId=p?p.id:null;
-  document.getElementById('modalTitle').textContent=p?'Edit Product':'Add Product';
-  document.getElementById('fieldName').value=p?p.name:'';
-  document.getElementById('fieldSku').value=p?p.sku:'';
-  document.getElementById('fieldCategory').value=p?p.category:'';
-  document.getElementById('fieldPrice').value=p?p.price:'';
-  document.getElementById('fieldQty').value=p?p.qty:'';
-  document.getElementById('fieldReorder').value=p?p.reorder:'';
-  document.getElementById('fieldWarehouse').value=p?p.warehouse:'Jeddah Main';
-  document.getElementById('modalOverlay').classList.add('open');
+function renderBranchDetail(host){
+  const all=allAssets.filter(d=>d.branch===activeBranch);
+  const agg=getBranchAgg()[activeBranch]||{brand:'—',types:0,units:0,value:0,cats:{}};
+  const catList=['All',...Array.from(new Set(all.map(d=>d.category)))];
+  let items=all.filter(d=>activeCat==='All'||d.category===activeCat);
+  if(assetSearchQ){const q=assetSearchQ.toLowerCase();items=items.filter(d=>(d.name+d.model+d.category+d.color+d.notes).toLowerCase().includes(q))}
+  const groups={};items.forEach(d=>(groups[d.category]??=[]).push(d));
+  host.innerHTML=`
+    <button class="back-btn" onclick="activeBranch=null;renderBranches()">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> All Branches
+    </button>
+    <div class="bdetail-header">
+      <div class="l">
+        <span class="brand-badge" style="background:${brandColor(agg.brand)}">${esc(agg.brand)}</span>
+        <h2>${esc(activeBranch)}</h2>
+        <div style="color:var(--muted);font-size:12px">Last updated: ${fmtDate(all[0]?.created)}</div>
+      </div>
+      <div class="mini-stats">
+        <div class="ms-item"><b>${agg.types}</b><span>Types</span></div>
+        <div class="ms-item"><b>${agg.units}</b><span>Units</span></div>
+        <div class="ms-item"><b>${Object.keys(agg.cats).length}</b><span>Categories</span></div>
+        <div class="ms-item"><b>${fmt(agg.value)}</b><span>SAR</span></div>
+      </div>
+    </div>
+    <div class="filter-row" style="margin-bottom:14px">
+      <input class="flt-input" placeholder="Search in branch…" oninput="assetSearchQ=this.value;renderBranchDetail(document.getElementById('page-branches'))" value="${esc(assetSearchQ)}" style="min-width:220px"/>
+    </div>
+    <div class="pills">${catList.map(c=>{const n=c==='All'?all.length:all.filter(d=>d.category===c).length;
+      return`<button class="pill ${activeCat===c?'active':''}" onclick="activeCat='${esc(c)}';renderBranchDetail(document.getElementById('page-branches'))">${esc(c)}<span class="n">${n}</span></button>`
+    }).join('')}</div>
+    ${Object.keys(groups).length?Object.entries(groups).map(([cat,arr])=>{
+      const u=arr.reduce((s,d)=>s+d.qty,0);
+      return`<div class="cat-section">
+        <div class="cat-bar">
+          <span class="cat-dot" style="background:${catColor(cat)}"></span>
+          <h4>${esc(cat)}</h4>
+          <span class="meta">${arr.length} types · ${u} units</span>
+        </div>
+        <div class="asset-grid">${arr.map(renderAssetCard).join('')}</div>
+      </div>`
+    }).join(''):'<div class="empty">No matching assets</div>'}`;
 }
-function closeModal(){document.getElementById('modalOverlay').classList.remove('open')}
-function closeModalOnOverlay(e){if(e.target===document.getElementById('modalOverlay'))closeModal()}
 
-function saveProduct(){
-  const name=document.getElementById('fieldName').value.trim();
-  const sku=document.getElementById('fieldSku').value.trim();
-  const category=document.getElementById('fieldCategory').value;
-  const price=parseFloat(document.getElementById('fieldPrice').value)||0;
-  const qty=parseInt(document.getElementById('fieldQty').value)||0;
-  const reorder=parseInt(document.getElementById('fieldReorder').value)||10;
-  const warehouse=document.getElementById('fieldWarehouse').value;
-  if(!name||!sku||!category){showToast('Please fill required fields.','error');return;}
-  if(editId){
-    const i=products.findIndex(p=>p.id===editId);
-    if(i>-1)products[i]={id:editId,name,sku,category,price,qty,reorder,warehouse};
-    showToast('Product updated!','success');
-  }else{
-    products.push({id:nextId++,name,sku,category,price,qty,reorder,warehouse});
-    showToast('Product added!','success');
+function renderAssetCard(d){
+  const ic=`<svg viewBox="0 0 24 24" style="width:44px;height:44px;stroke:var(--muted);fill:none;stroke-width:1.5">${assetIcon(d.category,d.name)}</svg>`;
+  const bg=d.photo?`style="background-image:url('${esc(d.photo)}');background-size:cover;background-position:center"`:'';
+  return`<div class="asset-card" onclick="openDetail(${d.id})">
+    <div class="asset-thumb" ${bg}>
+      <span class="asset-qty-pill">×${d.qty}</span>
+      ${d.photo?'':ic}
+    </div>
+    <div class="asset-body">
+      <h5>${esc(d.name)}</h5>
+      <div class="asset-model">${esc(d.model||'—')}</div>
+      <div class="asset-row">
+        <span class="color-dot" style="background:${colorHex(d.color)}"></span>
+        <span style="font-size:12px;color:var(--muted2)">${esc(d.color||'—')}</span>
+        ${statusBadge(d.status)}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ===== ALL ASSETS TABLE =====
+function renderAll(){
+  const host=document.getElementById('page-all');
+  let rows=allAssets.slice();
+  const sq=document.getElementById('all-q')?.value||'';
+  const scmp=document.getElementById('all-company')?.value||'';
+  const scat=document.getElementById('all-cat')?.value||'';
+  const sst=document.getElementById('all-status')?.value||'';
+  if(sq){const q=sq.toLowerCase();rows=rows.filter(d=>(d.name+d.model+d.category+d.branch+d.status+d.color).toLowerCase().includes(q))}
+  if(scmp)rows=rows.filter(d=>d.branch.includes(scmp));
+  if(scat)rows=rows.filter(d=>d.category===scat);
+  if(sst)rows=rows.filter(d=>(d.status||'').toLowerCase().includes(sst.toLowerCase()));
+  if(sortState.key){
+    const k=sortState.key,dir=sortState.dir;
+    const val=i=>k==='id'?i.id:k==='name'?i.name:k==='branch'?i.branch:k==='cat'?i.category:k==='qty'?i.qty:k==='amount'?i.amount:k==='status'?i.status:'';
+    rows.sort((a,b)=>{const x=val(a),y=val(b);return(x<y?-1:x>y?1:0)*dir});
   }
-  closeModal();
-  renderKPIs();populateFilters();filterTable();
+  const total=Math.ceil(rows.length/PAGE_SIZE);
+  const sliced=rows.slice((currentPage-1)*PAGE_SIZE,(currentPage)*PAGE_SIZE);
+  const cats=[...new Set(allAssets.map(d=>d.category))].sort();
+  const allBranches=[...new Set(allAssets.map(d=>d.branch))].sort();
+  host.innerHTML=`
+    <div class="topbar">
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">REGISTRY</div><div style="font-size:20px;font-weight:700">All Assets</div></div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" onclick="clearAllFilters()">✕ Clear</button>
+        <button class="btn btn-ghost" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
+        <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="flt-group"><div class="flt-label">Search</div>
+        <input class="flt-input" id="all-q" placeholder="Search…" oninput="currentPage=1;renderAll()" value="${esc(sq)}" style="min-width:180px"/></div>
+      <div class="flt-group"><div class="flt-label">Branch</div>
+        <select class="flt-select" id="all-company" onchange="currentPage=1;renderAll()">
+          <option value="">All Branches</option>
+          ${allBranches.map(b=>`<option value="${esc(b)}" ${scmp===b?'selected':''}>${esc(b)}</option>`).join('')}
+        </select></div>
+      <div class="flt-group"><div class="flt-label">Category</div>
+        <select class="flt-select" id="all-cat" onchange="currentPage=1;renderAll()">
+          <option value="">All Categories</option>
+          ${cats.map(c=>`<option value="${esc(c)}" ${scat===c?'selected':''}>${esc(c)}</option>`).join('')}
+        </select></div>
+      <div class="flt-group"><div class="flt-label">Status</div>
+        <select class="flt-select" id="all-status" onchange="currentPage=1;renderAll()">
+          <option value="">All Status</option>
+          <option value="استخدام" ${sst==='استخدام'?'selected':''}>في الاستخدام</option>
+          <option value="مخزن" ${sst==='مخزن'?'selected':''}>مخزن</option>
+          <option value="صيان" ${sst==='صيان'?'selected':''}>صيانة</option>
+          <option value="متوقف" ${sst==='متوقف'?'selected':''}>متوقف</option>
+        </select></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:10px">${rows.length} result${rows.length!==1?'s':''} found</div>
+    <div class="table-card">
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th style="cursor:pointer" onclick="sortAll('id')">#</th>
+          <th style="cursor:pointer" onclick="sortAll('name')">Asset</th>
+          <th style="cursor:pointer" onclick="sortAll('branch')">Branch</th>
+          <th style="cursor:pointer" onclick="sortAll('cat')">Category</th>
+          <th>Model</th>
+          <th style="cursor:pointer" onclick="sortAll('qty')">Qty</th>
+          <th style="cursor:pointer" onclick="sortAll('status')">Status</th>
+          <th>Color</th>
+          <th style="cursor:pointer" onclick="sortAll('amount')">Amount</th>
+          <th>Date</th>
+          <th></th>
+        </tr></thead>
+        <tbody>${sliced.map(d=>`<tr>
+          <td><span class="id-tag">#${d.id}</span></td>
+          <td style="font-weight:700">${esc(d.name)}</td>
+          <td style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</td>
+          <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
+          <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2)">${esc(d.model||'—')}</td>
+          <td style="font-family:'Space Mono',monospace;font-weight:700">${d.qty}</td>
+          <td>${statusBadge(d.status)}</td>
+          <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'—')}</td>
+          <td style="font-family:'Space Mono',monospace;font-size:12px">${fmtMoney(d.amount)}</td>
+          <td style="font-size:11px;color:var(--muted)">${fmtDate(d.purchaseDate)}</td>
+          <td><button class="view-btn" onclick="openDetail(${d.id})">View</button></td>
+        </tr>`).join('')||'<tr><td colspan="11"><div class="empty">No assets found</div></td></tr>'}</tbody>
+      </table></div>
+    </div>
+    <div class="pagination">${buildPagination(total)}</div>`;
 }
 
-function editProduct(id){const p=products.find(x=>x.id===id);if(p)openModal(p)}
+function sortAll(key){if(sortState.key===key)sortState.dir*=-1;else{sortState.key=key;sortState.dir=1}currentPage=1;renderAll()}
+function buildPagination(total){
+  if(total<=1)return'';
+  let h='';
+  if(currentPage>1)h+=`<button class="pg-btn" onclick="goPg(${currentPage-1})">←</button>`;
+  for(let i=1;i<=Math.min(total,7);i++)h+=`<button class="pg-btn ${i===currentPage?'active':''}" onclick="goPg(${i})">${i}</button>`;
+  if(total>7)h+=`<span style="color:var(--muted);font-size:11px">... ${total}</span>`;
+  if(currentPage<total)h+=`<button class="pg-btn" onclick="goPg(${currentPage+1})">→</button>`;
+  return h;
+}
+function goPg(p){currentPage=p;renderAll()}
+function clearAllFilters(){sortState={key:null,dir:1};currentPage=1;renderAll()}
+function globalSearch(v){switchTab('all');setTimeout(()=>{const el=document.getElementById('all-q');if(el){el.value=v;currentPage=1;renderAll()}},50)}
 
-function deleteProduct(id){
-  if(!confirm('Delete this product?'))return;
-  products=products.filter(p=>p.id!==id);
-  renderKPIs();populateFilters();filterTable();
-  showToast('Product deleted.','error');
+// ===== ANALYTICS =====
+function renderAnalytics(){
+  const host=document.getElementById('page-analytics');
+  host.innerHTML=`
+    <div class="topbar"><div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">ANALYTICS</div><div style="font-size:20px;font-weight:700">Asset Distribution</div></div></div>
+    <div class="charts-grid">
+      <div class="chart-card"><div class="chart-header">Units by Branch</div><div class="chart-wrap"><canvas id="c-branch"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">By Category</div><div class="chart-wrap"><canvas id="c-cat"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">By Status</div><div class="chart-wrap"><canvas id="c-status"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">By Brand / Company</div><div class="chart-wrap"><canvas id="c-brand"></canvas></div></div>
+    </div>`;
+  Object.values(chartInstances).forEach(c=>{try{c.destroy()}catch(e){}});chartInstances={};
+  const css=getComputedStyle(document.documentElement);
+  const txt=css.getPropertyValue('--muted2').trim();const grid=css.getPropertyValue('--border').trim();
+  Chart.defaults.color=txt;Chart.defaults.font.family='Space Grotesk';
+  const agg=getBranchAgg();const bn=Object.keys(agg);
+  chartInstances.branch=new Chart(document.getElementById('c-branch'),{type:'bar',data:{labels:bn,datasets:[{data:bn.map(b=>agg[b].units),backgroundColor:bn.map(b=>brandColor(agg[b].brand)),borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
+  const cats={};allAssets.forEach(d=>cats[d.category]=(cats[d.category]||0)+d.qty);const ck=Object.keys(cats);
+  chartInstances.cat=new Chart(document.getElementById('c-cat'),{type:'doughnut',data:{labels:ck,datasets:[{data:ck.map(c=>cats[c]),backgroundColor:ck.map(catColor),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
+  const st={};allAssets.forEach(d=>{const k=d.status||'غير محدد';st[k]=(st[k]||0)+d.qty});const sk=Object.keys(st);
+  const stc={'في الاستخدام':'#00FF88','متوقف':'#FF3366','تالف':'#FF3366','صيانة':'#FFB020','مخزن':'#60A5FA','غير محدد':'#4A6080'};
+  chartInstances.status=new Chart(document.getElementById('c-status'),{type:'doughnut',data:{labels:sk,datasets:[{data:sk.map(k=>st[k]),backgroundColor:sk.map(k=>stc[k]||'#8B5CF6'),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
+  const br={};allAssets.forEach(d=>br[d.brand]=(br[d.brand]||0)+d.qty);const bk=Object.keys(br);
+  chartInstances.brand=new Chart(document.getElementById('c-brand'),{type:'bar',data:{labels:bk,datasets:[{data:bk.map(b=>br[b]),backgroundColor:bk.map(b=>brandColor(b)),borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
 }
 
-function exportCSV(){
-  const headers=['#','Product Name','SKU','Category','Price (SAR)','Quantity','Reorder Level','Warehouse','Status'];
-  const rows=products.map((p,i)=>[
-    i+1,
-    `"${p.name}"`,
-    p.sku,
-    p.category,
-    p.price.toFixed(2),
-    p.qty,
-    p.reorder,
-    p.warehouse,
-    getStockStatus(p.qty,p.reorder)==='in'?'In Stock':getStockStatus(p.qty,p.reorder)==='low'?'Low Stock':'Out of Stock'
-  ]);
-  const csv=[headers.join(','),...rows.map(r=>r.join(','))].join('\n');
-  const blob=new Blob([csv],{type:'text/csv'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='SWAG_Inventory_Export.csv';
-  a.click();
-  showToast('CSV exported!','success');
+// ===== DETAIL MODAL =====
+function openDetail(id){
+  const d=allAssets.find(x=>x.id===id);if(!d)return;
+  const rows=[['Branch',d.branch],['Category',d.category],['Model',d.model||'—'],['Status',d.status||'—'],['Color',d.color||'—'],['Quantity',d.qty],['Amount',fmtMoney(d.amount)],['Total Value',fmtMoney(d.amount*d.qty)],['Invoice',d.invoice||'—'],['Purchase Date',fmtDate(d.purchaseDate)]];
+  document.getElementById('modal-detail-body').innerHTML=`
+    <div class="modal-info">
+      <div class="modal-info-row"><span class="modal-info-label">Asset Name</span><span class="modal-info-val">${esc(d.name)}</span></div>
+      ${rows.map(([k,v])=>`<div class="modal-info-row"><span class="modal-info-label">${esc(k)}</span><span class="modal-info-val">${esc(String(v))}</span></div>`).join('')}
+    </div>
+    ${d.notes?`<div class="modal-label">Notes</div><div style="background:var(--surface2);border-radius:10px;padding:12px;font-size:13px;line-height:1.6;color:var(--text)">${esc(d.notes)}</div>`:''}`;
+  document.getElementById('modal-detail').classList.add('open');
 }
 
-function showToast(msg,type='success'){
-  const tc=document.getElementById('toastContainer');
-  const t=document.createElement('div');
-  t.className=`toast ${type}`;
-  t.innerHTML=`<span class="toast-dot"></span>${msg}`;
-  tc.appendChild(t);
-  setTimeout(()=>t.remove(),3000);
+// ===== ADD ASSET =====
+function populateBranchSelect(){
+  const sel=document.getElementById('add-branch');if(!sel)return;
+  const branches=[...new Set(allAssets.map(d=>d.branch))].sort();
+  sel.innerHTML='<option value="">Select Branch</option>'+branches.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
+}
+function openAddAsset(){populateBranchSelect();document.getElementById('modal-add').classList.add('open')}
+async function submitNewAsset(){
+  const name=document.getElementById('add-name').value.trim();
+  const branch=document.getElementById('add-branch').value;
+  const category=document.getElementById('add-category').value;
+  const qty=parseInt(document.getElementById('add-qty').value)||1;
+  if(!name||!branch||!category){toast('Please fill all required fields','error');return}
+  const btn=document.getElementById('add-submit-btn');
+  btn.disabled=true;btn.textContent='Submitting...';
+  try{
+    // Try SharePoint, fallback to demo mode
+    await getToken();
+    const digestR=await fetch(`${SITE}/_api/contextinfo`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`}});
+    const digest=(await digestR.json()).d.GetContextWebInformation.FormDigestValue;
+    const amount=parseFloat(document.getElementById('add-amount').value)||0;
+    const body={
+      "__metadata":{"type":"SP.Data.ListItem"},
+      "Title":name,"AssetType":category,"Status":document.getElementById('add-status').value,
+      "Color":document.getElementById('add-color').value,"SerialNumber":String(qty),
+      "Model":document.getElementById('add-model').value,"PurchasePrice":amount,
+      "ConditionNotes":document.getElementById('add-notes').value,
+      [BRANCH_KEY]:branch
+    };
+    const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items`,{
+      method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},
+      body:JSON.stringify(body)
+    });
+    const d2=await r.json();
+    if(d2.d?.ID){toast(`✓ Asset added #${d2.d.ID}`,'success');closeModal('modal-add');await loadAll();}
+    else{toast('Add failed','error')}
+  }catch(e){
+    // Demo fallback: add locally
+    const newId=Math.max(...allAssets.map(x=>x.id))+1;
+    allAssets.unshift({id:newId,branch,brand:(branch.split(/[-–]/)[0]||'').trim(),name,category,model:document.getElementById('add-model').value,status:document.getElementById('add-status').value,color:document.getElementById('add-color').value,qty,notes:document.getElementById('add-notes').value,purchaseDate:'',amount:parseFloat(document.getElementById('add-amount').value)||0,invoice:'',photo:'',created:new Date().toISOString()});
+    toast(`✓ Asset added (demo mode) #${newId}`,'success');
+    closeModal('modal-add');renderTab(currentTab);
+  }
+  finally{btn.disabled=false;btn.textContent='Add Asset'}
 }
 
-function setActiveNav(el){
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  el.classList.add('active');
+// ===== EXPORT =====
+function exportExcel(){
+  const data=allAssets.map(d=>({'ID':d.id,'Name':d.name,'Branch':d.branch,'Brand':d.brand,'Category':d.category,'Model':d.model,'Qty':d.qty,'Status':d.status,'Color':d.color,'Amount SAR':d.amount,'Total SAR':d.amount*d.qty,'Invoice':d.invoice,'Purchase Date':fmtDate(d.purchaseDate),'Notes':d.notes}));
+  const ws=XLSX.utils.json_to_sheet(data);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Inventory');XLSX.writeFile(wb,`Swag_Inventory_${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast('✓ Excel exported!','success');
 }
 
-renderKPIs();
-populateFilters();
-filterTable();
+// ===== THEME =====
+let currentTheme='dark';
+function toggleTheme(){currentTheme=currentTheme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',currentTheme);if(currentTab==='analytics')setTimeout(renderAnalytics,100)}
+
+// ===== MODAL CLOSE =====
+function closeModal(id){document.getElementById(id)?.classList.remove('open')}
+document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))closeModal(e.target.id)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'))});
+
+// ===== TOAST =====
+function toast(msg,type='info'){
+  const wrap=document.getElementById('toast-wrap');if(!wrap)return;
+  const el=document.createElement('div');el.className=`toast ${type}`;el.textContent=msg;
+  wrap.appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transition='all .3s';setTimeout(()=>el.remove(),300)},3000);
+}
+
+// ===== BOOT =====
+window.onload=async()=>{
+  await initMsal();
+  if(!msalInstance)return;
+  await msalInstance.initialize();
+  const resp=await msalInstance.handleRedirectPromise();
+  if(resp?.account){setUser(resp.account);accessToken=resp.accessToken;showDashboard();await loadAll();return}
+  const accounts=msalInstance.getAllAccounts();
+  if(accounts.length>0){
+    try{await getToken();showDashboard();await loadAll()}
+    catch(e){/* not logged in */}
+  }
+  // Show demo even without login
+  if(document.getElementById('login-screen').style.display!=='none'){
+    // Offer demo mode button
+    const card=document.querySelector('.login-card');
+    const demoBtn=document.createElement('button');
+    demoBtn.className='login-btn';demoBtn.style.marginTop='12px';demoBtn.style.background='rgba(139,92,246,.1)';demoBtn.style.borderColor='rgba(139,92,246,.3)';
+    demoBtn.innerHTML='<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/></svg> View Demo (No Login)';
+    demoBtn.onclick=()=>{currentUser={name:'Demo User',email:'demo@swag.com'};document.getElementById('user-name').textContent='Demo User';document.getElementById('user-initial').textContent='D';allAssets=DEMO_DATA;showDashboard();populateBranchSelect();renderTab('overview');buildNav()};
+    card.appendChild(demoBtn);
+  }
+  setInterval(()=>{const tm=document.getElementById('live-time');if(tm&&!tm.textContent.includes('Sync'))tm.textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})},60000);
+};
+setInterval(()=>{if(document.getElementById('dashboard').style.display!=='none')loadAll()},120000);
 </script>
 </body>
 </html>
