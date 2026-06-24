@@ -456,7 +456,7 @@ const TENANT_ID  = 'fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
 const CLIENT_ID  = 'b74353f0-ec73-4a69-ac7d-a7dbb9166b95';
 const SITE       = 'https://netorg20570594.sharepoint.com/sites/-484';
 const LIST_ID    = 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
-const BRANCH_KEY = 'OData__x0627__x0644__x0641__x0631__x06';
+let BRANCH_KEY   = 'OData__x0627__x0644__x0641__x0631__x0639_'; // الفرع — auto-detected on load
 const SCOPES     = [
   'https://netorg20570594.sharepoint.com/AllSites.Read',
   'https://netorg20570594.sharepoint.com/AllSites.Write',
@@ -604,6 +604,7 @@ async function loadAll(refresh){
       items=[...items,...(d.value||[])];
       url=d['odata.nextLink']||null;
     }
+    if(items[0]){ const bk=Object.keys(items[0]).find(k=>k.startsWith('OData__x0627__x0644__x0641__x0631')); if(bk) BRANCH_KEY=bk; }
     allAssets=items.map(mapItem);
     if(refresh)toast(`✓ ${allAssets.length} assets loaded`,'success');
     setLive(new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}));
@@ -915,6 +916,15 @@ function renderAssetCard(d){
    So we fetch each image as a blob with the token, then show it. */
 const BLANK='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 const _imgCache={};
+// Raw SharePoint file URLs are blocked by CORS from another origin (vercel).
+// The REST file endpoint IS CORS-enabled + honours the bearer token, so route through it.
+function spFileUrl(u){
+  try{
+    const path = /^https?:/i.test(u) ? new URL(u).pathname : u;
+    const enc  = path.split('/').map(encodeURIComponent).join('/');
+    return `${SITE}/_api/web/getfilebyserverrelativeurl('${enc}')/$value`;
+  }catch(_){ return u; }
+}
 async function hydrateImages(root){
   root=root||document;
   const list=[...root.querySelectorAll('img[data-src]')].filter(i=>!i.dataset.hy);
@@ -924,10 +934,8 @@ async function hydrateImages(root){
     if(_imgCache[u]){ img.src=_imgCache[u]; continue; }
     try{
       if(!accessToken) await getToken();
-      const r=await fetch(u,{headers:{Authorization:`Bearer ${accessToken}`}});
+      const r=await fetch(spFileUrl(u),{headers:{Authorization:`Bearer ${accessToken}`}});
       if(!r.ok) throw new Error('HTTP '+r.status);
-      const ct=r.headers.get('content-type')||'';
-      if(!/image|octet-stream/i.test(ct)) throw new Error('not image ('+ct+')');
       const o=URL.createObjectURL(await r.blob()); _imgCache[u]=o; img.src=o;
     }catch(e){
       const fb=img.getAttribute('data-fb');
