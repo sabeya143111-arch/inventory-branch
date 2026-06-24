@@ -262,6 +262,56 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .confirm-box p{color:var(--muted2);font-size:13px;margin-bottom:24px;line-height:1.6}
 .confirm-btns{display:flex;gap:10px;justify-content:center}
 @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.kpi-strip{grid-template-columns:repeat(2,1fr)}.branch-grid{grid-template-columns:1fr}.asset-grid{grid-template-columns:repeat(2,1fr)}.header-right{gap:6px}.modal-grid2{grid-template-columns:1fr}}
+
+/* ===== Bigger & bolder text ===== */
+body{font-size:16px;font-weight:500}
+.nav-item{font-size:15px;font-weight:700;padding:15px 18px}
+.nav-badge{font-size:11px}
+.stat-num{font-size:34px;font-weight:800}
+.stat-label{font-size:13px;font-weight:700}
+.branch-card h3{font-size:20px;font-weight:800}
+.brand-badge{font-size:12px;font-weight:800}
+.cat-chip{font-size:12px;font-weight:700}
+.asset-body h5{font-size:17px;font-weight:800}
+.asset-model{font-size:13px;font-weight:600}
+.table-title{font-size:17px;font-weight:800}
+th{font-size:13px;font-weight:800}
+td{font-size:14.5px;font-weight:600}
+.view-btn{font-size:13px;font-weight:700;padding:6px 12px}
+.btn{font-size:15px;font-weight:800;padding:10px 18px}
+.flt-input,.flt-select{font-size:14px;font-weight:600}
+.modal-title{font-size:21px;font-weight:800}
+.modal-label{font-size:13px;font-weight:700}
+.modal-input,.modal-select,.modal-textarea{font-size:15px;font-weight:600}
+.bdetail-header h2{font-size:25px;font-weight:800}
+.mini-stats b{font-size:24px;font-weight:800}
+.modal-info-label{font-weight:700}
+.modal-info-val{font-weight:700;font-size:15px}
+.user-chip{font-size:13px}
+
+/* ===== Mobile responsive ===== */
+@media(max-width:768px){
+  .nav{padding:0 10px}
+  .main{padding:16px 12px}
+  .header-right{flex-wrap:wrap}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .branch-grid{grid-template-columns:1fr}
+  .asset-grid{grid-template-columns:repeat(2,1fr)}
+  .modal{min-width:0;width:94%;padding:20px}
+  .modal-grid2{grid-template-columns:1fr}
+  .bdetail-header{flex-direction:column}
+  .mini-stats{gap:16px;width:100%}
+  .flt-input,.flt-select{min-width:0;width:100%}
+}
+@media(max-width:480px){
+  .asset-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .stat-num{font-size:26px}
+  .nav-item{font-size:14px;padding:13px 12px}
+  .branch-card h3{font-size:18px}
+  .asset-body h5{font-size:15px}
+  .stat-card{padding:14px}
+  .table-card{overflow-x:auto}
+}
 </style>
 </head>
 <body>
@@ -1203,6 +1253,33 @@ function resetPhotoPreview(){
 }
 
 // ===== SUBMIT (ADD OR EDIT) =====
+let LIST_ETYPE=null;
+async function getEntityType(){
+  if(LIST_ETYPE)return LIST_ETYPE;
+  try{
+    const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')?$select=ListItemEntityTypeFullName`,{headers:{'Accept':'application/json;odata=nometadata','Authorization':`Bearer ${accessToken}`}});
+    if(r.ok){const j=await r.json();if(j.ListItemEntityTypeFullName)LIST_ETYPE=j.ListItemEntityTypeFullName;}
+  }catch(_){}
+  return LIST_ETYPE||'SP.Data.ListItem';
+}
+async function uploadPhoto(itemId,dataUrl,digest){
+  const m=dataUrl.match(/^data:(image\/[\w+.-]+);base64,(.+)$/);if(!m)return null;
+  let ext=(m[1].split('/')[1]||'jpg').replace('jpeg','jpg').replace('+xml','').replace('svg','png');
+  const fileName=`photo_${itemId}_${Date.now()}.${ext}`;
+  const bin=atob(m[2]);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+  const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${itemId})/AttachmentFiles/add(FileName='${fileName}')`,{
+    method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},body:arr});
+  if(!r.ok)return null;
+  const d=await r.json().catch(()=>({}));
+  return{fileName,serverRelativeUrl:(d.d&&d.d.ServerRelativeUrl)||''};
+}
+async function setDevicePhoto(itemId,up,etype,digest){
+  const dp=JSON.stringify({type:'thumbnail',fileName:up.fileName,serverUrl:SITE.replace(/\/sites\/.+/,''),serverRelativeUrl:up.serverRelativeUrl});
+  await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${itemId})`,{
+    method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},
+    body:JSON.stringify({"__metadata":{"type":etype},DevicePhoto:dp})});
+}
+
 async function submitAsset(){
   const name=document.getElementById('add-name').value.trim();
   const branch=document.getElementById('add-branch').value;
@@ -1216,9 +1293,11 @@ async function submitAsset(){
   try{
     await getToken();
     const digestR=await fetch(`${SITE}/_api/contextinfo`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`}});
+    if(!digestR.ok)throw new Error('No write permission (AllSites.Write) — Azure consent needed');
     const digest=(await digestR.json()).d.GetContextWebInformation.FormDigestValue;
+    const etype=await getEntityType();
     const body={
-      "__metadata":{"type":"SP.Data.ListItem"},
+      "__metadata":{"type":etype},
       Title:name, AssetType:category,
       Status:document.getElementById('add-status').value,
       Color:document.getElementById('add-color').value,
@@ -1229,30 +1308,32 @@ async function submitAsset(){
       ConditionNotes:document.getElementById('add-notes').value,
       [BRANCH_KEY]:branch
     };
-    // If photo uploaded, store base64 in PhotoUrl (you can also use attachments separately)
-    if(uploadedPhotoBase64)body.PhotoUrl=uploadedPhotoBase64;
-
-    let r;
+    let itemId=editId;
     if(isEdit){
-      r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${editId})`,{
-        method:'PATCH',
+      const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${editId})`,{
+        method:'POST',
         headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},
-        body:JSON.stringify(body)
-      });
-      if(r.status===204||r.ok){toast(`✓ Asset #${editId} updated!`,'success');closeModal('modal-add');await loadAll();}
-      else{const t=await r.text();toast('Update failed: '+t.slice(0,100),'error')}
+        body:JSON.stringify(body)});
+      if(!(r.status===204||r.ok)){const t=await r.text();throw new Error('Update failed: '+t.slice(0,120))}
     }else{
-      r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items`,{
+      const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items`,{
         method:'POST',
         headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},
-        body:JSON.stringify(body)
-      });
-      const d2=await r.json();
-      if(d2.d?.ID){toast(`✓ Asset #${d2.d.ID} added!`,'success');closeModal('modal-add');await loadAll();}
-      else{toast('Add failed: '+(d2.error?.message?.value||JSON.stringify(d2)),'error')}
+        body:JSON.stringify(body)});
+      const d2=await r.json().catch(()=>({}));
+      if(!(d2.d&&d2.d.ID))throw new Error('Add failed: '+((d2.error&&d2.error.message&&d2.error.message.value)||('HTTP '+r.status)));
+      itemId=d2.d.ID;
     }
-  }catch(e){toast('Error: '+e.message,'error')}
-  finally{btn.disabled=false;btn.querySelector('span').textContent=editId?'Save Changes':'Add Asset'}
+    // photo (best effort — attachment + DevicePhoto)
+    if(uploadedPhotoBase64&&itemId){
+      try{ const up=await uploadPhoto(itemId,uploadedPhotoBase64,digest); if(up)await setDevicePhoto(itemId,up,etype,digest); }
+      catch(pe){ console.warn('photo upload skipped:',pe); }
+    }
+    toast(`\u2713 Asset #${itemId} ${isEdit?'updated':'added'}!`,'success');
+    closeModal('modal-add');
+    await loadAll();
+  }catch(e){ toast(e.message,'error'); console.error(e); }
+  finally{ btn.disabled=false; btn.querySelector('span').textContent=document.getElementById('edit-asset-id').value?'Save Changes':'Add Asset'; }
 }
 
 // ===== DELETE ASSET =====
