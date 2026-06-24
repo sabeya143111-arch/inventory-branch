@@ -8,6 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#080A0E;--surface:#0E1117;--surface2:#151B24;--surface3:#1C2433;--border:#1E2A3A;--border2:#243040;--text:#F6F9FF;--muted:#4A6080;--muted2:#6A8090;--accent:#00D9FF;--accent2:#0099CC;--green:#00FF88;--red:#FF3366;--amber:#FFB020;--purple:#8B5CF6;--gold:#D4A84B;--card-glass:rgba(14,17,23,0.70)}
@@ -312,6 +313,38 @@ td{font-size:14.5px;font-weight:600}
   .stat-card{padding:14px}
   .table-card{overflow-x:auto}
 }
+
+/* ===== Smooth mobile layout ===== */
+@media(max-width:760px){
+  .header{height:auto!important;flex-wrap:wrap;align-items:center;padding:10px 12px;gap:8px;row-gap:8px}
+  .header-left{flex:1 1 auto;min-width:0}
+  .header-right{width:100%;justify-content:flex-start;flex-wrap:wrap;gap:6px;margin-top:2px}
+  #global-search{order:-1;flex:1 1 100%;min-width:0!important;width:100%!important;height:38px!important}
+  .user-chip{order:-2;font-size:12px;padding:5px 10px}
+  .user-chip span{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hdr-btn{flex:1 1 auto;justify-content:center;padding:9px 8px;font-size:13px;min-width:0}
+  .hdr-btn.danger{flex:1 1 100%}
+  .nav{padding:0 8px;gap:0}
+  .nav-item{flex:0 0 auto}
+  .main{padding:14px 12px!important}
+  /* Alerts dropdown fits screen */
+  .notif-panel{position:fixed!important;left:8px!important;right:8px!important;top:120px!important;width:auto!important;max-width:none!important;max-height:60vh;overflow:auto}
+  /* overview action buttons wrap */
+  .page .btn{flex:1 1 auto;justify-content:center}
+  /* modals comfy on phone */
+  .modal{width:96%!important;max-width:96%!important;padding:20px!important;max-height:92vh}
+  #qr-reader{min-height:260px}
+  /* branch detail header stacks */
+  .bdetail-header{flex-direction:column;gap:12px}
+  .mini-stats{gap:18px;width:100%;justify-content:space-between}
+}
+@media(max-width:430px){
+  .header-brand{font-size:12px}
+  .hdr-btn{font-size:12px;padding:8px 6px}
+  .asset-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .stat-num{font-size:25px}
+  .nav-item{padding:12px 11px;font-size:14px}
+}
 </style>
 </head>
 <body>
@@ -362,6 +395,7 @@ td{font-size:14.5px;font-weight:600}
         </div>
       </div>
       <button class="hdr-btn" onclick="loadAll(true)"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> Refresh</button>
+      <button class="hdr-btn" onclick="openScanner()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Scan</button>
       <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
       <button class="hdr-btn" onclick="toggleTheme()">🌙</button>
       <button class="hdr-btn danger" onclick="signOut()">Sign out</button>
@@ -399,12 +433,7 @@ td{font-size:14.5px;font-weight:600}
     <div class="modal-label">Asset Name *</div>
     <input class="modal-input" id="add-name" placeholder="e.g. Cashier Computer"/>
     <div class="modal-label">Category *</div>
-    <select class="modal-select" id="add-category">
-      <option value="">Select Category</option>
-      <option>كمبيوتر</option><option>لابتوب</option><option>شاشة</option>
-      <option>طابعة</option><option>كاميرات</option><option>كراسي</option>
-      <option>أثاث</option><option>شبكات</option><option>أخرى</option>
-    </select>
+    <select class="modal-select" id="add-category"><option value="">Select Category</option></select>
     <div class="modal-grid2" style="margin-bottom:14px">
       <div>
         <div class="modal-label">Model</div>
@@ -418,16 +447,11 @@ td{font-size:14.5px;font-weight:600}
     <div class="modal-grid2" style="margin-bottom:14px">
       <div>
         <div class="modal-label">Status</div>
-        <select class="modal-select" id="add-status">
-          <option value="قيد الاستخدام">قيد الاستخدام</option>
-          <option value="مخزن">مخزن</option>
-          <option value="صيانة">صيانة</option>
-          <option value="متوقف">متوقف</option>
-        </select>
+        <select class="modal-select" id="add-status"></select>
       </div>
       <div>
         <div class="modal-label">Color</div>
-        <input class="modal-input" id="add-color" placeholder="أسود، رمادي..."/>
+        <select class="modal-select" id="add-color"></select>
       </div>
     </div>
     <div class="modal-grid2" style="margin-bottom:14px">
@@ -464,6 +488,16 @@ td{font-size:14.5px;font-weight:600}
 </div>
 
 <!-- ========== MODAL: QR CODE ========== -->
+<div class="modal-overlay" id="modal-scan">
+  <div class="modal" style="max-width:400px;text-align:center">
+    <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Scan Asset QR</div>
+    <div id="qr-reader" style="width:100%;border-radius:12px;overflow:hidden;background:#000;min-height:240px"></div>
+    <div id="scan-status" style="font-size:14px;color:var(--muted2);margin-top:12px;line-height:1.6">Point the camera at an asset QR code.</div>
+    <div class="modal-footer" style="justify-content:center">
+      <button class="btn btn-ghost" onclick="closeScanner()">Close</button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="modal-qr">
   <div class="modal" style="max-width:380px;text-align:center">
     <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3M17 17h3M14 17h.01M17 14h.01"/></svg> QR Code</div>
@@ -509,6 +543,13 @@ const SITE       = 'https://netorg20570594.sharepoint.com/sites/-484';
 const LIST_ID    = 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
 const ADMIN_EMAILS = ['tareq.mahmood@swag.sa']; // always admin (bootstrap)
 const ACCESS_LIST  = 'DashboardAccess';
+const CHOICES={
+  status:['متاح','قيد الاستخدام','يحتاج صيانة','تالف'],
+  category:['الكترونيات','كمبيوتر','كاميرات','هاتف','جوال','ديكورات','مستلزمات','اخرى','كراسي','طاولات','مكتب','اثاث','مكاتب','طيور وقوارض'],
+  color:['ابيض','اسود','رمادي','اصفر','برتقالي','احمر','وردي','اخضر','سماوي','ازرق','بنفسجي','بني'],
+  branch:['اوتفيت - المدينة','اوتفيت - البديعة','اوتفيت - النسيم','اوتفيت - سكاكا']
+};
+const optionsHtml=(arr,sel)=>arr.map(o=>`<option value="${o}"${o===sel?' selected':''}>${o}</option>`).join('');
 let BRANCH_KEY   = 'OData__x0627__x0644__x0641__x0631__x0639_'; // الفرع — auto-detected on load
 const SCOPES     = [
   'https://netorg20570594.sharepoint.com/AllSites.Read',
@@ -550,7 +591,7 @@ let msalInstance=null, accessToken=null, currentUser=null;
 let allAssets=[], currentTab='overview';
 let allAssetsRaw=[]; let myAccess={role:'none',branches:[],all:false};
 let sortState={key:null,dir:1}, currentPage=1;
-let activeBranch=null, activeCat='All', branchSearchQ='', assetSearchQ='';
+let activeBranch=null, activeCat='All', branchSearchQ='', assetSearchQ='', firstLoadDone=false;
 let chartInstances={};
 const PAGE_SIZE=30;
 let pendingDeleteId=null;
@@ -667,7 +708,17 @@ async function loadAll(refresh){
     setLive(new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}));
     populateBranchSelect();
     checkAlerts();
-    renderTab(currentTab);
+    // My Branch quick view: single-branch users land straight in their branch
+    if(!firstLoadDone){
+      firstLoadDone=true;
+      if(!isAdmin() && myAccess.branches.length===1 && allAssets.some(d=>d.branch===myAccess.branches[0])){
+        openBranch(myAccess.branches[0]);
+      }else{
+        renderTab(currentTab);
+      }
+    }else{
+      renderTab(currentTab);
+    }
   }catch(e){
     console.error('loadAll error:',e);
     setLive('Error');
@@ -833,7 +884,19 @@ async function renderAccess(){
   const branches=[...new Set(allAssetsRaw.map(d=>d.branch))].sort();
   const c=document.getElementById('access-content');
   if(items===null){
-    c.innerHTML='<div class="table-card" style="padding:22px"><p style="font-size:15px;margin-bottom:14px">Access list <b>'+ACCESS_LIST+'</b> not found. Create it once to start managing permissions.</p><button class="btn btn-primary" onclick="createAccessList()">Create access list</button></div>';
+    c.innerHTML='<div class="table-card" style="padding:24px;line-height:1.9">'
+      +'<p style="font-size:16px;font-weight:800;margin:0 0 6px">One-time setup: create the access list</p>'
+      +'<p style="font-size:14px;color:var(--muted2);margin:0 0 14px">The app can read/write entries, but creating a list needs site-admin rights. Make it once in SharePoint/Teams:</p>'
+      +'<ol style="font-size:15px;padding-inline-start:20px;margin:0 0 16px">'
+      +'<li>Teams &rarr; this team &rarr; <b>+</b> tab &rarr; <b>List</b> &rarr; <b>Blank list</b>.</li>'
+      +'<li>Name it exactly <b>'+ACCESS_LIST+'</b> &rarr; Create.</li>'
+      +'<li>Add column <b>Role</b> (Single line of text).</li>'
+      +'<li>Add column <b>Branches</b> (Multiple lines of text).</li>'
+      +'<li>Come back here and tap <b>Re-check</b>.</li>'
+      +'</ol>'
+      +'<button class="btn btn-primary" onclick="renderAccess()">Re-check</button> '
+      +'<button class="btn btn-ghost" onclick="createAccessList()">Try auto-create anyway</button>'
+      +'</div>';
     return;
   }
   const opts=branches.map(b=>'<label style="display:flex;gap:8px;align-items:center;font-size:14px;padding:5px 0;cursor:pointer"><input type="checkbox" class="acc-br" value="'+esc(b)+'"> '+esc(b)+'</label>').join('');
@@ -1291,9 +1354,13 @@ function openDetail(id){
 
 // ===== ADD ASSET =====
 function populateBranchSelect(){
-  const sel=document.getElementById('add-branch');if(!sel)return;
-  const branches=[...new Set(allAssets.map(d=>d.branch))].sort();
-  sel.innerHTML='<option value="">Select Branch</option>'+branches.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
+  const sel=document.getElementById('add-branch'); if(!sel)return;
+  const fromData=[...new Set(allAssetsRaw.map(d=>d.branch).filter(Boolean))];
+  const branches=[...new Set([...CHOICES.branch,...fromData])];
+  sel.innerHTML='<option value="">Select Branch</option>'+branches.map(b=>`<option value="${b}">${b}</option>`).join('');
+  const cat=document.getElementById('add-category'); if(cat)cat.innerHTML='<option value="">Select Category</option>'+optionsHtml(CHOICES.category);
+  const st=document.getElementById('add-status'); if(st)st.innerHTML=optionsHtml(CHOICES.status);
+  const cl=document.getElementById('add-color'); if(cl)cl.innerHTML='<option value="">Select Color</option>'+optionsHtml(CHOICES.color);
 }
 
 function openAddAsset(){
@@ -1305,9 +1372,9 @@ function openAddAsset(){
   ['add-name','add-model','add-color','add-invoice','add-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   document.getElementById('add-qty').value='1';
   document.getElementById('add-amount').value='';
-  document.getElementById('add-status').value='قيد الاستخدام';
   document.getElementById('add-category').value='';
   populateBranchSelect();
+  document.getElementById('add-status').value='قيد الاستخدام';
   document.getElementById('modal-add').classList.add('open');
 }
 
@@ -1481,6 +1548,7 @@ async function confirmDeleteAsset(){
 
 // ===== QR CODE =====
 function openQR(id){
+  if(typeof QRCode==='undefined'){toast('QR library still loading, try again','error');return;}
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   const qrData=JSON.stringify({id:d.id,name:d.name,branch:d.branch,category:d.category,qty:d.qty,status:d.status});
   document.getElementById('qr-name').textContent=d.name;
@@ -1564,6 +1632,41 @@ function toggleTheme(){
   if(currentTab==='analytics')setTimeout(renderAnalytics,100);
 }
 
+let html5Qr=null, _scanLock=false;
+async function openScanner(){
+  const modal=document.getElementById('modal-scan'); modal.classList.add('open');
+  const st=document.getElementById('scan-status');
+  st.textContent='Starting camera...';
+  _scanLock=false;
+  if(!window.Html5Qrcode){ st.textContent='Scanner not loaded. Check your internet and retry.'; return; }
+  try{
+    html5Qr=new Html5Qrcode('qr-reader');
+    await html5Qr.start({facingMode:'environment'},{fps:10,qrbox:{width:230,height:230}},onScanSuccess,()=>{});
+    st.textContent='Point the camera at an asset QR code.';
+  }catch(e){
+    st.innerHTML='Camera error. Allow camera permission and open over HTTPS.<br><span style="font-size:12px">'+esc(String(e))+'</span>';
+  }
+}
+async function closeScanner(){
+  try{ if(html5Qr){ await html5Qr.stop(); await html5Qr.clear(); } }catch(_){}
+  html5Qr=null;
+  document.getElementById('modal-scan')?.classList.remove('open');
+}
+async function onScanSuccess(text){
+  if(_scanLock) return; _scanLock=true;
+  let id=null;
+  try{ const o=JSON.parse(text); if(o&&o.id!=null) id=parseInt(o.id,10); }catch(_){}
+  if(id==null){ const m=String(text).match(/(\d+)\s*$/); if(m) id=parseInt(m[1],10); }
+  await closeScanner();
+  if(id==null||isNaN(id)){ toast('QR not recognized','error'); _scanLock=false; return; }
+  const d=allAssets.find(x=>x.id===id);
+  if(d){ openDetail(id); }
+  else{
+    const raw=allAssetsRaw.find(x=>x.id===id);
+    toast(raw?('Asset #'+id+' is outside your access'):('Asset #'+id+' not found'),'error');
+  }
+  setTimeout(()=>{_scanLock=false;},800);
+}
 function closeModal(id){document.getElementById(id)?.classList.remove('open')}
 document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))closeModal(e.target.id)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));document.getElementById('confirm-delete')?.classList.remove('open')}});
