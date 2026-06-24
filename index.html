@@ -424,6 +424,7 @@ const TENANT_ID='fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
 const CLIENT_ID='b74353f0-ec73-4a69-ac7d-a7dbb9166b95';
 const SITE='https://netorg20570594.sharepoint.com/sites/484';
 const SITE_BASE='https://netorg20570594.sharepoint.com';
+const SITE_API=SITE.replace(/\/$/,'')+'/api';
 const LIST_ID='bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
 const BRANCH_KEY='OData__x0627__x0644__x0641__x0631__x06';
 const SCOPES=[
@@ -499,31 +500,42 @@ function mapItem(it){
   const branch=(it[BRANCH_KEY]||'غير محدد').toString().trim();
   const brand=(branch.split(/[-–]/)[0]||'').trim()||'—';
   let photo='';
+  const fields=['DevicePhoto','PhotoUrl','ImageUrl','Photo','Image'];
+
+  function normalizeUrl(value){
+    if(!value) return '';
+    if(typeof value!=='string') return value;
+    const s=value.trim();
+    if(!s) return '';
+    if(s.startsWith('data:image/')) return s;
+    if(s.startsWith('http://')||s.startsWith('https://')) return s;
+    if(s.startsWith('/')) return SITE_BASE+s;
+    try{const parsed=JSON.parse(s);return normalizeUrl(parsed)}catch(_){return s}
+  }
 
   try{
-    let p=it.DevicePhoto||it.Photo||it.Image;
-
-    if(p){
-      if(typeof p==='string'){
-        const s=p.trim();
-        if(s.startsWith('data:image/')) photo=s;
-        else if(s.startsWith('http')) photo=s;
-        else { try{ p=JSON.parse(s) }catch(e){} }
-      }
-
-      if(!photo && p && typeof p==='object'){
-        if(p.serverRelativeUrl) photo=SITE_BASE+p.serverRelativeUrl;
-        else if(p.serverUrl && p.serverRelativeUrl) photo=p.serverUrl+p.serverRelativeUrl;
-        else if(p.Url) photo=p.Url;
-        else if(p.url) photo=p.url;
+    for(const key of fields){
+      if(photo) break;
+      let value=it[key];
+      if(value==null) continue;
+      if(typeof value==='string') value=normalizeUrl(value);
+      if(typeof value==='string' && value.startsWith('data:image/')){photo=value;break}
+      if(typeof value==='string' && /^https?:\/\//i.test(value)){photo=value;break}
+      if(typeof value==='object'){
+        const url=value.serverRelativeUrl||value.ServerRelativeUrl||value.FileRef||value.Url||value.url||value.DecodedUrl||value['odata.id']||value['odata.editLink'];
+        if(url){
+          if(typeof url==='string' && url.startsWith('/')) photo=SITE_BASE+url;
+          else if(typeof url==='string') photo=url;
+          break;
+        }
       }
     }
   }catch(e){
-    console.warn('DevicePhoto parse error',e,it.DevicePhoto);
+    console.warn('DevicePhoto parse error',e,it.DevicePhoto||it.Photo||it.Image);
   }
 
-  if(!photo && typeof it.PhotoUrl==='string' && it.PhotoUrl.trim()) photo=it.PhotoUrl.trim();
-  if(!photo && typeof it.ImageUrl==='string' && it.ImageUrl.trim()) photo=it.ImageUrl.trim();
+  if(!photo && typeof it.PhotoUrl==='string' && it.PhotoUrl.trim()) photo=normalizeUrl(it.PhotoUrl);
+  if(!photo && typeof it.ImageUrl==='string' && it.ImageUrl.trim()) photo=normalizeUrl(it.ImageUrl);
 
   const qraw=String(it.SerialNumber||it.Quantity||'1');
   const qn=parseInt(qraw.replace(/\D/g,''),10);
@@ -550,7 +562,8 @@ function mapItem(it){
 
 async function spFetch(url){
   await getToken();
-  const r=await fetch(url,{headers:{'Accept':'application/json;odata=nometadata','Authorization':`Bearer ${accessToken}`}});
+  const requestUrl=url.startsWith('http')?url:`${SITE_API}/${url.replace(/^\//,'')}`;
+  const r=await fetch(requestUrl,{headers:{'Accept':'application/json;odata=nometadata','Authorization':`Bearer ${accessToken}`}});
   if(!r.ok){const t=await r.text();throw new Error(`SP ${r.status}: ${t.slice(0,200)}`)}
   return r.json();
 }
@@ -558,11 +571,12 @@ async function spFetch(url){
 async function loadAll(refresh){
   try{
     setLive('Syncing...');
-    let items=[],url=`${SITE}/_api/web/lists(guid'${LIST_ID}')/items?$top=500&$orderby=ID desc`;
+    let items=[],url=`/web/lists(guid'${LIST_ID}')/items?$top=500&$orderby=ID desc`;
     while(url){
       const d=await spFetch(url);
-      items=[...items,...(d.value||[])];
-      url=d['odata.nextLink']||null;
+      const pageItems=(d.value||d.d?.results||[]);
+      items=[...items,...pageItems];
+      url=d['@odata.nextLink']||d['odata.nextLink']||d.d?.['odata.nextLink']||null;
     }
     allAssets=items.map(mapItem);
     if(refresh)toast(`✓ ${allAssets.length} assets loaded`,'success');
@@ -1112,7 +1126,7 @@ async function submitAsset(){
   btn.disabled=true;btn.querySelector('span').textContent=isEdit?'Saving...':'Submitting...';
   try{
     await getToken();
-    const digestR=await fetch(`${SITE}/_api/contextinfo`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`}});
+    const digestR=await fetch(`${SITE_API}/contextinfo`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`}});
     const digest=(await digestR.json()).d.GetContextWebInformation.FormDigestValue;
     const body={
       "__metadata":{"type":"SP.Data.ListItem"},
@@ -1131,7 +1145,7 @@ async function submitAsset(){
 
     let r;
     if(isEdit){
-      r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${editId})`,{
+      r=await fetch(`${SITE_API}/web/lists(guid'${LIST_ID}')/items(${editId})`,{
         method:'POST',
         headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},
         body:JSON.stringify(body)
@@ -1139,7 +1153,7 @@ async function submitAsset(){
       if(r.status===204||r.ok){toast(`✓ Asset #${editId} updated!`,'success');closeModal('modal-add');await loadAll();}
       else{const t=await r.text();toast('Update failed: '+t.slice(0,100),'error')}
     }else{
-      r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items`,{
+      r=await fetch(`${SITE_API}/web/lists(guid'${LIST_ID}')/items`,{
         method:'POST',
         headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},
         body:JSON.stringify(body)
@@ -1163,9 +1177,9 @@ async function confirmDeleteAsset(){
   const id=pendingDeleteId;closeConfirm();
   try{
     await getToken();
-    const digestR=await fetch(`${SITE}/_api/contextinfo`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`}});
+    const digestR=await fetch(`${SITE_API}/contextinfo`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`}});
     const digest=(await digestR.json()).d.GetContextWebInformation.FormDigestValue;
-    const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${id})`,{
+    const r=await fetch(`${SITE_API}/web/lists(guid'${LIST_ID}')/items(${id})`,{
       method:'DELETE',
       headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*'}
     });
