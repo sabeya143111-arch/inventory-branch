@@ -135,7 +135,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .flt-input,.flt-select{background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:12px;padding:8px 12px;outline:none;min-width:130px;transition:border-color .15s}
 .flt-input:focus,.flt-select:focus{border-color:var(--accent)}
 .flt-select option{background:var(--surface2)}
-.adv-filter-panel{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:18px;margin-bottom:16px;display:none}
+.adv-filter-panel{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:18px;margin-bottom:16px;display:none;max-height:60vh;overflow-y:auto}
 .adv-filter-panel.open{display:block;animation:pageIn .2s ease}
 .adv-filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
 
@@ -327,14 +327,10 @@ td{font-size:14.5px;font-weight:600}
   .nav{padding:0 8px;gap:0}
   .nav-item{flex:0 0 auto}
   .main{padding:14px 12px!important}
-  /* Alerts dropdown fits screen */
   .notif-panel{position:fixed!important;left:8px!important;right:8px!important;top:120px!important;width:auto!important;max-width:none!important;max-height:60vh;overflow:auto}
-  /* overview action buttons wrap */
   .page .btn{flex:1 1 auto;justify-content:center}
-  /* modals comfy on phone */
   .modal{width:96%!important;max-width:96%!important;padding:20px!important;max-height:92vh}
   #qr-reader{min-height:260px}
-  /* branch detail header stacks */
   .bdetail-header{flex-direction:column;gap:12px}
   .mini-stats{gap:18px;width:100%;justify-content:space-between}
 }
@@ -353,15 +349,20 @@ td{font-size:14.5px;font-weight:600}
 <div id="login-screen" class="login-screen">
   <div class="login-card">
     <div class="login-logo"><svg viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg></div>
-    <div class="login-brand">Swag Group</div>
-    <div class="login-title">Inventory Control Center</div>
-    <div class="login-divider"></div>
-    <div class="login-sub">Sign in with your Microsoft account to access the inventory management dashboard.</div>
+    <div class="login-brand" data-i18n="login_brand">Swag Group</div>
+    <div class="login-title-wrapper">
+      <div class="login-title" data-i18n="login_title">Inventory Control Center</div>
+      <svg class="animated-underline" width="100%" height="20" viewBox="0 0 300 20" preserveAspectRatio="none">
+        <path class="underline-path" d="M 0,10 Q 75,0 150,10 Q 225,20 300,10" stroke="currentColor" stroke-width="2" fill="none" />
+      </svg>
+    </div>
+    <div class="login-divider" style="display:none;"></div>
+    <div class="login-sub" data-i18n="login_sub">Sign in with your Microsoft account to access the inventory management dashboard.</div>
     <button class="login-btn" onclick="doLogin()">
       <svg width="18" height="18" viewBox="0 0 23 23"><path d="M1 1h10v10H1V1z" fill="#f25022"/><path d="M12 1h10v10H12V1z" fill="#7fba00"/><path d="M1 12h10v10H1V12z" fill="#00a4ef"/><path d="M12 12h10v10H12V12z" fill="#ffb900"/></svg>
-      Continue with Microsoft
+      <span data-i18n="continue_ms">Continue with Microsoft</span>
     </button>
-    <button class="hdr-btn" onclick="toggleTheme()" style="margin:16px auto 0;width:fit-content">Toggle Theme</button>
+    <button class="hdr-btn" onclick="toggleTheme()" style="margin:16px auto 0;width:fit-content"><span data-i18n="toggle_theme">Toggle Theme</span></button>
   </div>
 </div>
 
@@ -369,16 +370,16 @@ td{font-size:14.5px;font-weight:600}
 <div id="dashboard" style="display:none">
   <div class="header">
     <div class="header-left">
-      <div class="header-brand">INVENTORY</div>
+      <div class="header-brand" data-i18n="header_brand">INVENTORY</div>
       <div class="header-sep"></div>
-      <div class="header-sub"><div class="live-dot"></div><span id="live-time">Live</span></div>
+      <div class="header-sub"><div class="live-dot"></div><span id="live-time" data-i18n="live">Live</span></div>
     </div>
     <div class="header-right">
       <div class="user-chip">
         <div class="user-avatar" id="user-initial">T</div>
         <span id="user-name">Loading...</span>
       </div>
-      <input id="global-search" class="flt-input" placeholder="Search assets…" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
+      <input id="global-search" class="flt-input" placeholder="Search assets…" data-i18n="search_assets" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
       <!-- Notification Bell -->
       <div style="position:relative">
         <div class="notif-bell" onclick="toggleNotifPanel()">
@@ -388,17 +389,18 @@ td{font-size:14.5px;font-weight:600}
         </div>
         <div class="notif-panel" id="notif-panel">
           <div class="notif-header">
-            <span>🔔 Alerts</span>
-            <button class="btn-ghost" style="font-size:10px;padding:3px 8px;border-radius:6px;cursor:pointer;background:var(--surface3);border:1px solid var(--border)" onclick="clearAllNotifs()">Clear All</button>
+            <span>🔔 <span data-i18n="alerts">Alerts</span></span>
+            <button class="btn-ghost" style="font-size:10px;padding:3px 8px;border-radius:6px;cursor:pointer;background:var(--surface3);border:1px solid var(--border)" onclick="clearAllNotifs()"><span data-i18n="clear_all">Clear All</span></button>
           </div>
-          <div id="notif-list"><div class="notif-empty">No alerts right now</div></div>
+          <div id="notif-list"><div class="notif-empty" data-i18n="no_alerts">No alerts right now</div></div>
         </div>
       </div>
-      <button class="hdr-btn" onclick="loadAll(true)"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> Refresh</button>
-      <button class="hdr-btn" onclick="openScanner()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Scan</button>
-      <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
+      <button class="hdr-btn" onclick="loadAll(true)"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> <span data-i18n="refresh">Refresh</span></button>
+      <button class="hdr-btn" onclick="openScanner()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> <span data-i18n="scan">Scan</span></button>
+      <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> <span data-i18n="export">Export</span></button>
+      <button class="hdr-btn" onclick="toggleLanguage()">🌐 EN/AR</button>
       <button class="hdr-btn" onclick="toggleTheme()">🌙</button>
-      <button class="hdr-btn danger" onclick="signOut()">Sign out</button>
+      <button class="hdr-btn danger" onclick="signOut()"><span data-i18n="sign_out">Sign out</span></button>
     </div>
   </div>
   <div class="nav" id="nav-bar"></div>
@@ -414,10 +416,10 @@ td{font-size:14.5px;font-weight:600}
 <!-- ========== MODAL: DETAIL ========== -->
 <div class="modal-overlay" id="modal-detail">
   <div class="modal">
-    <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg> Asset Details</div>
+    <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg> <span data-i18n="asset_details">Asset Details</span></div>
     <div id="modal-detail-body"></div>
     <div class="modal-footer" id="modal-detail-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Close</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-detail')"><span data-i18n="close">Close</span></button>
     </div>
   </div>
 </div>
@@ -425,63 +427,63 @@ td{font-size:14.5px;font-weight:600}
 <!-- ========== MODAL: ADD/EDIT ASSET ========== -->
 <div class="modal-overlay" id="modal-add">
   <div class="modal">
-    <div class="modal-title" id="add-modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add New Asset</div>
+    <div class="modal-title" id="add-modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> <span data-i18n="add_new_asset">Add New Asset</span></div>
     <input type="hidden" id="edit-asset-id" value=""/>
 
-    <div class="modal-label">Branch *</div>
+    <div class="modal-label" data-i18n="branch">Branch *</div>
     <select class="modal-select" id="add-branch"><option value="">Select Branch</option></select>
-    <div class="modal-label">Asset Name *</div>
+    <div class="modal-label" data-i18n="asset_name">Asset Name *</div>
     <input class="modal-input" id="add-name" placeholder="e.g. Cashier Computer"/>
-    <div class="modal-label">Category *</div>
+    <div class="modal-label" data-i18n="category">Category *</div>
     <select class="modal-select" id="add-category"><option value="">Select Category</option></select>
     <div class="modal-grid2" style="margin-bottom:14px">
       <div>
-        <div class="modal-label">Model</div>
+        <div class="modal-label" data-i18n="model">Model</div>
         <input class="modal-input" id="add-model" placeholder="Model number"/>
       </div>
       <div>
-        <div class="modal-label">Quantity *</div>
+        <div class="modal-label" data-i18n="qty">Quantity *</div>
         <input class="modal-input" id="add-qty" type="number" min="1" value="1"/>
       </div>
     </div>
     <div class="modal-grid2" style="margin-bottom:14px">
       <div>
-        <div class="modal-label">Status</div>
+        <div class="modal-label" data-i18n="status">Status</div>
         <select class="modal-select" id="add-status"></select>
       </div>
       <div>
-        <div class="modal-label">Color</div>
+        <div class="modal-label" data-i18n="color">Color</div>
         <select class="modal-select" id="add-color"></select>
       </div>
     </div>
     <div class="modal-grid2" style="margin-bottom:14px">
       <div>
-        <div class="modal-label">Purchase Amount (SAR)</div>
+        <div class="modal-label" data-i18n="amount">Purchase Amount (SAR)</div>
         <input class="modal-input" id="add-amount" type="number" min="0" placeholder="0"/>
       </div>
       <div>
-        <div class="modal-label">Invoice #</div>
+        <div class="modal-label" data-i18n="invoice">Invoice #</div>
         <input class="modal-input" id="add-invoice" placeholder="INV-001"/>
       </div>
     </div>
 
     <!-- ✅ IMAGE UPLOAD -->
-    <div class="modal-label">Photo</div>
+    <div class="modal-label" data-i18n="photo">Photo</div>
     <div class="photo-upload-area" id="photo-drop" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handlePhotoDrop(event)">
       <input type="file" accept="image/*" id="photo-file-input" onchange="handlePhotoSelect(event)"/>
       <img id="photo-preview" class="photo-preview"/>
       <div id="photo-placeholder">
         <svg class="ico" viewBox="0 0 24 24" style="width:28px;height:28px;stroke:var(--muted);margin-bottom:8px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <div style="font-size:12px;color:var(--muted)">Click or drag to upload photo</div>
+        <div style="font-size:12px;color:var(--muted)" data-i18n="click_drag_photo">Click or drag to upload photo</div>
       </div>
     </div>
 
-    <div class="modal-label">Notes</div>
-    <textarea class="modal-textarea" id="add-notes" placeholder="Optional notes..."></textarea>
+    <div class="modal-label" data-i18n="notes">Notes</div>
+    <textarea class="modal-textarea" id="add-notes" placeholder="Optional notes..." data-i18n="optional_notes"></textarea>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-add')">Cancel</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add')"><span data-i18n="cancel">Cancel</span></button>
       <button class="btn btn-primary" id="add-submit-btn" onclick="submitAsset()">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> <span id="add-submit-label">Add Asset</span>
+        <svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> <span id="add-submit-label" data-i18n="add_asset">Add Asset</span>
       </button>
     </div>
   </div>
@@ -490,9 +492,9 @@ td{font-size:14.5px;font-weight:600}
 <!-- ========== MODAL: QR CODE ========== -->
 <div class="modal-overlay" id="modal-scan">
   <div class="modal" style="max-width:400px;text-align:center">
-    <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Scan Asset QR</div>
+    <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> <span data-i18n="scan_asset_qr">Scan Asset QR</span></div>
     <div id="qr-reader" style="width:100%;border-radius:12px;overflow:hidden;background:#000;min-height:240px"></div>
-    <div id="scan-status" style="font-size:14px;color:var(--muted2);margin-top:12px;line-height:1.6">Point the camera at an asset QR code.</div>
+    <div id="scan-status" style="font-size:14px;color:var(--muted2);margin-top:12px;line-height:1.6"><span data-i18n="point_camera">Point the camera at an asset QR code.</span></div>
     <div class="modal-footer" style="justify-content:center">
       <button class="btn btn-ghost" onclick="closeScanner()">Close</button>
     </div>
@@ -500,7 +502,7 @@ td{font-size:14.5px;font-weight:600}
 </div>
 <div class="modal-overlay" id="modal-qr">
   <div class="modal" style="max-width:380px;text-align:center">
-    <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3M17 17h3M14 17h.01M17 14h.01"/></svg> QR Code</div>
+    <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3M17 17h3M14 17h.01M17 14h.01"/></svg> <span data-i18n="qr_code">QR Code</span></div>
     <div class="qr-container">
       <canvas id="qr-canvas"></canvas>
       <div class="qr-asset-name" id="qr-name"></div>
@@ -509,10 +511,10 @@ td{font-size:14.5px;font-weight:600}
     <div class="modal-footer" style="justify-content:center">
       <button class="btn btn-ghost" onclick="closeModal('modal-qr')">Close</button>
       <button class="btn btn-primary" onclick="downloadQR()">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Download
+        <svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> <span data-i18n="download">Download</span>
       </button>
       <button class="btn btn-ghost" onclick="printQR()">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></svg> Print
+        <svg class="ico" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></svg> <span data-i18n="print">Print</span>
       </button>
     </div>
   </div>
@@ -522,8 +524,8 @@ td{font-size:14.5px;font-weight:600}
 <div class="confirm-overlay" id="confirm-delete">
   <div class="confirm-box">
     <div style="font-size:40px;margin-bottom:12px">🗑️</div>
-    <h3>Delete Asset?</h3>
-    <p id="confirm-delete-msg">This action cannot be undone. The asset will be permanently removed from SharePoint.</p>
+    <h3><span data-i18n="delete_asset">Delete Asset?</span></h3>
+    <p id="confirm-delete-msg"><span data-i18n="delete_msg">This action cannot be undone. The asset will be permanently removed from SharePoint.</span></p>
     <div class="confirm-btns">
       <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
       <button class="btn btn-danger" id="confirm-delete-btn" onclick="confirmDeleteAsset()">Delete</button>
@@ -535,22 +537,278 @@ td{font-size:14.5px;font-weight:600}
 
 <script>
 // ============================================================
+// i18n - BILINGUAL SUPPORT (FIXED: all missing keys added)
+// ============================================================
+let currentLang = localStorage.getItem('swag_lang') || 'en';
+
+const TRANSLATIONS = {
+  en: {
+    // Login
+    "login_brand": "Swag Group",
+    "login_title": "Inventory Control Center",
+    "login_sub": "Sign in with your Microsoft account to access the inventory management dashboard.",
+    "continue_ms": "Continue with Microsoft",
+    "toggle_theme": "Toggle Theme",
+    "header_brand": "INVENTORY",
+    "live": "Live",
+    "search_assets": "Search assets…",
+    "alerts": "Alerts",
+    "clear_all": "Clear All",
+    "no_alerts": "No alerts right now",
+    "refresh": "Refresh",
+    "scan": "Scan",
+    "export": "Export",
+    "sign_out": "Sign out",
+    "close": "Close",
+    "save_changes": "Save Changes",
+    "add_asset": "Add Asset",
+    "delete": "Delete",
+    "print": "Print",
+    "qr_code": "QR Code",
+    "download": "Download",
+    "cancel": "Cancel",
+    "view": "View",
+    "edit": "Edit",
+    "del": "Del",
+    "photo": "Photo",
+    "notes": "Notes",
+    "branch": "Branch",
+    "category": "Category",
+    "qty": "Quantity",
+    "status": "Status",
+    "color": "Color",
+    "amount": "Amount",
+    "invoice": "Invoice",
+    "model": "Model",
+    "asset_name": "Asset Name",
+    "branches": "Branches",
+    "overview": "Overview",
+    "all_assets": "All Assets",
+    "analytics": "Analytics",
+    "access": "Access",
+    "total_units": "Total Units",
+    "in_use": "In Use",
+    "total_value": "Total Value (SAR)",
+    "categories": "Categories",
+    "asset_types": "Asset Types",
+    "under_maintenance": "Under Maintenance",
+    "stopped_damaged": "Stopped/Damaged",
+    "in_storage": "In Storage",
+    "utilization_rate": "Utilization Rate",
+    "top_branches": "Top Branches by Units",
+    "view_all": "View All",
+    "recent_assets": "Recent Assets",
+    "all_branches": "All Branches",
+    "search_branches": "Search branches…",
+    "types": "Types",
+    "units": "Units",
+    "sar": "SAR",
+    "advanced_filters": "Advanced Filters",
+    "clear": "✕ Clear",
+    "date_from": "Date From",
+    "date_to": "Date To",
+    "amount_min": "Amount Min (SAR)",
+    "amount_max": "Amount Max (SAR)",
+    "results_found": "results found",
+    "asset": "Asset",
+    "actions": "Actions",
+    "asset_distribution": "Asset Distribution",
+    "units_by_branch": "Units by Branch",
+    "by_category": "By Category",
+    "by_status": "By Status",
+    "by_brand": "By Brand",
+    "asset_details": "Asset Details",
+    "add_new_asset": "Add New Asset",
+    "select_branch": "Select Branch",
+    "select_category": "Select Category",
+    "select_color": "Select Color",
+    "click_drag_photo": "Click or drag to upload photo",
+    "optional_notes": "Optional notes...",
+    "scan_asset_qr": "Scan Asset QR",
+    "point_camera": "Point the camera at an asset QR code.",
+    "delete_asset": "Delete Asset?",
+    "delete_msg": "This action cannot be undone. The asset will be permanently removed from SharePoint.",
+    "grant_access": "Grant access",
+    "remove": "Remove",
+    // Category/status/color translations (exact matches)
+    "الكترونيات": "Electronics", "كمبيوتر": "Computer", "كاميرات": "Cameras",
+    "هاتف": "Phone", "جوال": "Mobile", "ديكورات": "Decorations",
+    "مستلزمات": "Supplies", "اخرى": "Other", "أخرى": "Other",
+    "كراسي": "Chairs", "طاولات": "Tables", "مكتب": "Desk",
+    "اثاث": "Furniture", "أثاث": "Furniture", "مكاتب": "Offices",
+    "طيور وقوارض": "Birds & Rodents", "لابتوب": "Laptop", "شاشة": "Monitor",
+    "طابعة": "Printer", "شبكات": "Networks",
+    "متاح": "Available", "قيد الاستخدام": "In Use", "يحتاج صيانة": "Needs Maintenance",
+    "تالف": "Damaged", "صيانة": "Maintenance", "متوقف": "Stopped",
+    "مخزن": "In Storage", "في الاستخدام": "In Use",
+    "ابيض": "White", "أبيض": "White", "اسود": "Black", "أسود": "Black",
+    "رمادي": "Gray", "اصفر": "Yellow", "برتقالي": "Orange",
+    "احمر": "Red", "أحمر": "Red", "وردي": "Pink", "اخضر": "Green", "أخضر": "Green",
+    "سماوي": "Cyan", "ازرق": "Blue", "أزرق": "Blue", "بنفسجي": "Purple",
+    "بني": "Brown", "فضي": "Silver", "ذهبي": "Gold",
+    "سواج": "Swag", "لاروش": "Laroche", "جولد": "Gold", "اوتفيت": "Outfit", "أوتفيت": "Outfit",
+    "اوتفيت - المدينة": "Outfit - Madinah", "اوتفيت - البديعة": "Outfit - Badi'ah",
+    "اوتفيت - النسيم": "Outfit - Naseem", "اوتفيت - سكاكا": "Outfit - Sakaka",
+    "غير محدد": "Unspecified"
+  },
+  ar: {
+    "login_brand": "مجموعة سواج",
+    "login_title": "مركز التحكم في المخزون",
+    "login_sub": "قم بتسجيل الدخول باستخدام حساب مايكروسوفت الخاص بك للوصول إلى لوحة معلومات إدارة المخزون.",
+    "continue_ms": "المتابعة بحساب مايكروسوفت",
+    "toggle_theme": "تبديل المظهر",
+    "header_brand": "المخزون",
+    "live": "مباشر",
+    "search_assets": "البحث عن الأصول…",
+    "alerts": "التنبيهات",
+    "clear_all": "مسح الكل",
+    "no_alerts": "لا توجد تنبيهات حاليا",
+    "refresh": "تحديث",
+    "scan": "مسح",
+    "export": "تصدير",
+    "sign_out": "تسجيل الخروج",
+    "close": "إغلاق",
+    "save_changes": "حفظ التغييرات",
+    "add_asset": "إضافة أصل",
+    "delete": "حذف",
+    "print": "طباعة",
+    "qr_code": "رمز الاستجابة السريعة (QR)",
+    "download": "تحميل",
+    "cancel": "إلغاء",
+    "view": "عرض",
+    "edit": "تعديل",
+    "del": "حذف",
+    "photo": "صورة",
+    "notes": "ملاحظات",
+    "branch": "الفرع",
+    "category": "الفئة",
+    "qty": "الكمية",
+    "status": "الحالة",
+    "color": "اللون",
+    "amount": "المبلغ",
+    "invoice": "الفاتورة",
+    "model": "الموديل",
+    "asset_name": "اسم الأصل",
+    "branches": "الفروع",
+    "overview": "نظرة عامة",
+    "all_assets": "جميع الأصول",
+    "analytics": "التحليلات",
+    "access": "الصلاحيات",
+    "total_units": "إجمالي الوحدات",
+    "in_use": "قيد الاستخدام",
+    "total_value": "إجمالي القيمة (ريال)",
+    "categories": "الفئات",
+    "asset_types": "أنواع الأصول",
+    "under_maintenance": "تحت الصيانة",
+    "stopped_damaged": "متوقف/تالف",
+    "in_storage": "في المخزن",
+    "utilization_rate": "معدل الاستخدام",
+    "top_branches": "أبرز الفروع بالوحدات",
+    "view_all": "عرض الكل",
+    "recent_assets": "الأصول الأخيرة",
+    "all_branches": "جميع الفروع",
+    "search_branches": "البحث في الفروع…",
+    "types": "أنواع",
+    "units": "وحدات",
+    "sar": "ريال",
+    "advanced_filters": "تصفية متقدمة",
+    "clear": "✕ مسح",
+    "date_from": "التاريخ من",
+    "date_to": "التاريخ إلى",
+    "amount_min": "أقل مبلغ (ريال)",
+    "amount_max": "أعلى مبلغ (ريال)",
+    "results_found": "نتائج",
+    "asset": "الأصل",
+    "actions": "إجراءات",
+    "asset_distribution": "توزيع الأصول",
+    "units_by_branch": "الوحدات حسب الفرع",
+    "by_category": "حسب الفئة",
+    "by_status": "حسب الحالة",
+    "by_brand": "حسب العلامة التجارية",
+    "asset_details": "تفاصيل الأصل",
+    "add_new_asset": "إضافة أصل جديد",
+    "select_branch": "اختر الفرع",
+    "select_category": "اختر الفئة",
+    "select_color": "اختر اللون",
+    "click_drag_photo": "انقر أو اسحب لرفع صورة",
+    "optional_notes": "ملاحظات اختيارية...",
+    "scan_asset_qr": "مسح رمز الأصل",
+    "point_camera": "وجه الكاميرا نحو رمز الاستجابة السريعة (QR) الخاص بالأصل.",
+    "delete_asset": "حذف الأصل؟",
+    "delete_msg": "لا يمكن التراجع عن هذا الإجراء. ستتم إزالة الأصل نهائياً من شيربوينت.",
+    "grant_access": "منح الصلاحية",
+    "remove": "إزالة",
+    // Arabic already has all keys, no need to map
+  }
+};
+
+function t(key) {
+  if (!key) return '';
+  const langDict = TRANSLATIONS[currentLang];
+  if (langDict && langDict[key] !== undefined) return langDict[key];
+  if (currentLang === 'en' && TRANSLATIONS.en[key]) return TRANSLATIONS.en[key];
+  return key;
+}
+
+// Improved tVal: exact match, then try lower-case, then fallback to original
+function tVal(val) {
+  if (!val) return '';
+  const dict = TRANSLATIONS[currentLang];
+  if (dict && dict[val] !== undefined) return dict[val];
+  // Try lowercased
+  const lower = val.toLowerCase();
+  if (dict && dict[lower] !== undefined) return dict[lower];
+  return val;
+}
+
+function switchLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('swag_lang', lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      if (el.placeholder) el.placeholder = t(key);
+      else el.value = t(key);
+    } else {
+      el.textContent = t(key);
+    }
+  });
+  // Re-render current page
+  if (typeof buildNav === 'function') buildNav();
+  if (currentTab === 'overview' && typeof renderOverview === 'function') renderOverview();
+  else if (currentTab === 'branches' && typeof renderBranches === 'function') {
+    if (activeBranch) renderBranchDetail(document.getElementById('page-branches'));
+    else renderBranches();
+  }
+  else if (currentTab === 'all' && typeof renderAll === 'function') renderAll();
+  else if (currentTab === 'access' && typeof renderAccess === 'function') renderAccess();
+  else if (currentTab === 'analytics' && typeof renderAnalytics === 'function') renderAnalytics();
+  if (typeof populateBranchSelect === 'function') populateBranchSelect();
+}
+
+function toggleLanguage() {
+  switchLanguage(currentLang === 'en' ? 'ar' : 'en');
+}
+
+// ============================================================
 // CONFIG
 // ============================================================
 const TENANT_ID  = 'fa3cca65-daac-4f03-8efd-c9c233c8c1d7';
 const CLIENT_ID  = 'b74353f0-ec73-4a69-ac7d-a7dbb9166b95';
 const SITE       = 'https://netorg20570594.sharepoint.com/sites/-484';
 const LIST_ID    = 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1';
-const ADMIN_EMAILS = ['tareq.mahmood@swag.sa']; // always admin (bootstrap)
+const ADMIN_EMAILS = ['tareq.mahmood@swag.sa']; // always admin
 const ACCESS_LIST  = 'DashboardAccess';
 const CHOICES={
   status:['متاح','قيد الاستخدام','يحتاج صيانة','تالف'],
   category:['الكترونيات','كمبيوتر','كاميرات','هاتف','جوال','ديكورات','مستلزمات','اخرى','كراسي','طاولات','مكتب','اثاث','مكاتب','طيور وقوارض'],
-  color:['ابيض','اسود','رمادي','اصفر','برتقالي','احمر','وردي','اخضر','سماوي','ازرق','بنفسجي','بني'],
-  branch:['اوتفيت - المدينة','اوتفيت - البديعة','اوتفيت - النسيم','اوتفيت - سكاكا']
+  color:['ابيض','اسود','رمادي','اصفر','برتقالي','احمر','وردي','اخضر','سماوي','ازرق','بنفسجي','بني']
 };
 const optionsHtml=(arr,sel)=>arr.map(o=>`<option value="${o}"${o===sel?' selected':''}>${o}</option>`).join('');
-let BRANCH_KEY   = 'OData__x0627__x0644__x0641__x0631__x0639_'; // الفرع — auto-detected on load
+let BRANCH_KEY = 'OData__x0627__x0644__x0641__x0631__x0639_'; // fallback
 const SCOPES     = [
   'https://netorg20570594.sharepoint.com/AllSites.Read',
   'https://netorg20570594.sharepoint.com/AllSites.Write',
@@ -641,13 +899,12 @@ function mapItem(it){
   const branch=(it[BRANCH_KEY]||'غير محدد').toString().trim();
   const brand=(branch.split(/[-–]/)[0]||'').trim()||'—';
 
-  // DevicePhoto (Image column) stores the picture as a LIST-ITEM ATTACHMENT.
+  // DevicePhoto parsing with fallback
   let photo='';
   try{
     let p=it.DevicePhoto;
     if(typeof p==='string')p=JSON.parse(p);
     if(p?.fileName){
-      // attachment endpoint (CORS-safe + honours bearer token)
       photo=`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${it.ID})/AttachmentFiles('${encodeURIComponent(p.fileName)}')/$value`;
     }else if(p?.serverRelativeUrl){
       const base=p.serverUrl||SITE.replace(/\/sites\/.+/,'');
@@ -657,7 +914,6 @@ function mapItem(it){
       photo=it.DevicePhoto;
     }
   }catch(_){}
-  // direct URL fallbacks
   if(!photo&&it.PhotoUrl)photo=it.PhotoUrl;
   if(!photo&&it.ImageUrl)photo=it.ImageUrl;
 
@@ -691,6 +947,8 @@ async function spFetch(url){
 }
 
 async function loadAll(refresh){
+  // Only refresh if dashboard visible
+  if(document.getElementById('dashboard').style.display==='none') return;
   try{
     setLive('Syncing...');
     await loadAccess();
@@ -700,7 +958,10 @@ async function loadAll(refresh){
       items=[...items,...(d.value||[])];
       url=d['odata.nextLink']||null;
     }
-    if(items[0]){ const bk=Object.keys(items[0]).find(k=>k.startsWith('OData__x0627__x0644__x0641__x0631')); if(bk) BRANCH_KEY=bk; }
+    if(items[0]){ 
+      const bk=Object.keys(items[0]).find(k=>k.startsWith('OData__x0627__x0644__x0641__x0631'));
+      if(bk) BRANCH_KEY=bk; 
+    }
     allAssetsRaw=items.map(mapItem);
     allAssets=filterByAccess(allAssetsRaw);
     applyAccessUI();
@@ -730,13 +991,10 @@ function setLive(t){const el=document.getElementById('live-time');if(el)el.textC
 // ===== ALERTS / NOTIFICATIONS =====
 function checkAlerts(){
   notifications=[];
-  // Maintenance alert
   const maint=allAssets.filter(d=>(d.status||'').includes('صيان'));
   if(maint.length>0)notifications.push({type:'warn',title:`${maint.length} assets under maintenance`,sub:'Status: صيانة',color:CAT_COLORS['طابعة'],ids:maint.map(d=>d.id)});
-  // Stopped/damaged
   const stopped=allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('متوقف')||v.includes('تالف')});
   if(stopped.length>0)notifications.push({type:'error',title:`${stopped.length} assets stopped/damaged`,sub:'Require immediate attention',color:'#FF3366',ids:stopped.map(d=>d.id)});
-  // No status
   const noStatus=allAssets.filter(d=>!d.status||d.status.trim()==='');
   if(noStatus.length>0)notifications.push({type:'info',title:`${noStatus.length} assets missing status`,sub:'Please update status',color:'#60A5FA',ids:noStatus.map(d=>d.id)});
   renderNotifPanel();
@@ -768,7 +1026,6 @@ function filterByAlert(idx){
   setTimeout(()=>{
     const el=document.getElementById('all-q');
     if(el){
-      // Filter by IDs — highlight matching
       el.value='';renderAll();
     }
   },100);
@@ -786,17 +1043,25 @@ document.addEventListener('click',e=>{
 // ===== HELPERS =====
 function fmt(n){return new Intl.NumberFormat('en-US').format(n||0)}
 function fmtMoney(n){return n?fmt(n)+' SAR':'—'}
-function fmtDate(d){if(!d)return'—';try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch(_){return d}}
+function fmtDate(d){
+  if(!d)return'—';
+  try{
+    const date = new Date(d);
+    return date.toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-GB', {day:'numeric', month:'short', year:'numeric'});
+  }catch(_){return d}
+}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
+// Status badge with localized display
 function statusBadge(s){
   const v=(s||'').toLowerCase();
-  if(v.includes('استخدام')||v.includes('قيد'))return`<span class="badge b-use"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('متوقف')||v.includes('تالف'))return`<span class="badge b-stop"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('صيان'))return`<span class="badge b-fix"><span class="b-dot"></span>${esc(s)}</span>`;
-  if(v.includes('مخزن'))return`<span class="badge b-store"><span class="b-dot"></span>${esc(s)}</span>`;
+  const label = tVal(s);
+  if(v.includes('استخدام')||v.includes('قيد'))return`<span class="badge b-use"><span class="b-dot"></span>${esc(label)}</span>`;
+  if(v.includes('متوقف')||v.includes('تالف'))return`<span class="badge b-stop"><span class="b-dot"></span>${esc(label)}</span>`;
+  if(v.includes('صيان'))return`<span class="badge b-fix"><span class="b-dot"></span>${esc(label)}</span>`;
+  if(v.includes('مخزن'))return`<span class="badge b-store"><span class="b-dot"></span>${esc(label)}</span>`;
   if(!s)return`<span class="badge b-def">—</span>`;
-  return`<span class="badge b-def"><span class="b-dot"></span>${esc(s)}</span>`;
+  return`<span class="badge b-def"><span class="b-dot"></span>${esc(label)}</span>`;
 }
 function assetIcon(cat,name){
   const n=(name||'')+(cat||'');
@@ -830,11 +1095,10 @@ function getBranchAgg(){
   return m;
 }
 
-
 // ===== ACCESS CONTROL =====
 async function getAccessItems(){
   try{ const j=await spFetch(`${SITE}/_api/web/lists/getbytitle('${ACCESS_LIST}')/items?$top=500`); return j.value||[]; }
-  catch(e){ return null; } // null = list missing
+  catch(e){ return null; }
 }
 async function loadAccess(){
   const email=(currentUser&&currentUser.email||'').toLowerCase().trim();
@@ -899,7 +1163,7 @@ async function renderAccess(){
       +'</div>';
     return;
   }
-  const opts=branches.map(b=>'<label style="display:flex;gap:8px;align-items:center;font-size:14px;padding:5px 0;cursor:pointer"><input type="checkbox" class="acc-br" value="'+esc(b)+'"> '+esc(b)+'</label>').join('');
+  const opts=branches.map(b=>'<label style="display:flex;gap:8px;align-items:center;font-size:14px;padding:5px 0;cursor:pointer"><input type="checkbox" class="acc-br" value="'+esc(b)+'"> '+esc(tVal(b))+'</label>').join('');
   c.innerHTML=
    '<div class="table-card" style="padding:22px;margin-bottom:18px">'
    +'<div class="modal-grid2" style="gap:14px">'
@@ -911,7 +1175,7 @@ async function renderAccess(){
    +'<button class="btn btn-primary" onclick="addAccess()">Grant access</button>'
    +'</div>'
    +'<div class="table-card"><div class="tbl-wrap"><table><thead><tr><th>Email</th><th>Role</th><th>Branches</th><th></th></tr></thead><tbody>'
-   +(items.map(it=>'<tr><td style="font-weight:700">'+esc(it.Title)+'</td><td>'+esc(it.Role||'viewer')+'</td><td style="font-size:13px">'+esc(it.Branches==='*'||!it.Branches?'All':it.Branches)+'</td><td><button class="view-btn" onclick="removeAccess('+it.ID+')">Remove</button></td></tr>').join('')||'<tr><td colspan="4" style="padding:22px;color:var(--muted)">No users added yet</td></tr>')
+   +(items.map(it=>'<tr><td style="font-weight:700">'+esc(it.Title)+'</td><td>'+esc(it.Role||'viewer')+'</td><td style="font-size:13px">'+esc(it.Branches==='*'||!it.Branches?'All':tVal(it.Branches))+'</td><td><button class="view-btn" onclick="removeAccess('+it.ID+')">Remove</button></td></tr>').join('')||'<tr><td colspan="4" style="padding:22px;color:var(--muted)">No users added yet</td></tr>')
    +'</tbody></table></div></div>';
 }
 async function addAccess(){
@@ -949,10 +1213,10 @@ async function createAccessList(){
 
 // ===== NAV =====
 const NAV=[
-  ['overview','Overview','<svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>'],
-  ['branches','Branches','<svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg>'],
-  ['all','All Assets','<svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg>'],
-  ['analytics','Analytics','<svg class="ico" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>']
+  ['overview',t('overview'),'<svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>'],
+  ['branches',t('branches'),'<svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg>'],
+  ['all',t('all_assets'),'<svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg>'],
+  ['analytics',t('analytics'),'<svg class="ico" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>']
 ];
 function buildNav(){
   const agg=getBranchAgg();
@@ -996,41 +1260,41 @@ function renderOverview(){
   const top=branches.map(b=>({b,u:agg[b].units})).sort((x,y)=>y.u-x.u).slice(0,6);
   document.getElementById('page-overview').innerHTML=`
     <div class="topbar">
-      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">DASHBOARD</div><div style="font-size:20px;font-weight:700">Asset Overview</div></div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">DASHBOARD</div><div style="font-size:20px;font-weight:700">${t('overview')}</div></div>
       <div class="topbar-actions">
         <button class="btn btn-ghost" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
         <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
       </div>
     </div>
     <div class="stats-grid">
-      <div class="stat-card c1" onclick="switchTab('branches')"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg></div><div class="stat-num" id="s-br">0</div><div class="stat-label">Branches</div></div>
-      <div class="stat-card c2" onclick="switchTab('all')"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/></svg></div><div class="stat-num" id="s-ty">0</div><div class="stat-label">Asset Types</div></div>
-      <div class="stat-card c3"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg></div><div class="stat-num" id="s-un">0</div><div class="stat-label">Total Units</div></div>
-      <div class="stat-card c4"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div><div class="stat-num" id="s-iu">0</div><div class="stat-label">In Use</div></div>
-      <div class="stat-card c5"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9h4a2 2 0 0 1 0 4H9"/></svg></div><div class="stat-num" id="s-va">0</div><div class="stat-label">Total Value (SAR)</div></div>
-      <div class="stat-card c6"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div><div class="stat-num" id="s-ca">0</div><div class="stat-label">Categories</div></div>
+      <div class="stat-card c1" onclick="switchTab('branches')"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg></div><div class="stat-num" id="s-br">0</div><div class="stat-label">${t('branches')}</div></div>
+      <div class="stat-card c2" onclick="switchTab('all')"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/></svg></div><div class="stat-num" id="s-ty">0</div><div class="stat-label">${t('asset_types')}</div></div>
+      <div class="stat-card c3"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg></div><div class="stat-num" id="s-un">0</div><div class="stat-label">${t('total_units')}</div></div>
+      <div class="stat-card c4"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div><div class="stat-num" id="s-iu">0</div><div class="stat-label">${t('in_use')}</div></div>
+      <div class="stat-card c5"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9h4a2 2 0 0 1 0 4H9"/></svg></div><div class="stat-num" id="s-va">0</div><div class="stat-label">${t('total_value')}</div></div>
+      <div class="stat-card c6"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div><div class="stat-num" id="s-ca">0</div><div class="stat-label">${t('categories')}</div></div>
     </div>
     <div class="kpi-strip">
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('صيان')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Under Maintenance</div></div>
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('متوقف')||v.includes('تالف')}).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">Stopped/Damaged</div></div>
-      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('مخزن')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">In Storage</div></div>
-      <div class="kpi-box"><div class="kpi-val">${Math.round(inUse/(units||1)*100)}%</div><div class="kpi-lbl">Utilization Rate</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('صيان')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">${t('under_maintenance')}</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>{const v=(d.status||'').toLowerCase();return v.includes('متوقف')||v.includes('تالف')}).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">${t('stopped_damaged')}</div></div>
+      <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d=>(d.status||'').includes('مخزن')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">${t('in_storage')}</div></div>
+      <div class="kpi-box"><div class="kpi-val">${Math.round(inUse/(units||1)*100)}%</div><div class="kpi-lbl">${t('utilization_rate')}</div></div>
     </div>
     <div class="topbar" style="margin-bottom:16px">
-      <div style="font-size:14px;font-weight:700">Top Branches by Units</div>
-      <button class="btn btn-ghost" onclick="switchTab('branches')" style="font-size:11px;padding:6px 12px">View All →</button>
+      <div style="font-size:14px;font-weight:700">${t('top_branches')}</div>
+      <button class="btn btn-ghost" onclick="switchTab('branches')" style="font-size:11px;padding:6px 12px">${t('view_all')}</button>
     </div>
     <div class="branch-grid">${top.map(({b})=>renderBranchCard(b,agg[b])).join('')}</div>
     <div class="table-card">
-      <div class="table-header"><div class="table-title">Recent Assets <span class="table-count">${Math.min(allAssets.length,10)}</span></div></div>
+      <div class="table-header"><div class="table-title">${t('recent_assets')} <span class="table-count">${Math.min(allAssets.length,10)}</span></div></div>
       <div class="tbl-wrap"><table>
-        <thead><tr><th>#</th><th>Photo</th><th>Asset</th><th>Branch</th><th>Category</th><th>Qty</th><th>Status</th><th></th></tr></thead>
+        <thead><tr><th>#</th><th>${t('photo')}</th><th>${t('asset')}</th><th>${t('branch')}</th><th>${t('category')}</th><th>${t('qty')}</th><th>${t('status')}</th><th></th></tr></thead>
         <tbody>${allAssets.slice(0,10).map(d=>`<tr>
           <td><span class="id-tag">#${d.id}</span></td>
           <td>${d.photo?`<img src="${BLANK}" data-src="${esc(d.photo)}" class="photo-thumb"/>`:''}</td>
           <td style="font-weight:700">${esc(d.name)}</td>
-          <td style="font-size:12px">${esc(d.branch)}</td>
-          <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
+          <td style="font-size:12px">${esc(tVal(d.branch))}</td>
+          <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(tVal(d.category))}</span></td>
           <td style="font-family:'Space Mono',monospace">${d.qty}</td>
           <td>${statusBadge(d.status)}</td>
           <td><button class="view-btn" onclick="openDetail(${d.id})">View</button></td>
@@ -1045,13 +1309,13 @@ function renderOverview(){
 
 function renderBranchCard(name,a){
   const cats=Object.entries(a.cats).sort((x,y)=>y[1]-x[1]).slice(0,3);
-  return`<div class="branch-card" onclick="openBranch('${esc(name)}')">
-    <div class="branch-qty"><b>${a.units}</b><span>units</span></div>
-    <span class="brand-badge" style="background:${brandColor(a.brand)}">${esc(a.brand)}</span>
-    <h3>${esc(name)}</h3>${barcode(name)}
+  return`<div class="branch-card" onclick="openBranch('${esc(tVal(name))}')">
+    <div class="branch-qty"><b>${a.units}</b><span>${t('units')}</span></div>
+    <span class="brand-badge" style="background:${brandColor(a.brand)}">${esc(tVal(a.brand))}</span>
+    <h3>${esc(tVal(name))}</h3>${barcode(name)}
     <div class="branch-footer">
-      <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(c)} · ${k}</span>`).join('')}</div>
-      <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)">${a.types} types</span>
+      <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(tVal(c))} · ${k}</span>`).join('')}</div>
+      <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)">${a.types}  ${t('types')}</span>
     </div>
   </div>`;
 }
@@ -1065,9 +1329,9 @@ function renderBranches(){
     .filter(n=>!branchSearchQ||n.toLowerCase().includes(branchSearchQ.toLowerCase()));
   host.innerHTML=`
     <div class="topbar">
-      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">BRANCHES</div><div style="font-size:20px;font-weight:700">All Branches</div></div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">BRANCHES</div><div style="font-size:20px;font-weight:700">${t('all_branches')}</div></div>
       <div class="filter-row" style="margin:0">
-        <input class="flt-input" placeholder="Search branches…" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
+        <input class="flt-input" placeholder="${t('search_branches')}" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
         <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
       </div>
     </div>
@@ -1090,19 +1354,19 @@ function renderBranchDetail(host){
   const groups={};items.forEach(d=>(groups[d.category]??=[]).push(d));
   host.innerHTML=`
     <button class="back-btn" onclick="activeBranch=null;renderBranches()">
-      <svg class="ico" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> All Branches
+      <svg class="ico" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> ${t('all_branches')}
     </button>
     <div class="bdetail-header">
       <div class="l">
-        <span class="brand-badge" style="background:${brandColor(agg.brand)}">${esc(agg.brand)}</span>
-        <h2>${esc(activeBranch)}</h2>
+        <span class="brand-badge" style="background:${brandColor(agg.brand)}">${esc(tVal(agg.brand))}</span>
+        <h2>${esc(tVal(activeBranch))}</h2>
         <div style="color:var(--muted);font-size:12px">Last entry: ${fmtDate(all[0]?.created)}</div>
       </div>
       <div class="mini-stats">
-        <div class="ms-item"><b>${agg.types}</b><span>Types</span></div>
-        <div class="ms-item"><b>${agg.units}</b><span>Units</span></div>
-        <div class="ms-item"><b>${Object.keys(agg.cats).length}</b><span>Categories</span></div>
-        <div class="ms-item"><b>${fmt(agg.value)}</b><span>SAR</span></div>
+        <div class="ms-item"><b>${agg.types}</b><span>${t('types')}</span></div>
+        <div class="ms-item"><b>${agg.units}</b><span>${t('units')}</span></div>
+        <div class="ms-item"><b>${Object.keys(agg.cats).length}</b><span>${t('categories')}</span></div>
+        <div class="ms-item"><b>${fmt(agg.value)}</b><span>${t('sar')}</span></div>
       </div>
     </div>
     <div class="filter-row" style="margin-bottom:14px">
@@ -1110,12 +1374,12 @@ function renderBranchDetail(host){
     </div>
     <div class="pills">${catList.map(c=>{
       const n=c==='All'?all.length:all.filter(d=>d.category===c).length;
-      return`<button class="pill${activeCat===c?' active':''}" onclick="activeCat='${esc(c)}';renderBranchDetail(document.getElementById('page-branches'))">${esc(c)}<span class="n">${n}</span></button>`;
+      return`<button class="pill${activeCat===c?' active':''}" onclick="activeCat='${esc(c)}';renderBranchDetail(document.getElementById('page-branches'))">${esc(tVal(c))}<span class="n">${n}</span></button>`;
     }).join('')}</div>
     ${Object.keys(groups).length?Object.entries(groups).map(([cat,arr])=>{
       const u=arr.reduce((s,d)=>s+d.qty,0);
       return`<div class="cat-section">
-        <div class="cat-bar"><span class="cat-dot" style="background:${catColor(cat)}"></span><h4>${esc(cat)}</h4><span class="meta">${arr.length} types · ${u} units</span></div>
+        <div class="cat-bar"><span class="cat-dot" style="background:${catColor(cat)}"></span><h4>${esc(tVal(cat))}</h4><span class="meta">${arr.length} types · ${u} units</span></div>
         <div class="asset-grid">${arr.map(renderAssetCard).join('')}</div>
       </div>`;
     }).join(''):'<div class="empty">No matching assets</div>'}`;
@@ -1123,7 +1387,6 @@ function renderBranchDetail(host){
 
 function renderAssetCard(d){
   const ic=`<svg viewBox="0 0 24 24" style="width:44px;height:44px;stroke:var(--muted);fill:none;stroke-width:1.5">${assetIcon(d.category,d.name)}</svg>`;
-  // ✅ Fixed image with auth token for SharePoint
   const imgHtml=d.photo
     ?`<img src="${BLANK}" alt="" class="sp-img" data-src="${esc(d.photo)}" data-fb="${encodeURIComponent('<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">'+ic+'</div>')}" style="width:100%;height:100%;object-fit:cover"/>`
     :`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${ic}</div>`;
@@ -1137,22 +1400,18 @@ function renderAssetCard(d){
       <div class="asset-model">${esc(d.model||'—')}</div>
       <div class="asset-row">
         <span class="color-dot" style="background:${colorHex(d.color)}"></span>
-        <span style="font-size:12px;color:var(--muted2)">${esc(d.color||'—')}</span>
+        <span style="font-size:12px;color:var(--muted2)">${esc(tVal(d.color)||'—')}</span>
         ${statusBadge(d.status)}
       </div>
     </div>
   </div>`;
 }
 
-/* ===== Authenticated image loader =====
-   SharePoint images need the bearer token; <img src> can't send it.
-   So we fetch each image as a blob with the token, then show it. */
+/* ===== Authenticated image loader with memory leak fix ===== */
 const BLANK='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 const _imgCache={};
-// Raw SharePoint file URLs are blocked by CORS from another origin (vercel).
-// The REST file endpoint IS CORS-enabled + honours the bearer token, so route through it.
 function spFileUrl(u){
-  if(/\/_api\//i.test(u)) return u; // already a REST endpoint (e.g. AttachmentFiles)
+  if(/\/_api\//i.test(u)) return u;
   try{
     const path = /^https?:/i.test(u) ? new URL(u).pathname : u;
     const enc  = path.split('/').map(encodeURIComponent).join('/');
@@ -1170,17 +1429,20 @@ async function hydrateImages(root){
       if(!accessToken) await getToken();
       const r=await fetch(spFileUrl(u),{headers:{Authorization:`Bearer ${accessToken}`}});
       if(!r.ok) throw new Error('HTTP '+r.status);
-      const o=URL.createObjectURL(await r.blob()); _imgCache[u]=o; img.src=o;
+      const o=URL.createObjectURL(await r.blob());
+      _imgCache[u]=o;
+      img.src=o;
+      // revoke after load to free memory
+      img.onload = () => { URL.revokeObjectURL(o); };
+      img.onerror = () => { URL.revokeObjectURL(o); };
     }catch(e){
       const fb=img.getAttribute('data-fb');
       if(fb){ img.outerHTML=decodeURIComponent(fb); } else { img.style.display='none'; }
     }
   }
 }
-// auto-hydrate whenever images are added to the DOM (covers all render paths)
 let _hyT; new MutationObserver(()=>{ clearTimeout(_hyT); _hyT=setTimeout(()=>hydrateImages(),60); })
   .observe(document.documentElement,{childList:true,subtree:true});
-function handleImgError(img){ img.style.display='none'; } // legacy, unused
 
 // ===== ALL ASSETS =====
 function renderAll(){
@@ -1190,7 +1452,6 @@ function renderAll(){
   const sc=document.getElementById('all-company')?.value||'';
   const scat=document.getElementById('all-cat')?.value||'';
   const sst=document.getElementById('all-status')?.value||'';
-  // ✅ ADVANCED FILTERS
   const dateFrom=document.getElementById('adv-date-from')?.value||'';
   const dateTo=document.getElementById('adv-date-to')?.value||'';
   const amtMin=document.getElementById('adv-amt-min')?.value||'';
@@ -1209,8 +1470,23 @@ function renderAll(){
 
   if(sortState.key){
     const{key:k,dir}=sortState;
-    const v=i=>k==='id'?i.id:k==='name'?i.name:k==='branch'?i.branch:k==='cat'?i.category:k==='qty'?i.qty:k==='amount'?i.amount:i.status;
-    rows.sort((a,b)=>(v(a)<v(b)?-1:v(a)>v(b)?1:0)*dir);
+    // custom sort for status
+    const statusOrder = {'متاح':0, 'قيد الاستخدام':1, 'يحتاج صيانة':2, 'تالف':3, 'متوقف':4};
+    const getVal = (i) => {
+      if(k==='id') return i.id;
+      if(k==='name') return i.name;
+      if(k==='branch') return i.branch;
+      if(k==='cat') return i.category;
+      if(k==='qty') return i.qty;
+      if(k==='amount') return i.amount;
+      if(k==='status') return statusOrder[i.status] ?? 99;
+      return i.status;
+    };
+    rows.sort((a,b)=>{
+      const va = getVal(a), vb = getVal(b);
+      if(typeof va === 'string') return va.localeCompare(vb) * dir;
+      return (va - vb) * dir;
+    });
   }
   const total=Math.ceil(rows.length/PAGE_SIZE);
   const sliced=rows.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
@@ -1220,59 +1496,58 @@ function renderAll(){
 
   host.innerHTML=`
     <div class="topbar">
-      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">REGISTRY</div><div style="font-size:20px;font-weight:700">All Assets</div></div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">REGISTRY</div><div style="font-size:20px;font-weight:700">${t('all_assets')}</div></div>
       <div class="topbar-actions">
-        <button class="btn btn-ghost" onclick="toggleAdvFilters()"><svg class="ico" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg> Advanced Filters</button>
-        <button class="btn btn-ghost" onclick="clearAllFilters()">✕ Clear</button>
+        <button class="btn btn-ghost" onclick="toggleAdvFilters()"><svg class="ico" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg> ${t('advanced_filters')}</button>
+        <button class="btn btn-ghost" onclick="clearAllFilters()">${t('clear')}</button>
         <button class="btn btn-ghost" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
         <button class="btn btn-primary" onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add Asset</button>
       </div>
     </div>
     <div class="filter-row">
       <div class="flt-group"><div class="flt-label">Search</div><input class="flt-input" id="all-q" placeholder="Search…" oninput="currentPage=1;renderAll()" value="${esc(sq)}" style="min-width:180px"/></div>
-      <div class="flt-group"><div class="flt-label">Branch</div><select class="flt-select" id="all-company" onchange="currentPage=1;renderAll()"><option value="">All Branches</option>${allBranches.map(b=>`<option value="${esc(b)}"${sc===b?' selected':''}>${esc(b)}</option>`).join('')}</select></div>
-      <div class="flt-group"><div class="flt-label">Category</div><select class="flt-select" id="all-cat" onchange="currentPage=1;renderAll()"><option value="">All Categories</option>${cats.map(c=>`<option value="${esc(c)}"${scat===c?' selected':''}>${esc(c)}</option>`).join('')}</select></div>
-      <div class="flt-group"><div class="flt-label">Status</div><select class="flt-select" id="all-status" onchange="currentPage=1;renderAll()"><option value="">All Status</option><option value="استخدام">قيد الاستخدام</option><option value="مخزن">مخزن</option><option value="صيان">صيانة</option><option value="متوقف">متوقف</option></select></div>
+      <div class="flt-group"><div class="flt-label">Branch</div><select class="flt-select" id="all-company" onchange="currentPage=1;renderAll()"><option value="">${t('all_branches')}</option>${allBranches.map(b=>`<option value="${esc(b)}"${sc===b?' selected':''}>${esc(tVal(b))}</option>`).join('')}</select></div>
+      <div class="flt-group"><div class="flt-label">Category</div><select class="flt-select" id="all-cat" onchange="currentPage=1;renderAll()"><option value="">${t('categories')}</option>${cats.map(c=>`<option value="${esc(c)}"${scat===c?' selected':''}>${esc(tVal(c))}</option>`).join('')}</select></div>
+      <div class="flt-group"><div class="flt-label">Status</div><select class="flt-select" id="all-status" onchange="currentPage=1;renderAll()"><option value="">${t('status')}</option><option value="استخدام">قيد الاستخدام</option><option value="مخزن">مخزن</option><option value="صيان">صيانة</option><option value="متوقف">متوقف</option></select></div>
     </div>
 
-    <!-- ✅ ADVANCED FILTERS PANEL -->
     <div class="adv-filter-panel${advOpen?' open':''}" id="adv-filter-panel">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'Space Mono',monospace">Advanced Filters</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'Space Mono',monospace">${t('advanced_filters')}</div>
       <div class="adv-filter-grid">
-        <div class="flt-group"><div class="flt-label">Date From</div><input type="date" class="flt-input" id="adv-date-from" onchange="currentPage=1;renderAll()" value="${dateFrom}"/></div>
-        <div class="flt-group"><div class="flt-label">Date To</div><input type="date" class="flt-input" id="adv-date-to" onchange="currentPage=1;renderAll()" value="${dateTo}"/></div>
-        <div class="flt-group"><div class="flt-label">Amount Min (SAR)</div><input type="number" class="flt-input" id="adv-amt-min" placeholder="0" oninput="currentPage=1;renderAll()" value="${amtMin}"/></div>
-        <div class="flt-group"><div class="flt-label">Amount Max (SAR)</div><input type="number" class="flt-input" id="adv-amt-max" placeholder="99999" oninput="currentPage=1;renderAll()" value="${amtMax}"/></div>
-        <div class="flt-group"><div class="flt-label">Color</div><input class="flt-input" id="adv-color" placeholder="أسود، رمادي…" oninput="currentPage=1;renderAll()" value="${colorFlt}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('date_from')}</div><input type="date" class="flt-input" id="adv-date-from" onchange="currentPage=1;renderAll()" value="${dateFrom}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('date_to')}</div><input type="date" class="flt-input" id="adv-date-to" onchange="currentPage=1;renderAll()" value="${dateTo}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('amount_min')}</div><input type="number" class="flt-input" id="adv-amt-min" placeholder="0" oninput="currentPage=1;renderAll()" value="${amtMin}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('amount_max')}</div><input type="number" class="flt-input" id="adv-amt-max" placeholder="99999" oninput="currentPage=1;renderAll()" value="${amtMax}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('color')}</div><input class="flt-input" id="adv-color" placeholder="أسود، رمادي…" oninput="currentPage=1;renderAll()" value="${colorFlt}"/></div>
       </div>
     </div>
 
-    <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:10px">${rows.length} result${rows.length!==1?'s':''} found</div>
+    <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:10px">${rows.length} ${t('results_found')}</div>
     <div class="table-card">
       <div class="tbl-wrap"><table>
         <thead><tr>
           <th onclick="sortAll('id')" style="cursor:pointer"># ↕</th>
-          <th>Photo</th>
-          <th onclick="sortAll('name')" style="cursor:pointer">Asset ↕</th>
-          <th onclick="sortAll('branch')" style="cursor:pointer">Branch ↕</th>
-          <th onclick="sortAll('cat')" style="cursor:pointer">Category ↕</th>
-          <th>Model</th>
-          <th onclick="sortAll('qty')" style="cursor:pointer">Qty ↕</th>
-          <th onclick="sortAll('status')" style="cursor:pointer">Status ↕</th>
-          <th>Color</th>
-          <th onclick="sortAll('amount')" style="cursor:pointer">Amount ↕</th>
-          <th>Actions</th>
+          <th>${t('photo')}</th>
+          <th onclick="sortAll('name')" style="cursor:pointer">${t('asset')} ↕</th>
+          <th onclick="sortAll('branch')" style="cursor:pointer">${t('branch')} ↕</th>
+          <th onclick="sortAll('cat')" style="cursor:pointer">${t('category')} ↕</th>
+          <th>${t('model')}</th>
+          <th onclick="sortAll('qty')" style="cursor:pointer">${t('qty')} ↕</th>
+          <th onclick="sortAll('status')" style="cursor:pointer">${t('status')} ↕</th>
+          <th>${t('color')}</th>
+          <th onclick="sortAll('amount')" style="cursor:pointer">${t('amount')} ↕</th>
+          <th>${t('actions')}</th>
         </tr></thead>
         <tbody>${sliced.map(d=>`<tr>
           <td><span class="id-tag">#${d.id}</span></td>
           <td>${d.photo?`<img src="${BLANK}" data-src="${esc(d.photo)}" class="photo-thumb"/>`:''}</td>
           <td style="font-weight:700">${esc(d.name)}</td>
-          <td style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</td>
-          <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
+          <td style="font-size:12px;color:var(--muted2)">${esc(tVal(d.branch))}</td>
+          <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(tVal(d.category))}</span></td>
           <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted2)">${esc(d.model||'—')}</td>
           <td style="font-family:'Space Mono',monospace;font-weight:700">${d.qty}</td>
           <td>${statusBadge(d.status)}</td>
-          <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'—')}</td>
+          <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(tVal(d.color)||'—')}</td>
           <td style="font-family:'Space Mono',monospace;font-size:12px">${fmtMoney(d.amount)}</td>
           <td>
             <div style="display:flex;gap:4px;flex-wrap:wrap">
@@ -1289,7 +1564,11 @@ function renderAll(){
 }
 
 function toggleAdvFilters(){advFiltersOpen=!advFiltersOpen;renderAll()}
-function sortAll(k){if(sortState.key===k)sortState.dir*=-1;else{sortState.key=k;sortState.dir=1}currentPage=1;renderAll()}
+function sortAll(k){
+  if(sortState.key===k)sortState.dir*=-1;
+  else{sortState.key=k;sortState.dir=1}
+  currentPage=1;renderAll()
+}
 function buildPagination(total){
   if(total<=1)return'';
   let h='';
@@ -1306,12 +1585,12 @@ function globalSearch(v){switchTab('all');setTimeout(()=>{const el=document.getE
 // ===== ANALYTICS =====
 function renderAnalytics(){
   document.getElementById('page-analytics').innerHTML=`
-    <div class="topbar"><div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">ANALYTICS</div><div style="font-size:20px;font-weight:700">Asset Distribution</div></div></div>
+    <div class="topbar"><div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:5px">ANALYTICS</div><div style="font-size:20px;font-weight:700">${t('asset_distribution')}</div></div></div>
     <div class="charts-grid">
-      <div class="chart-card"><div class="chart-header">Units by Branch</div><div class="chart-wrap"><canvas id="c-branch"></canvas></div></div>
-      <div class="chart-card"><div class="chart-header">By Category</div><div class="chart-wrap"><canvas id="c-cat"></canvas></div></div>
-      <div class="chart-card"><div class="chart-header">By Status</div><div class="chart-wrap"><canvas id="c-status"></canvas></div></div>
-      <div class="chart-card"><div class="chart-header">By Brand</div><div class="chart-wrap"><canvas id="c-brand"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">${t('units_by_branch')}</div><div class="chart-wrap"><canvas id="c-branch"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">${t('by_category')}</div><div class="chart-wrap"><canvas id="c-cat"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">${t('by_status')}</div><div class="chart-wrap"><canvas id="c-status"></canvas></div></div>
+      <div class="chart-card"><div class="chart-header">${t('by_brand')}</div><div class="chart-wrap"><canvas id="c-brand"></canvas></div></div>
     </div>`;
   Object.values(chartInstances).forEach(c=>{try{c.destroy()}catch(e){}});
   chartInstances={};
@@ -1320,28 +1599,39 @@ function renderAnalytics(){
   const grid=css.getPropertyValue('--border').trim();
   Chart.defaults.color=txt;Chart.defaults.font.family='Space Grotesk';
   const agg=getBranchAgg();const bn=Object.keys(agg);
-  chartInstances.branch=new Chart(document.getElementById('c-branch'),{type:'bar',data:{labels:bn,datasets:[{data:bn.map(b=>agg[b].units),backgroundColor:bn.map(b=>brandColor(agg[b].brand)),borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
+  chartInstances.branch=new Chart(document.getElementById('c-branch'),{type:'bar',data:{labels:bn.map(tVal),datasets:[{data:bn.map(b=>agg[b].units),backgroundColor:bn.map(b=>brandColor(agg[b].brand)),borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
   const cats={};allAssets.forEach(d=>cats[d.category]=(cats[d.category]||0)+d.qty);const ck=Object.keys(cats);
-  chartInstances.cat=new Chart(document.getElementById('c-cat'),{type:'doughnut',data:{labels:ck,datasets:[{data:ck.map(c=>cats[c]),backgroundColor:ck.map(catColor),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
+  chartInstances.cat=new Chart(document.getElementById('c-cat'),{type:'doughnut',data:{labels:ck.map(tVal),datasets:[{data:ck.map(c=>cats[c]),backgroundColor:ck.map(catColor),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
   const st={};allAssets.forEach(d=>{const k=d.status||'غير محدد';st[k]=(st[k]||0)+d.qty});const sk=Object.keys(st);
   const stc={'قيد الاستخدام':'#00FF88','في الاستخدام':'#00FF88','متوقف':'#FF3366','تالف':'#FF3366','صيانة':'#FFB020','مخزن':'#60A5FA'};
-  chartInstances.status=new Chart(document.getElementById('c-status'),{type:'doughnut',data:{labels:sk,datasets:[{data:sk.map(k=>st[k]),backgroundColor:sk.map(k=>stc[k]||'#8B5CF6'),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
+  chartInstances.status=new Chart(document.getElementById('c-status'),{type:'doughnut',data:{labels:sk.map(tVal),datasets:[{data:sk.map(k=>st[k]),backgroundColor:sk.map(k=>stc[k]||'#8B5CF6'),borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false}});
   const br={};allAssets.forEach(d=>br[d.brand]=(br[d.brand]||0)+d.qty);const bk=Object.keys(br);
-  chartInstances.brand=new Chart(document.getElementById('c-brand'),{type:'bar',data:{labels:bk,datasets:[{data:bk.map(b=>br[b]),backgroundColor:bk.map(brandColor),borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
+  chartInstances.brand=new Chart(document.getElementById('c-brand'),{type:'bar',data:{labels:bk.map(tVal),datasets:[{data:bk.map(b=>br[b]),backgroundColor:bk.map(brandColor),borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false}});
 }
 
 // ===== DETAIL MODAL =====
 function openDetail(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
-  const rows=[['Branch',d.branch],['Category',d.category],['Model',d.model||'—'],['Status',d.status||'—'],['Color',d.color||'—'],['Quantity',d.qty],['Amount',fmtMoney(d.amount)],['Total Value',fmtMoney(d.amount*d.qty)],['Invoice',d.invoice||'—'],['Purchase Date',fmtDate(d.purchaseDate)],['Created',fmtDate(d.created)]];
+  const rows=[
+    ['Branch',tVal(d.branch)],
+    ['Category',tVal(d.category)],
+    ['Model',d.model||'—'],
+    ['Status',tVal(d.status)||'—'],
+    ['Color',tVal(d.color)||'—'],
+    ['Quantity',d.qty],
+    ['Amount',fmtMoney(d.amount)],
+    ['Total Value',fmtMoney(d.amount*d.qty)],
+    ['Invoice',d.invoice||'—'],
+    ['Purchase Date',fmtDate(d.purchaseDate)],
+    ['Created',fmtDate(d.created)]
+  ];
   document.getElementById('modal-detail-body').innerHTML=`
     ${d.photo?`<img src="${BLANK}" data-src="${esc(d.photo)}" style="width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:16px" id="detail-hero-img"/>`:''}
     <div class="modal-info">
       <div class="modal-info-row"><span class="modal-info-label">Asset Name</span><span class="modal-info-val">${esc(d.name)}</span></div>
-      ${rows.map(([k,v])=>`<div class="modal-info-row"><span class="modal-info-label">${k}</span><span class="modal-info-val">${esc(String(v))}</span></div>`).join('')}
+      ${rows.map(([k,v])=>`<div class="modal-info-row"><span class="modal-info-label">${t(k.toLowerCase().replace(/ /g,'_'))}</span><span class="modal-info-val">${esc(String(v))}</span></div>`).join('')}
     </div>
     ${d.notes?`<div class="modal-label">Notes</div><div style="background:var(--surface2);border-radius:10px;padding:12px;font-size:13px;line-height:1.6">${esc(d.notes)}</div>`:''}`;
-  // load hero image with auth token
   hydrateImages(document.getElementById('modal-detail-body'));
   document.getElementById('modal-detail-footer').innerHTML=`
     <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Close</button>
@@ -1369,7 +1659,7 @@ function openAddAsset(){
   document.getElementById('edit-asset-id').value='';
   document.getElementById('add-modal-title').innerHTML='<svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add New Asset';
   document.getElementById('add-submit-label').textContent='Add Asset';
-  ['add-name','add-model','add-color','add-invoice','add-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  ['add-name','add-model','add-invoice','add-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   document.getElementById('add-qty').value='1';
   document.getElementById('add-amount').value='';
   document.getElementById('add-category').value='';
@@ -1378,7 +1668,6 @@ function openAddAsset(){
   document.getElementById('modal-add').classList.add('open');
 }
 
-// ✅ EDIT ASSET
 function openEditAsset(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   uploadedPhotoBase64=null;
@@ -1454,17 +1743,22 @@ async function uploadPhoto(itemId,dataUrl,digest){
   let ext=(m[1].split('/')[1]||'jpg').replace('jpeg','jpg').replace('+xml','').replace('svg','png');
   const fileName=`photo_${itemId}_${Date.now()}.${ext}`;
   const bin=atob(m[2]);const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
-  const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${itemId})/AttachmentFiles/add(FileName='${fileName}')`,{
-    method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},body:arr});
-  if(!r.ok)return null;
-  const d=await r.json().catch(()=>({}));
-  return{fileName,serverRelativeUrl:(d.d&&d.d.ServerRelativeUrl)||''};
+  try{
+    const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${itemId})/AttachmentFiles/add(FileName='${fileName}')`,{
+      method:'POST',headers:{'Accept':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},body:arr});
+    if(!r.ok)return null;
+    const d=await r.json().catch(()=>({}));
+    return{fileName,serverRelativeUrl:(d.d&&d.d.ServerRelativeUrl)||''};
+  }catch(e){console.warn('Photo upload failed:',e); return null;}
 }
 async function setDevicePhoto(itemId,up,etype,digest){
+  if(!up)return;
   const dp=JSON.stringify({type:'thumbnail',fileName:up.fileName,serverUrl:SITE.replace(/\/sites\/.+/,''),serverRelativeUrl:up.serverRelativeUrl});
-  await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${itemId})`,{
-    method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},
-    body:JSON.stringify({"__metadata":{"type":etype},DevicePhoto:dp})});
+  try{
+    await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${itemId})`,{
+      method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},
+      body:JSON.stringify({"__metadata":{"type":etype},DevicePhoto:dp})});
+  }catch(e){console.warn('DevicePhoto update failed:',e);}
 }
 
 async function submitAsset(){
@@ -1511,7 +1805,6 @@ async function submitAsset(){
       if(!(d2.d&&d2.d.ID))throw new Error('Add failed: '+((d2.error&&d2.error.message&&d2.error.message.value)||('HTTP '+r.status)));
       itemId=d2.d.ID;
     }
-    // photo (best effort — attachment + DevicePhoto)
     if(uploadedPhotoBase64&&itemId){
       try{ const up=await uploadPhoto(itemId,uploadedPhotoBase64,digest); if(up)await setDevicePhoto(itemId,up,etype,digest); }
       catch(pe){ console.warn('photo upload skipped:',pe); }
@@ -1554,6 +1847,14 @@ function openQR(id){
   document.getElementById('qr-name').textContent=d.name;
   document.getElementById('qr-branch').textContent=d.branch+' · #'+d.id;
   const canvas=document.getElementById('qr-canvas');
+  // Show loading
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#fff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#000';
+  ctx.font='14px sans-serif';
+  ctx.fillText('Generating...',10,20);
   QRCode.toCanvas(canvas,qrData,{width:200,margin:2,color:{dark:'#0E1117',light:'#F6F9FF'}},err=>{if(err)console.error(err)});
   document.getElementById('modal-qr').classList.add('open');
 }
@@ -1584,6 +1885,7 @@ function printQR(){
 function printAsset(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   const w=window.open('','_blank');
+  if(!w){ toast('Pop-up blocked! Allow pop-ups for this site.','error'); return; }
   w.document.write(`<html><head><style>
     body{font-family:'Arial',sans-serif;padding:32px;color:#111;background:#fff}
     h2{margin-bottom:4px}
@@ -1595,14 +1897,14 @@ function printAsset(id){
     @media print{body{padding:0}}
   </style></head><body>
     <h2>${esc(d.name)}</h2>
-    <div class="sub">Asset #${d.id} · ${esc(d.branch)}</div>
+    <div class="sub">Asset #${d.id} · ${esc(tVal(d.branch))}</div>
     <hr/>
     <table>
-      <tr><td>Branch</td><td>${esc(d.branch)}</td></tr>
-      <tr><td>Category</td><td>${esc(d.category)}</td></tr>
+      <tr><td>Branch</td><td>${esc(tVal(d.branch))}</td></tr>
+      <tr><td>Category</td><td>${esc(tVal(d.category))}</td></tr>
       <tr><td>Model</td><td>${esc(d.model||'—')}</td></tr>
-      <tr><td>Status</td><td>${esc(d.status||'—')}</td></tr>
-      <tr><td>Color</td><td>${esc(d.color||'—')}</td></tr>
+      <tr><td>Status</td><td>${esc(tVal(d.status)||'—')}</td></tr>
+      <tr><td>Color</td><td>${esc(tVal(d.color)||'—')}</td></tr>
       <tr><td>Quantity</td><td>${d.qty}</td></tr>
       <tr><td>Purchase Amount</td><td>${fmtMoney(d.amount)}</td></tr>
       <tr><td>Total Value</td><td>${fmtMoney(d.amount*d.qty)}</td></tr>
@@ -1632,13 +1934,17 @@ function toggleTheme(){
   if(currentTab==='analytics')setTimeout(renderAnalytics,100);
 }
 
+// ===== QR SCANNER =====
 let html5Qr=null, _scanLock=false;
 async function openScanner(){
   const modal=document.getElementById('modal-scan'); modal.classList.add('open');
   const st=document.getElementById('scan-status');
   st.textContent='Starting camera...';
   _scanLock=false;
-  if(!window.Html5Qrcode){ st.textContent='Scanner not loaded. Check your internet and retry.'; return; }
+  if(!window.Html5Qrcode){
+    st.textContent='Scanner library not loaded. Check internet and retry.';
+    return;
+  }
   try{
     html5Qr=new Html5Qrcode('qr-reader');
     await html5Qr.start({facingMode:'environment'},{fps:10,qrbox:{width:230,height:230}},onScanSuccess,()=>{});
@@ -1674,7 +1980,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelec
 function toast(msg,type='info'){
   const wrap=document.getElementById('toast-wrap');if(!wrap)return;
   const el=document.createElement('div');el.className=`toast ${type}`;
-  const icons={success:'✅',error:'❌',info:'ℹ️',warn:'� ️'};
+  const icons={success:'✅',error:'❌',info:'ℹ️',warn:'⚠️'};
   el.innerHTML=`<span>${icons[type]||'ℹ️'}</span><span>${esc(msg)}</span>`;
   wrap.appendChild(el);
   setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300)},3500);
@@ -1682,6 +1988,7 @@ function toast(msg,type='info'){
 
 // ===== BOOT =====
 window.onload=async()=>{
+  switchLanguage(currentLang);
   await initMsal();
   if(!msalInstance)return;
   await msalInstance.initialize();
@@ -1694,13 +2001,16 @@ window.onload=async()=>{
     try{await getToken();showDashboard();await loadAll();return}
     catch(e){console.log('Silent fail:',e)}
   }
+  // Update clock every minute
   setInterval(()=>{
     const tm=document.getElementById('live-time');
     if(tm&&!tm.textContent.includes('Sync'))tm.textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
   },60000);
 };
-// Auto-refresh every 2 min
-setInterval(()=>{if(document.getElementById('dashboard').style.display!=='none')loadAll()},120000);
+// Auto-refresh only if dashboard visible
+setInterval(()=>{
+  if(document.getElementById('dashboard').style.display!=='none') loadAll(false);
+},120000);
 </script>
 </body>
 </html>
