@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.4.0/lib/msal-browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
@@ -378,7 +378,7 @@ td{font-size:14.5px;font-weight:600}
         <div class="user-avatar" id="user-initial">T</div>
         <span id="user-name">Loading...</span>
       </div>
-      <input id="global-search" class="flt-input" placeholder="Search assets…" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
+      <input id="global-search" class="flt-input" data-i18n-ph="search" placeholder="Search assets…" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
       <!-- Notification Bell -->
       <div style="position:relative">
         <div class="notif-bell" onclick="toggleNotifPanel()">
@@ -394,11 +394,14 @@ td{font-size:14.5px;font-weight:600}
           <div id="notif-list"><div class="notif-empty">No alerts right now</div></div>
         </div>
       </div>
-      <button class="hdr-btn" onclick="loadAll(true)"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> Refresh</button>
-      <button class="hdr-btn" onclick="openScanner()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Scan</button>
-      <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Export</button>
+      <button class="hdr-btn" onclick="loadAll(true)"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> <span data-i18n="refresh">Refresh</span></button>
+      <button class="hdr-btn" onclick="openScanner()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> <span data-i18n="scan">Scan</span></button>
+      <button class="hdr-btn" onclick="startAudit()"><svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> <span data-i18n="audit">Audit</span></button>
+      <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> <span data-i18n="export">Export</span></button>
+      <button class="hdr-btn" onclick="openImport()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 21h14"/></svg> <span data-i18n="import">Import</span></button>
       <button class="hdr-btn" onclick="toggleTheme()">🌙</button>
-      <button class="hdr-btn danger" onclick="signOut()">Sign out</button>
+      <button class="hdr-btn" id="lang-btn" onclick="toggleLang()">العربية</button>
+      <button class="hdr-btn danger" onclick="signOut()"><span data-i18n="signout">Sign out</span></button>
     </div>
   </div>
   <div class="nav" id="nav-bar"></div>
@@ -407,6 +410,7 @@ td{font-size:14.5px;font-weight:600}
     <div class="page" id="page-branches"></div>
     <div class="page" id="page-all"></div>
     <div class="page" id="page-analytics"></div>
+    <div class="page" id="page-surplus"></div>
     <div class="page" id="page-access"></div>
   </div>
 </div>
@@ -417,7 +421,7 @@ td{font-size:14.5px;font-weight:600}
     <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg> Asset Details</div>
     <div id="modal-detail-body"></div>
     <div class="modal-footer" id="modal-detail-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Close</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-detail')"><span data-i18n="close">Close</span></button><button class="btn btn-primary" onclick="requestAsset(${id})"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span data-i18n="request">Request</span></button><button class="btn btn-ghost" onclick="openTransfer(${id})"><svg class="ico" viewBox="0 0 24 24"><path d="M16 3l5 5-5 5M21 8H9M8 21l-5-5 5-5M3 16h12"/></svg> <span data-i18n="transfer">Transfer</span></button>
     </div>
   </div>
 </div>
@@ -488,6 +492,40 @@ td{font-size:14.5px;font-weight:600}
 </div>
 
 <!-- ========== MODAL: QR CODE ========== -->
+<div class="modal-overlay" id="modal-import">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 21h14"/></svg> <span data-i18n="bulkImport">Bulk Import</span></div>
+    <p style="font-size:13px;color:var(--muted2);line-height:1.7" data-i18n="importHint">Download the template, fill rows, then upload. Required: Name, Branch, Category, Status, Color.</p>
+    <button class="btn btn-ghost" onclick="downloadTemplate()" style="margin-bottom:12px"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg> <span data-i18n="template">Download template</span></button>
+    <input type="file" id="import-file" accept=".xlsx,.xls,.csv" onchange="handleImportFile(this)" class="modal-input">
+    <div id="import-preview" style="margin:6px 0;font-size:14px"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-import')" data-i18n="close">Close</button>
+      <button class="btn btn-primary" id="import-go" style="display:none" onclick="doImport()"><span data-i18n="import">Import</span></button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-audit">
+  <div class="modal" style="max-width:460px">
+    <div id="audit-report"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-audit')" data-i18n="close">Close</button>
+      <button class="btn btn-primary" onclick="exportAudit()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg> Excel</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-transfer">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M16 3l5 5-5 5M21 8H9M8 21l-5-5 5-5M3 16h12"/></svg> <span data-i18n="transfer">Transfer</span></div>
+    <input type="hidden" id="transfer-id">
+    <div class="modal-label" data-i18n="transferTo">Transfer to branch</div>
+    <select class="modal-select" id="transfer-branch"></select>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-transfer')" data-i18n="close">Close</button>
+      <button class="btn btn-primary" onclick="doTransfer()"><span data-i18n="transfer">Transfer</span></button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="modal-scan">
   <div class="modal" style="max-width:400px;text-align:center">
     <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Scan Asset QR</div>
@@ -502,7 +540,7 @@ td{font-size:14.5px;font-weight:600}
   <div class="modal" style="max-width:380px;text-align:center">
     <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3M17 17h3M14 17h.01M17 14h.01"/></svg> QR Code</div>
     <div class="qr-container">
-      <canvas id="qr-canvas"></canvas>
+      <div id="qr-box" style="display:flex;justify-content:center;padding:6px"></div>
       <div class="qr-asset-name" id="qr-name"></div>
       <div class="qr-asset-branch" id="qr-branch"></div>
     </div>
@@ -676,7 +714,8 @@ function mapItem(it){
     amount:Number(it.PurchasePrice)||0,
     invoice:it.OrderNumber||'',
     photo,
-    created:it.Created||''
+    created:it.Created||'',
+    authorId:it.AuthorId||null
   };
 }
 
@@ -701,6 +740,7 @@ async function loadAll(refresh){
       url=d['odata.nextLink']||null;
     }
     if(items[0]){ const bk=Object.keys(items[0]).find(k=>k.startsWith('OData__x0627__x0644__x0641__x0631')); if(bk) BRANCH_KEY=bk; }
+    await loadUsers();
     allAssetsRaw=items.map(mapItem);
     allAssets=filterByAccess(allAssetsRaw);
     applyAccessUI();
@@ -831,6 +871,115 @@ function getBranchAgg(){
 }
 
 
+
+// ===== i18n (EN / AR) =====
+let LANG='en';
+const T={
+  en:{overview:'Overview',branches:'Branches',all:'All Assets',analytics:'Analytics',access:'Access',surplus:'Surplus',
+      refresh:'Refresh',scan:'Scan',export:'Export',signout:'Sign out',search:'Search assets…',addAsset:'Add Asset',
+      addedBy:'Added by',request:'Request',transfer:'Transfer',transferTo:'Transfer to branch',transferred:'Transferred',
+      available:'Available surplus across all branches',close:'Close',edit:'Edit',del:'Delete',qr:'QR',print:'Print',
+      noItems:'No items',reqReady:'Request message ready (WhatsApp / copied)',langBtn:'العربية',createdBy:'Created by',import:'Import',bulkImport:'Bulk Import',audit:'Audit',template:'Download template',importHint:'Download the template, fill rows, then upload. Required: Name, Branch, Category, Status, Color.',auditReport:'Audit Report',verified:'Verified',missing:'Missing',extra:'Unexpected',finishAudit:'Finish & Report'},
+  ar:{overview:'نظرة عامة',branches:'الفروع',all:'كل الأصول',analytics:'التحليلات',access:'الصلاحيات',surplus:'الفائض',
+      refresh:'تحديث',scan:'مسح',export:'تصدير',signout:'خروج',search:'ابحث عن قطعة…',addAsset:'إضافة قطعة',
+      addedBy:'أضافها',request:'طلب',transfer:'نقل',transferTo:'نقل إلى فرع',transferred:'تم النقل',
+      available:'الفائض المتاح في جميع الفروع',close:'إغلاق',edit:'تعديل',del:'حذف',qr:'رمز',print:'طباعة',
+      noItems:'لا توجد قطع',reqReady:'تم تجهيز رسالة الطلب (واتساب / نسخ)',langBtn:'EN',createdBy:'أضافها',import:'استيراد',bulkImport:'استيراد جماعي',audit:'جرد',template:'تحميل القالب',importHint:'حمّل القالب، املأ الصفوف، ثم ارفعه. مطلوب: الاسم، الفرع، الفئة، الحالة، اللون.',auditReport:'تقرير الجرد',verified:'تم التحقق',missing:'مفقود',extra:'غير متوقع',finishAudit:'إنهاء وعرض التقرير'}
+};
+function t(k){return (T[LANG]&&T[LANG][k])||(T.en&&T.en[k])||k;}
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(e=>{const v=t(e.getAttribute('data-i18n'));if(v)e.textContent=v;});
+  document.querySelectorAll('[data-i18n-ph]').forEach(e=>{const v=t(e.getAttribute('data-i18n-ph'));if(v)e.placeholder=v;});
+  const lb=document.getElementById('lang-btn'); if(lb)lb.textContent=t('langBtn');
+}
+function setLang(l){
+  LANG=l; try{localStorage.setItem('inv_lang',l)}catch(_){}
+  document.documentElement.dir = l==='ar'?'rtl':'ltr';
+  document.documentElement.lang = l;
+  applyI18n(); buildNav(); renderTab(currentTab);
+}
+function toggleLang(){ setLang(LANG==='ar'?'en':'ar'); }
+
+// ===== Users (creator names) =====
+let userMap={};
+async function loadUsers(){
+  try{
+    const r=await fetch(`${SITE}/_api/web/siteusers?$select=Id,Title&$top=500`,{headers:{'Accept':'application/json;odata=nometadata','Authorization':`Bearer ${accessToken}`}});
+    if(r.ok){ (await r.json()).value.forEach(u=>{userMap[u.Id]=u.Title;}); }
+  }catch(_){}
+}
+function creatorName(d){ return (d&&d.authorId&&userMap[d.authorId])||''; }
+
+// ===== Surplus marketplace (cross-branch) =====
+function renderSurplus(){
+  const host=document.getElementById('page-surplus'); if(!host)return;
+  let items=allAssetsRaw.slice();
+  if(assetSearchQ){const q=assetSearchQ.toLowerCase();items=items.filter(d=>(d.name+d.model+d.category+d.branch+d.color).toLowerCase().includes(q));}
+  const groups={}; items.forEach(d=>(groups[d.branch]=groups[d.branch]||[]).push(d));
+  host.innerHTML=`<div style="margin-bottom:6px"><div class="eyebrow">${t('surplus')}</div><h2 style="font-size:24px;font-weight:800">${t('available')}</h2></div>
+    <input class="flt-input" style="width:100%;max-width:380px;margin:6px 0 18px;height:40px" data-i18n-ph="search" placeholder="${t('search')}" oninput="assetSearchQ=this.value;renderSurplus()" value="${esc(assetSearchQ)}">
+    ${Object.keys(groups).length?Object.entries(groups).map(([br,arr])=>`
+      <div style="margin-bottom:22px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span style="width:11px;height:11px;border-radius:3px;background:${brandColor((br.split(/[-–]/)[0]||'').trim())}"></span>
+          <h4 style="font-size:16px;font-weight:800;margin:0">${esc(br)}</h4>
+          <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);margin-inline-start:auto">${arr.length}</span>
+        </div>
+        <div class="asset-grid">${arr.map(surplusCard).join('')}</div>
+      </div>`).join(''):`<div class="empty" style="padding:50px;text-align:center;color:var(--muted)">${t('noItems')}</div>`}`;
+}
+function surplusCard(d){
+  const who=creatorName(d);
+  const img=d.photo
+    ?`<img src="${BLANK}" data-src="${esc(d.photo)}" style="width:100%;height:100%;object-fit:cover"/>`
+    :`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%"><svg viewBox="0 0 24 24" style="width:42px;height:42px;stroke:var(--muted);fill:none;stroke-width:1.5">${assetIcon(d.category,d.name)}</svg></div>`;
+  return `<div class="asset-card">
+    <div class="asset-thumb" onclick="openDetail(${d.id})" style="cursor:pointer"><span class="asset-qty-pill">x${d.qty}</span>${img}</div>
+    <div class="asset-body">
+      <h5 onclick="openDetail(${d.id})" style="cursor:pointer">${esc(d.name)}</h5>
+      <div class="asset-model">${esc(d.model||'—')}</div>
+      <div style="font-size:11px;color:var(--muted);margin:5px 0 9px">${who?(t('addedBy')+': '+esc(who)):''}${d.created?(' · '+fmtDate(d.created)):''}</div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:13px;padding:9px" onclick="requestAsset(${d.id})"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${t('request')}</button>
+    </div>
+  </div>`;
+}
+function requestAsset(id){
+  const d=allAssetsRaw.find(x=>x.id===id); if(!d)return;
+  const who=currentUser?currentUser.email:'';
+  const msg=LANG==='ar'
+    ? `مرحبًا، أحتاج هذه القطعة الفائضة من فرع ${d.branch}:\n• ${d.name} (${d.model||'-'}) — الكمية: ${d.qty}\nالطالب: ${who}`
+    : `Hi, I'd like this surplus item from ${d.branch}:\n• ${d.name} (${d.model||'-'}) — qty: ${d.qty}\nRequested by: ${who}`;
+  try{navigator.clipboard&&navigator.clipboard.writeText(msg);}catch(_){}
+  try{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}catch(_){}
+  toast(t('reqReady'),'success');
+}
+
+// ===== Transfer (move asset to another branch) + log =====
+function openTransfer(id){
+  const d=allAssetsRaw.find(x=>x.id===id); if(!d)return;
+  document.getElementById('transfer-id').value=id;
+  const branches=[...new Set([...CHOICES.branch,...allAssetsRaw.map(x=>x.branch)])].filter(b=>b&&b!==d.branch);
+  document.getElementById('transfer-branch').innerHTML=branches.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
+  closeModal('modal-detail');
+  applyI18n();
+  document.getElementById('modal-transfer').classList.add('open');
+}
+async function doTransfer(){
+  const id=parseInt(document.getElementById('transfer-id').value,10);
+  const to=document.getElementById('transfer-branch').value;
+  const d=allAssetsRaw.find(x=>x.id===id); if(!d||!to)return;
+  try{
+    await getToken(); const digest=await _digest(); const et=await getEntityType();
+    const stamp=new Date().toLocaleDateString('en-GB');
+    const who=currentUser?currentUser.email:'';
+    const log=(d.notes?d.notes+' | ':'')+`نقل: ${d.branch} → ${to} (${stamp}, ${who})`;
+    const body={"__metadata":{"type":et},[BRANCH_KEY]:to,ConditionNotes:log};
+    const r=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items(${id})`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},body:JSON.stringify(body)});
+    if(r.ok||r.status===204){toast(t('transferred'),'success');closeModal('modal-transfer');await loadAll();}
+    else{const tx=await r.text();toast('Transfer failed: '+tx.slice(0,100),'error');}
+  }catch(e){toast(e.message,'error');}
+}
+
 // ===== ACCESS CONTROL =====
 async function getAccessItems(){
   try{ const j=await spFetch(`${SITE}/_api/web/lists/getbytitle('${ACCESS_LIST}')/items?$top=500`); return j.value||[]; }
@@ -857,7 +1006,7 @@ function canEdit(){ return myAccess.role==='admin'||myAccess.role==='editor'; }
 function isAdmin(){ return myAccess.role==='admin'; }
 function applyRoleUI(){
   const hide=!canEdit();
-  document.querySelectorAll('[onclick*="openAddAsset"],[onclick*="openEditAsset"],[onclick*="askDeleteAsset"]').forEach(el=>{el.style.display=hide?'none':'';});
+  document.querySelectorAll('[onclick*="openAddAsset"],[onclick*="openEditAsset"],[onclick*="askDeleteAsset"],[onclick*="openTransfer"],[onclick*="openImport"]').forEach(el=>{el.style.display=hide?'none':'';});
 }
 function applyAccessUI(){
   document.body.dataset.role=myAccess.role;
@@ -952,20 +1101,21 @@ const NAV=[
   ['overview','Overview','<svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>'],
   ['branches','Branches','<svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg>'],
   ['all','All Assets','<svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg>'],
+  ['surplus','Surplus','<svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg>'],
   ['analytics','Analytics','<svg class="ico" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>']
 ];
 function buildNav(){
   const agg=getBranchAgg();
   let html=NAV.map(([id,label,svg])=>{
-    const cnt=id==='branches'?Object.keys(agg).length:id==='analytics'?'':allAssets.length;
-    return`<div class="nav-item${currentTab===id?' active':''}" onclick="switchTab('${id}')">${svg} ${label}<span class="nav-badge">${cnt}</span></div>`;
+    const cnt=id==='branches'?Object.keys(agg).length:(id==='analytics'?'':(id==='surplus'?allAssetsRaw.length:allAssets.length));
+    return`<div class="nav-item${currentTab===id?' active':''}" onclick="switchTab('${id}')">${svg} ${t(id)}<span class="nav-badge">${cnt}</span></div>`;
   }).join('');
   if(isAdmin()){
     const svg='<svg class="ico" viewBox="0 0 24 24"><path d="M12 1l9 4v6c0 5-3.8 9.4-9 11-5.2-1.6-9-6-9-11V5z"/><path d="M9 12l2 2 4-4"/></svg>';
-    html+=`<div class="nav-item${currentTab==='access'?' active':''}" onclick="switchTab('access')">${svg} Access</div>`;
+    html+=`<div class="nav-item${currentTab==='access'?' active':''}" onclick="switchTab('access')">${svg} ${t('access')}</div>`;
   }
   document.getElementById('nav-bar').innerHTML=html;
-  applyRoleUI();
+  applyRoleUI(); applyI18n();
 }
 function switchTab(tab){
   currentTab=tab;
@@ -975,6 +1125,7 @@ function switchTab(tab){
   if(tab==='overview')renderOverview();
   else if(tab==='branches'){if(!activeBranch){renderBranches()}else{renderBranchDetail(document.getElementById('page-branches'))}}
   else if(tab==='all'){currentPage=1;renderAll()}
+  else if(tab==='surplus')renderSurplus();
   else if(tab==='access')renderAccess();
   else if(tab==='analytics')renderAnalytics();
 }
@@ -982,6 +1133,7 @@ function renderTab(tab){buildNav();
   if(tab==='overview')renderOverview();
   else if(tab==='branches')renderBranches();
   else if(tab==='all')renderAll();
+  else if(tab==='surplus')renderSurplus();
   else if(tab==='access')renderAccess();
   else if(tab==='analytics')renderAnalytics();
 }
@@ -1140,6 +1292,7 @@ function renderAssetCard(d){
         <span style="font-size:12px;color:var(--muted2)">${esc(d.color||'—')}</span>
         ${statusBadge(d.status)}
       </div>
+      ${creatorName(d)?`<div style="font-size:10.5px;color:var(--muted);margin-top:7px">${t('addedBy')}: ${esc(creatorName(d))}</div>`:''}
     </div>
   </div>`;
 }
@@ -1332,8 +1485,8 @@ function renderAnalytics(){
 
 // ===== DETAIL MODAL =====
 function openDetail(id){
-  const d=allAssets.find(x=>x.id===id);if(!d)return;
-  const rows=[['Branch',d.branch],['Category',d.category],['Model',d.model||'—'],['Status',d.status||'—'],['Color',d.color||'—'],['Quantity',d.qty],['Amount',fmtMoney(d.amount)],['Total Value',fmtMoney(d.amount*d.qty)],['Invoice',d.invoice||'—'],['Purchase Date',fmtDate(d.purchaseDate)],['Created',fmtDate(d.created)]];
+  const d=allAssetsRaw.find(x=>x.id===id)||allAssets.find(x=>x.id===id);if(!d)return;
+  const rows=[['Branch',d.branch],['Category',d.category],['Model',d.model||'—'],['Status',d.status||'—'],['Color',d.color||'—'],['Quantity',d.qty],['Amount',fmtMoney(d.amount)],['Total Value',fmtMoney(d.amount*d.qty)],['Invoice',d.invoice||'—'],['Purchase Date',fmtDate(d.purchaseDate)],['Created By',creatorName(d)||'—'],['Created',fmtDate(d.created)]];
   document.getElementById('modal-detail-body').innerHTML=`
     ${d.photo?`<img src="${BLANK}" data-src="${esc(d.photo)}" style="width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:16px" id="detail-hero-img"/>`:''}
     <div class="modal-info">
@@ -1548,26 +1701,30 @@ async function confirmDeleteAsset(){
 
 // ===== QR CODE =====
 function openQR(id){
-  if(typeof QRCode==='undefined'){toast('QR library still loading, try again','error');return;}
   const d=allAssets.find(x=>x.id===id);if(!d)return;
   const qrData=JSON.stringify({id:d.id,name:d.name,branch:d.branch,category:d.category,qty:d.qty,status:d.status});
   document.getElementById('qr-name').textContent=d.name;
   document.getElementById('qr-branch').textContent=d.branch+' · #'+d.id;
-  const canvas=document.getElementById('qr-canvas');
-  QRCode.toCanvas(canvas,qrData,{width:200,margin:2,color:{dark:'#0E1117',light:'#F6F9FF'}},err=>{if(err)console.error(err)});
+  const box=document.getElementById('qr-box'); box.innerHTML='';
+  if(typeof QRCode==='undefined'){toast('QR library still loading, try again in a moment','error');return;}
+  new QRCode(box,{text:qrData,width:210,height:210,colorDark:'#0E1117',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
   document.getElementById('modal-qr').classList.add('open');
 }
+function _qrDataURL(){
+  const box=document.getElementById('qr-box');
+  const c=box.querySelector('canvas'); if(c)return c.toDataURL('image/png');
+  const img=box.querySelector('img'); return img?img.src:'';
+}
 function downloadQR(){
-  const canvas=document.getElementById('qr-canvas');
+  const u=_qrDataURL(); if(!u){toast('Generate the QR first','error');return;}
   const a=document.createElement('a');
-  a.href=canvas.toDataURL();
+  a.href=u;
   a.download=`asset-qr-${document.getElementById('qr-name').textContent}.png`;
   a.click();
   toast('QR downloaded!','success');
 }
 function printQR(){
-  const canvas=document.getElementById('qr-canvas');
-  const img=canvas.toDataURL();
+  const img=_qrDataURL(); if(!img){toast('Generate the QR first','error');return;}
   const name=document.getElementById('qr-name').textContent;
   const branch=document.getElementById('qr-branch').textContent;
   const w=window.open('','_blank');
@@ -1633,42 +1790,130 @@ function toggleTheme(){
 }
 
 let html5Qr=null, _scanLock=false;
+let auditMode=false, auditState=null, LAST_AUDIT=null;
+function parseScanId(text){
+  let id=null; try{const o=JSON.parse(text); if(o&&o.id!=null) id=parseInt(o.id,10);}catch(_){}
+  if(id==null){const m=String(text).match(/(\d+)\s*$/); if(m) id=parseInt(m[1],10);}
+  return (id==null||isNaN(id))?null:id;
+}
 async function openScanner(){
   const modal=document.getElementById('modal-scan'); modal.classList.add('open');
   const st=document.getElementById('scan-status');
-  st.textContent='Starting camera...';
-  _scanLock=false;
+  st.textContent='Starting camera...'; _scanLock=false;
   if(!window.Html5Qrcode){ st.textContent='Scanner not loaded. Check your internet and retry.'; return; }
   try{
     html5Qr=new Html5Qrcode('qr-reader');
     await html5Qr.start({facingMode:'environment'},{fps:10,qrbox:{width:230,height:230}},onScanSuccess,()=>{});
-    st.textContent='Point the camera at an asset QR code.';
+    if(auditMode) updateAuditStatus(); else st.textContent='Point the camera at an asset QR code.';
   }catch(e){
     st.innerHTML='Camera error. Allow camera permission and open over HTTPS.<br><span style="font-size:12px">'+esc(String(e))+'</span>';
   }
 }
 async function closeScanner(){
+  const wasAudit=auditMode; auditMode=false;
   try{ if(html5Qr){ await html5Qr.stop(); await html5Qr.clear(); } }catch(_){}
   html5Qr=null;
   document.getElementById('modal-scan')?.classList.remove('open');
+  if(wasAudit) showAuditSummary();
 }
 async function onScanSuccess(text){
+  if(auditMode){
+    if(_scanLock) return; _scanLock=true;
+    const id=parseScanId(text);
+    if(id!=null && auditState){
+      if(auditState.expected.has(id)) auditState.verified.add(id); else auditState.extra.add(id);
+      const d=allAssetsRaw.find(x=>x.id===id);
+      updateAuditStatus(d?d.name:('#'+id));
+    }
+    setTimeout(()=>{_scanLock=false;},700);
+    return;
+  }
   if(_scanLock) return; _scanLock=true;
-  let id=null;
-  try{ const o=JSON.parse(text); if(o&&o.id!=null) id=parseInt(o.id,10); }catch(_){}
-  if(id==null){ const m=String(text).match(/(\d+)\s*$/); if(m) id=parseInt(m[1],10); }
+  const id=parseScanId(text);
   await closeScanner();
-  if(id==null||isNaN(id)){ toast('QR not recognized','error'); _scanLock=false; return; }
+  if(id==null){ toast('QR not recognized','error'); _scanLock=false; return; }
   const d=allAssets.find(x=>x.id===id);
   if(d){ openDetail(id); }
-  else{
-    const raw=allAssetsRaw.find(x=>x.id===id);
-    toast(raw?('Asset #'+id+' is outside your access'):('Asset #'+id+' not found'),'error');
-  }
+  else{ const raw=allAssetsRaw.find(x=>x.id===id); toast(raw?('Asset #'+id+' is outside your access'):('Asset #'+id+' not found'),'error'); }
   setTimeout(()=>{_scanLock=false;},800);
 }
+// ===== Audit / Stock-take =====
+function startAudit(){
+  let scope,label;
+  if(currentTab==='branches' && activeBranch){ scope=allAssets.filter(d=>d.branch===activeBranch); label=activeBranch; }
+  else { scope=allAssets.slice(); label=(LANG==='ar'?'كل الفروع':'All branches'); }
+  if(!scope.length){ toast(LANG==='ar'?'لا توجد أصول للجرد':'No assets in scope','error'); return; }
+  auditState={expected:new Map(scope.map(d=>[d.id,d])),verified:new Set(),extra:new Set(),label};
+  auditMode=true; openScanner();
+}
+function updateAuditStatus(last){
+  const st=document.getElementById('scan-status'); if(!st||!auditState)return;
+  const tot=auditState.expected.size,v=auditState.verified.size,ex=auditState.extra.size; const ar=LANG==='ar';
+  st.innerHTML=`<b style="color:var(--accent);font-size:18px">${v}/${tot}</b> ${ar?'تم التحقق':'verified'} · <b style="color:var(--amber)">${ex}</b> ${ar?'غير متوقع':'extra'}`+(last?`<br><span style="font-size:12px;color:var(--muted2)">${ar?'آخر':'last'}: ${esc(last)} ✓</span>`:'')+`<br><button class="btn btn-primary" style="margin-top:10px" onclick="closeScanner()">${t('finishAudit')}</button>`;
+}
+function showAuditSummary(){
+  if(!auditState)return;
+  const missing=[...auditState.expected.values()].filter(d=>!auditState.verified.has(d.id));
+  const extra=[...auditState.extra];
+  LAST_AUDIT={label:auditState.label,verified:[...auditState.verified],missing,extra};
+  const ar=LANG==='ar';
+  document.getElementById('audit-report').innerHTML=
+   `<div class="modal-title">${t('auditReport')} — ${esc(auditState.label)}</div>
+    <div style="display:flex;gap:8px;margin:12px 0">
+     <div style="flex:1;background:rgba(52,211,153,.12);border-radius:10px;padding:12px;text-align:center"><div style="font-size:24px;font-weight:800;color:var(--green)">${auditState.verified.size}</div><div style="font-size:12px">${t('verified')}</div></div>
+     <div style="flex:1;background:rgba(248,113,113,.12);border-radius:10px;padding:12px;text-align:center"><div style="font-size:24px;font-weight:800;color:var(--red)">${missing.length}</div><div style="font-size:12px">${t('missing')}</div></div>
+     <div style="flex:1;background:rgba(251,191,36,.12);border-radius:10px;padding:12px;text-align:center"><div style="font-size:24px;font-weight:800;color:var(--amber)">${extra.length}</div><div style="font-size:12px">${t('extra')}</div></div>
+    </div>
+    ${missing.length?`<div class="modal-label">${t('missing')}</div><div style="max-height:170px;overflow:auto;font-size:13px;line-height:1.9">${missing.map(d=>'• '+esc(d.name)+' <span style=\"color:var(--muted)\">('+esc(d.branch)+')</span>').join('<br>')}</div>`:''}`;
+  auditState=null;
+  document.getElementById('modal-audit').classList.add('open');
+}
+function exportAudit(){
+  if(!LAST_AUDIT){toast('No audit data','error');return;}
+  const rows=[];
+  LAST_AUDIT.verified.forEach(id=>{const d=allAssetsRaw.find(x=>x.id===id);rows.push({Result:'Verified',Name:d?d.name:('#'+id),Branch:d?d.branch:'',Qty:d?d.qty:''});});
+  LAST_AUDIT.missing.forEach(d=>rows.push({Result:'Missing',Name:d.name,Branch:d.branch,Qty:d.qty}));
+  LAST_AUDIT.extra.forEach(id=>{const d=allAssetsRaw.find(x=>x.id===id);rows.push({Result:'Unexpected',Name:d?d.name:('#'+id),Branch:d?d.branch:'',Qty:d?d.qty:''});});
+  const ws=XLSX.utils.json_to_sheet(rows);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Audit');
+  XLSX.writeFile(wb,`audit_${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast('✓ Audit exported','success');
+}
+// ===== Bulk Excel Import =====
+let IMPORT_ROWS=[];
+function openImport(){ IMPORT_ROWS=[]; const f=document.getElementById('import-file'); if(f)f.value=''; document.getElementById('import-preview').innerHTML=''; document.getElementById('import-go').style.display='none'; document.getElementById('modal-import').classList.add('open'); }
+function downloadTemplate(){
+  const ex=[{Name:'Example Laptop',Branch:(CHOICES.branch[0]||''),Category:(CHOICES.category[0]||''),Status:(CHOICES.status[1]||CHOICES.status[0]||''),Color:(CHOICES.color[1]||''),Quantity:1,Model:'HP-123',Price:2500,Invoice:'INV-001',Notes:''}];
+  const ws=XLSX.utils.json_to_sheet(ex);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Template');XLSX.writeFile(wb,'import-template.xlsx');
+}
+function rowValid(r){const g=k=>String(r[k]??'').trim();return g('Name')&&g('Branch')&&g('Category')&&g('Status')&&g('Color');}
+function handleImportFile(input){
+  const f=input.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{ try{
+    const wb=XLSX.read(e.target.result,{type:'binary'});
+    IMPORT_ROWS=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});
+    const valid=IMPORT_ROWS.filter(rowValid).length; const ar=LANG==='ar';
+    document.getElementById('import-preview').innerHTML=`${IMPORT_ROWS.length} ${ar?'صف':'rows'} — <b style="color:var(--green)">${valid}</b> ${ar?'صالح':'valid'}, ${IMPORT_ROWS.length-valid} ${ar?'ناقص':'incomplete'}`;
+    document.getElementById('import-go').style.display=valid?'inline-flex':'none';
+  }catch(err){ toast('Parse error: '+err.message,'error'); } };
+  r.readAsBinaryString(f);
+}
+async function doImport(){
+  const rows=IMPORT_ROWS.filter(rowValid); if(!rows.length){toast('No valid rows','error');return;}
+  const btn=document.getElementById('import-go'); btn.disabled=true;
+  try{
+    await getToken(); const digest=await _digest(); const et=await getEntityType(); let ok=0,fail=0; const ar=LANG==='ar';
+    for(let i=0;i<rows.length;i++){
+      const r=rows[i]; const g=k=>String(r[k]??'').trim();
+      const body={"__metadata":{"type":et},Title:g('Name'),AssetType:g('Category'),Status:g('Status'),Color:g('Color'),SerialNumber:String(parseInt(g('Quantity'))||1),Model:g('Model'),PurchasePrice:parseFloat(g('Price'))||0,OrderNumber:g('Invoice'),ConditionNotes:g('Notes'),[BRANCH_KEY]:g('Branch')};
+      try{const res=await fetch(`${SITE}/_api/web/lists(guid'${LIST_ID}')/items`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest},body:JSON.stringify(body)});res.ok?ok++:fail++;}catch(_){fail++;}
+      document.getElementById('import-preview').innerHTML=`${ar?'جارٍ الاستيراد':'Importing'}… ${i+1}/${rows.length} (✓${ok} ✗${fail})`;
+    }
+    toast(`${ar?'تم':'Done'}: ✓${ok} ✗${fail}`,'success'); closeModal('modal-import'); await loadAll();
+  }catch(e){ toast(e.message,'error'); } finally{ btn.disabled=false; }
+}
 function closeModal(id){document.getElementById(id)?.classList.remove('open')}
-document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))closeModal(e.target.id)});
+document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay')){ if(e.target.id==='modal-scan')closeScanner(); else closeModal(e.target.id); }});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));document.getElementById('confirm-delete')?.classList.remove('open')}});
 
 function toast(msg,type='info'){
@@ -1701,6 +1946,9 @@ window.onload=async()=>{
 };
 // Auto-refresh every 2 min
 setInterval(()=>{if(document.getElementById('dashboard').style.display!=='none')loadAll()},120000);
+
+// init language
+(function(){ try{LANG=localStorage.getItem('inv_lang')||'en'}catch(_){LANG='en'} document.documentElement.dir=LANG==='ar'?'rtl':'ltr'; document.documentElement.lang=LANG; try{applyI18n()}catch(_){}})();
 </script>
 </body>
 </html>
