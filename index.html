@@ -492,6 +492,17 @@ td{font-size:14.5px;font-weight:600}
 </div>
 
 <!-- ========== MODAL: QR CODE ========== -->
+<div class="modal-overlay" id="modal-request">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span data-i18n="request">Request</span></div>
+    <textarea id="request-text" class="modal-textarea" readonly style="height:120px;font-size:14px;line-height:1.7"></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-request')" data-i18n="close">Close</button>
+      <button class="btn btn-ghost" onclick="copyRequest()"><svg class="ico" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy</button>
+      <a class="btn btn-primary" id="request-wa" target="_blank" rel="noopener" href="#"><svg class="ico" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-4-1L3 21l1.9-5.5a8.38 8.38 0 0 1-1-4A8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"/></svg> WhatsApp</a>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="modal-import">
   <div class="modal" style="max-width:440px">
     <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 21h14"/></svg> <span data-i18n="bulkImport">Bulk Import</span></div>
@@ -949,9 +960,17 @@ function requestAsset(id){
   const msg=LANG==='ar'
     ? `مرحبًا، أحتاج هذه القطعة الفائضة من فرع ${d.branch}:\n• ${d.name} (${d.model||'-'}) — الكمية: ${d.qty}\nالطالب: ${who}`
     : `Hi, I'd like this surplus item from ${d.branch}:\n• ${d.name} (${d.model||'-'}) — qty: ${d.qty}\nRequested by: ${who}`;
-  try{navigator.clipboard&&navigator.clipboard.writeText(msg);}catch(_){}
-  try{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}catch(_){}
-  toast(t('reqReady'),'success');
+  const ta=document.getElementById('request-text'); if(ta)ta.value=msg;
+  const wa=document.getElementById('request-wa'); if(wa)wa.href='https://wa.me/?text='+encodeURIComponent(msg);
+  closeModal('modal-detail');
+  document.getElementById('modal-request').classList.add('open');
+}
+function copyRequest(){
+  const ta=document.getElementById('request-text'); if(!ta)return;
+  ta.removeAttribute('readonly'); ta.select(); ta.setSelectionRange(0,99999);
+  try{navigator.clipboard.writeText(ta.value);}catch(_){try{document.execCommand('copy')}catch(__){}}
+  ta.setAttribute('readonly','');
+  toast(LANG==='ar'?'تم النسخ':'Copied to clipboard','success');
 }
 
 // ===== Transfer (move asset to another branch) + log =====
@@ -1702,12 +1721,12 @@ async function confirmDeleteAsset(){
 // ===== QR CODE =====
 function openQR(id){
   const d=allAssets.find(x=>x.id===id);if(!d)return;
-  const qrData=JSON.stringify({id:d.id,name:d.name,branch:d.branch,category:d.category,qty:d.qty,status:d.status});
+  const qrData='ASSET:'+d.id; // small payload; scanner reads the id (avoids QR capacity overflow)
   document.getElementById('qr-name').textContent=d.name;
   document.getElementById('qr-branch').textContent=d.branch+' · #'+d.id;
   const box=document.getElementById('qr-box'); box.innerHTML='';
   if(typeof QRCode==='undefined'){toast('QR library still loading, try again in a moment','error');return;}
-  new QRCode(box,{text:qrData,width:210,height:210,colorDark:'#0E1117',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+  new QRCode(box,{text:qrData,width:210,height:210,colorDark:'#0E1117',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.L});
   document.getElementById('modal-qr').classList.add('open');
 }
 function _qrDataURL(){
