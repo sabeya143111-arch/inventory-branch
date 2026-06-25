@@ -1830,7 +1830,7 @@
 <div class="toast-wrap" id="toast-wrap"></div>
 
 <!-- ============================================================
-JAVASCRIPT — Full Refactored Application
+JAVASCRIPT — Full Refactored Application (Improved Error Handling)
 ============================================================ -->
 <script>
     // ============================================================
@@ -1843,7 +1843,7 @@ JAVASCRIPT — Full Refactored Application
         LIST_ID: 'bbd080c2-22dc-4cd1-a543-3a0cb6b629f1',
         ADMIN_EMAILS: ['tareq.mahmood@swag.sa'],
         ACCESS_LIST: 'DashboardAccess',
-        ALLOWED_DOMAIN: 'swag.sa', // only users with this domain get access
+        ALLOWED_DOMAIN: 'swag.sa',
         SCOPES: [
             'https://netorg20570594.sharepoint.com/AllSites.Read',
             'https://netorg20570594.sharepoint.com/AllSites.Write',
@@ -1914,62 +1914,31 @@ JAVASCRIPT — Full Refactored Application
         user: { name: '', email: '', initial: '?' },
         token: '',
         msal: null,
-        // assets
-        assets: {
-            all: [], // filtered (by access)
-            raw: [], // unfiltered from SP
-        },
-        // UI
-        ui: {
-            tab: 'overview',
-            theme: 'dark',
-            loading: false,
-        },
-        // access
-        access: {
-            role: 'none', // 'admin' | 'editor' | 'viewer' | 'none'
-            branches: [], // array of branch names user can see
-            all: false, // true = can see everything
-        },
-        // filters for All Assets
-        filters: {
-            q: '',
-            branch: '',
-            cat: '',
-            status: '',
-            dateFrom: '',
-            dateTo: '',
-            amtMin: '',
-            amtMax: '',
-            color: '',
-        },
+        assets: { all: [], raw: [] },
+        ui: { tab: 'overview', theme: 'dark', loading: false },
+        access: { role: 'none', branches: [], all: false },
+        filters: { q: '', branch: '', cat: '', status: '', dateFrom: '', dateTo: '', amtMin: '', amtMax: '',
+        color: '' },
         pagination: { page: 1, pageSize: PAGE_SIZE },
         sort: { key: null, dir: 1 },
-        // branch detail
-        branch: {
-            active: null, // branch name or null
-            cat: 'All',
-            search: '',
-        },
+        branch: { active: null, cat: 'All', search: '' },
         notifications: [],
         charts: {},
         qr: { assetId: null },
         scanner: { active: false, instance: null, lock: false },
-        // cached blob URLs for images
         imgCache: {},
         blobUrls: new Set(),
-        // other
-        branchKey: null, // auto-detected field name for Branch
+        branchKey: null,
         listEntityType: null,
         firstLoad: false,
         advFiltersOpen: false,
-        uploadedPhoto: null, // base64
+        uploadedPhoto: null,
         pendingDeleteId: null,
         searchDebounce: null,
     };
 
     // ============================================================
-    // HELPERS (pure)
+    // HELPERS
     // ============================================================
     const fmt = (n) => new Intl.NumberFormat('en-US').format(n || 0);
     const fmtMoney = (n) => n ? fmt(n) + ' SAR' : '—';
@@ -2090,7 +2059,6 @@ JAVASCRIPT — Full Refactored Application
             if (elInit) elInit.textContent = state.user.initial;
         },
 
-        // domain check: only @swag.sa allowed
         isAllowedDomain(email) {
             if (!email) return false;
             const parts = email.split('@');
@@ -2100,15 +2068,21 @@ JAVASCRIPT — Full Refactored Application
     };
 
     // ============================================================
-    // SHAREPOINT HELPERS
+    // SHAREPOINT HELPERS (Improved with verbose fallback)
     // ============================================================
     const sp = {
+        // Core request with better error handling
         async request(url, options) {
             options = options || {};
             // ensure token
             if (!state.token) await auth.getToken();
+
+            // Use verbose by default to get more details
+            const acceptHeader = options.verbose !== false ? 'application/json;odata=verbose' :
+                'application/json;odata=nometadata';
+
             const headers = {
-                'Accept': 'application/json;odata=nometadata',
+                'Accept': acceptHeader,
                 'Authorization': `Bearer ${state.token}`,
             };
             if (options.contentType) {
@@ -2121,7 +2095,6 @@ JAVASCRIPT — Full Refactored Application
                 headers['IF-MATCH'] = options.ifMatch || '*';
                 if (options.method === 'DELETE') headers['X-HTTP-Method'] = 'DELETE';
                 if (options.method === 'MERGE') headers['X-HTTP-Method'] = 'MERGE';
-                // use POST for MERGE
                 const method = options.method === 'DELETE' ? 'DELETE' : 'POST';
                 const r = await fetch(url, {
                     method: method,
@@ -2131,7 +2104,7 @@ JAVASCRIPT — Full Refactored Application
                 if (r.status === 204 || r.status === 200) return null;
                 if (!r.ok) {
                     const t = await r.text().catch(() => '');
-                    throw new Error(`SP ${r.status}: ${t.slice(0, 120)}`);
+                    throw new Error(`SP ${r.status}: ${t.slice(0, 200)}`);
                 }
                 return null;
             }
@@ -2142,7 +2115,14 @@ JAVASCRIPT — Full Refactored Application
             });
             if (!r.ok) {
                 const t = await r.text().catch(() => '');
-                throw new Error(`SP ${r.status}: ${t.slice(0, 120)}`);
+                // If we used nometadata and got error, retry with verbose once
+                if (options.verbose !== false) {
+                    // Already verbose, throw
+                    throw new Error(`SP ${r.status}: ${t.slice(0, 200)}`);
+                } else {
+                    // retry with verbose
+                    return sp.request(url, { ...options, verbose: true });
+                }
             }
             if (r.status === 204) return null;
             return r.json();
@@ -2156,14 +2136,14 @@ JAVASCRIPT — Full Refactored Application
             return r?.d?.GetContextWebInformation?.FormDigestValue || null;
         },
 
-        async getEntityType(listTitle) {
+        async getEntityType(listId) {
             if (state.listEntityType) return state.listEntityType;
             try {
                 const r = await sp.request(
-                    `${CONFIG.SITE}/_api/web/lists(getbytitle('${listTitle}'))?$select=ListItemEntityTypeFullName`
+                    `${CONFIG.SITE}/_api/web/lists(guid'${listId}')?$select=ListItemEntityTypeFullName`
                 );
-                if (r?.ListItemEntityTypeFullName) {
-                    state.listEntityType = r.ListItemEntityTypeFullName;
+                if (r?.d?.ListItemEntityTypeFullName) {
+                    state.listEntityType = r.d.ListItemEntityTypeFullName;
                     return state.listEntityType;
                 }
             } catch (_) {}
@@ -2178,33 +2158,47 @@ JAVASCRIPT — Full Refactored Application
                 `${CONFIG.SITE}/_api/web/lists(guid'${listId}')/items?$top=${top}&$orderby=${orderBy}`;
             while (url) {
                 const d = await sp.request(url);
-                items = items.concat(d?.value || []);
-                url = d?.['odata.nextLink'] || null;
+                // Handle verbose response: .d.results
+                const value = d?.d?.results || d?.value || [];
+                items = items.concat(value);
+                url = d?.d?.__next || d?.['odata.nextLink'] || null;
             }
             return items;
         },
+
+        // Check if list exists
+        async listExists(listId) {
+            try {
+                await sp.request(`${CONFIG.SITE}/_api/web/lists(guid'${listId}')?$select=Title`);
+                return true;
+            } catch (_) { return false; }
+        }
     };
 
     // ============================================================
-    // DATA MAPPING
+    // DATA MAPPING (with fallback for missing fields)
     // ============================================================
     function detectBranchKey(sample) {
         if (!sample) return null;
         const candidates = Object.keys(sample).filter(k =>
             k.startsWith('OData__x0627__x0644__x0641__x0631') ||
             k.toLowerCase().includes('branch') ||
-            k.toLowerCase().includes('x0641__x0631__x0639')
+            k.toLowerCase().includes('x0641__x0631__x0639') ||
+            k.includes('الفرع')
         );
         return candidates[0] || null;
     }
 
     function mapItem(it) {
-        // branch
+        // branch: try to get from detected key, else fallback to 'غير محدد'
         const branchKey = state.branchKey || detectBranchKey(it);
-        const branch = branchKey ? (it[branchKey] || 'غير محدد').toString().trim() : 'غير محدد';
+        let branch = 'غير محدد';
+        if (branchKey) {
+            const raw = it[branchKey];
+            if (raw !== undefined && raw !== null) branch = String(raw).trim() || 'غير محدد';
+        }
         const brand = (branch.split(/[-–]/)[0] || '').trim() || '—';
 
-        // quantity: prefer Quantity field
         let qty = 1;
         if (it.Quantity !== undefined && it.Quantity !== null) {
             qty = parseInt(it.Quantity, 10) || 1;
@@ -2213,7 +2207,6 @@ JAVASCRIPT — Full Refactored Application
             qty = Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
         }
 
-        // photo: parse JSON or string
         let photo = '';
         try {
             let p = it.DevicePhoto;
@@ -2261,7 +2254,6 @@ JAVASCRIPT — Full Refactored Application
     const access = {
         async load() {
             const email = (state.user.email || '').toLowerCase().trim();
-            // admin override
             if (CONFIG.ADMIN_EMAILS.map(x => x.toLowerCase()).includes(email)) {
                 state.access = { role: 'admin', branches: [], all: true };
                 return;
@@ -2270,21 +2262,20 @@ JAVASCRIPT — Full Refactored Application
                 const items = await sp.request(
                     `${CONFIG.SITE}/_api/web/lists/getbytitle('${CONFIG.ACCESS_LIST}')/items?$top=500`
                 );
-                if (items?.value) {
-                    const row = items.value.find(it =>
-                        String(it.Title || '').toLowerCase().trim() === email
-                    );
-                    if (row) {
-                        const role = String(row.Role || 'viewer').toLowerCase();
-                        const br = String(row.Branches || '').trim();
-                        const all = br === '*' || br.toLowerCase() === 'all' || role === 'admin' || br === '';
-                        state.access = {
-                            role,
-                            branches: all ? [] : br.split(',').map(x => x.trim()).filter(Boolean),
-                            all,
-                        };
-                        return;
-                    }
+                const value = items?.d?.results || items?.value || [];
+                const row = value.find(it =>
+                    String(it.Title || '').toLowerCase().trim() === email
+                );
+                if (row) {
+                    const role = String(row.Role || 'viewer').toLowerCase();
+                    const br = String(row.Branches || '').trim();
+                    const all = br === '*' || br.toLowerCase() === 'all' || role === 'admin' || br === '';
+                    state.access = {
+                        role,
+                        branches: all ? [] : br.split(',').map(x => x.trim()).filter(Boolean),
+                        all,
+                    };
+                    return;
                 }
             } catch (_) {}
             state.access = { role: 'none', branches: [], all: false };
@@ -2306,12 +2297,10 @@ JAVASCRIPT — Full Refactored Application
 
         applyUI() {
             document.body.dataset.role = state.access.role;
-            // show/hide edit-only elements
             const editable = access.canEdit();
             document.querySelectorAll('[data-edit-only]').forEach(el => {
                 el.style.display = editable ? '' : 'none';
             });
-            // access block for 'none'
             let blk = document.getElementById('access-block');
             if (state.access.role === 'none') {
                 if (!blk) {
@@ -2333,7 +2322,6 @@ JAVASCRIPT — Full Refactored Application
             }
         },
 
-        // render the access management page (admin only)
         async render() {
             const host = document.getElementById('page-access');
             if (!access.isAdmin()) {
@@ -2348,9 +2336,10 @@ JAVASCRIPT — Full Refactored Application
                 const items = await sp.request(
                     `${CONFIG.SITE}/_api/web/lists/getbytitle('${CONFIG.ACCESS_LIST}')/items?$top=500`
                 );
+                const value = items?.d?.results || items?.value || [];
                 const branches = [...new Set(state.assets.raw.map(d => d.branch))].sort();
                 const c = document.getElementById('access-content');
-                if (!items || !items.value) {
+                if (!value || value.length === 0) {
                     c.innerHTML =
                         `<div class="table-card" style="padding:24px;line-height:1.9">
                   <p style="font-size:16px;font-weight:800;margin:0 0 6px">One-time setup needed</p>
@@ -2379,7 +2368,7 @@ JAVASCRIPT — Full Refactored Application
               </div>
               <div class="table-card"><div class="tbl-wrap"><table>
                 <thead><tr><th>Email</th><th>Role</th><th>Branches</th><th></th></tr></thead>
-                <tbody>${(items.value || []).map(it => `<tr>
+                <tbody>${value.map(it => `<tr>
                   <td style="font-weight:700">${esc(it.Title)}</td>
                   <td>${esc(it.Role || 'viewer')}</td>
                   <td style="font-size:13px">${esc(it.Branches === '*' || !it.Branches ? 'All' : it.Branches)}</td>
@@ -2488,6 +2477,14 @@ JAVASCRIPT — Full Refactored Application
                 document.getElementById('live-time').textContent = 'Syncing...';
                 await auth.getToken();
 
+                // Verify list exists before loading
+                const exists = await sp.listExists(CONFIG.LIST_ID);
+                if (!exists) {
+                    toast('❌ List not found. Check LIST_ID in CONFIG.', 'error');
+                    document.getElementById('live-time').textContent = 'Error';
+                    return;
+                }
+
                 // load access first
                 await access.load();
 
@@ -2508,14 +2505,12 @@ JAVASCRIPT — Full Refactored Application
                     minute: '2-digit'
                 });
 
-                // populate UI
                 assets.populateSelects();
                 ui.checkAlerts();
                 access.applyUI();
 
                 if (!state.firstLoad) {
                     state.firstLoad = true;
-                    // if user has only one branch, open it directly
                     if (!access.isAdmin() && state.access.branches.length === 1 &&
                         state.assets.all.some(d => d.branch === state.access.branches[0])) {
                         app.openBranch(state.access.branches[0]);
@@ -2534,7 +2529,6 @@ JAVASCRIPT — Full Refactored Application
             }
         },
 
-        // global search from header
         globalSearch(val) {
             state.filters.q = val;
             state.pagination.page = 1;
@@ -2558,7 +2552,6 @@ JAVASCRIPT — Full Refactored Application
             ui.renderBranchDetail();
         },
 
-        // navigate back from branch detail
         backToBranches() {
             state.branch.active = null;
             ui.renderBranches();
@@ -2578,12 +2571,10 @@ JAVASCRIPT — Full Refactored Application
     const ui = {
         setTab(tabId) {
             state.ui.tab = tabId;
-            // page visibility
             document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
             const page = document.getElementById('page-' + tabId);
             if (page) page.classList.add('active');
             ui.buildNav();
-            // render
             switch (tabId) {
                 case 'overview':
                     ui.renderOverview();
@@ -2626,7 +2617,6 @@ JAVASCRIPT — Full Refactored Application
             access.applyUI();
         },
 
-        // ===== AGGREGATES =====
         getBranchAgg() {
             const m = {};
             state.assets.all.forEach(d => {
@@ -2640,7 +2630,6 @@ JAVASCRIPT — Full Refactored Application
             return m;
         },
 
-        // ===== STATUS BADGE =====
         statusBadge(s) {
             const v = (s || '').toLowerCase();
             if (v.includes('استخدام') || v.includes('قيد')) return `<span class="badge b-use"><span class="b-dot"></span>${esc(s)}</span>`;
@@ -2652,7 +2641,6 @@ JAVASCRIPT — Full Refactored Application
             return `<span class="badge b-def"><span class="b-dot"></span>${esc(s)}</span>`;
         },
 
-        // ===== BRANCH CARD =====
         renderBranchCard(name, a) {
             const cats = Object.entries(a.cats).sort((x, y) => y[1] - x[1]).slice(0, 3);
             const bcode = ui.barcode(name);
@@ -2678,7 +2666,6 @@ JAVASCRIPT — Full Refactored Application
             return `<div class="barcode">${s}</div>`;
         },
 
-        // ===== ASSET CARD =====
         assetIcon(cat, name) {
             const n = (name || '') + (cat || '');
             if (n.includes('كاشير') || n.includes('كمبيوتر')) return '<path d="M3 5h18v11H3z"/><path d="M8 21h8M12 16v5"/>';
@@ -2714,7 +2701,6 @@ JAVASCRIPT — Full Refactored Application
           </div>`;
         },
 
-        // ===== OVERVIEW =====
         renderOverview() {
             const agg = ui.getBranchAgg(),
                 branches = Object.keys(agg);
@@ -2798,7 +2784,6 @@ JAVASCRIPT — Full Refactored Application
             requestAnimationFrame(f);
         },
 
-        // ===== BRANCHES =====
         renderBranches() {
             const host = document.getElementById('page-branches');
             const agg = ui.getBranchAgg();
@@ -2817,7 +2802,6 @@ JAVASCRIPT — Full Refactored Application
             setTimeout(() => ui.hydrateImages(), 100);
         },
 
-        // ===== BRANCH DETAIL =====
         renderBranchDetail() {
             const host = document.getElementById('page-branches');
             const all = state.assets.all.filter(d => d.branch === state.branch.active);
@@ -2866,7 +2850,6 @@ JAVASCRIPT — Full Refactored Application
             setTimeout(() => ui.hydrateImages(), 100);
         },
 
-        // ===== ALL ASSETS (with filters & pagination) =====
         renderAll() {
             const host = document.getElementById('page-all');
             let rows = state.assets.all.slice();
@@ -2887,7 +2870,6 @@ JAVASCRIPT — Full Refactored Application
             if (amtMax) rows = rows.filter(d => d.amount <= parseFloat(amtMax));
             if (colorFlt) rows = rows.filter(d => (d.color || '').toLowerCase().includes(colorFlt.toLowerCase()));
 
-            // sort
             if (state.sort.key) {
                 const { key: k, dir } = state.sort;
                 const v = i => k === 'id' ? i.id : k === 'name' ? i.name : k === 'branch' ? i.branch : k === 'cat' ? i
@@ -3039,7 +3021,6 @@ JAVASCRIPT — Full Refactored Application
             ui.renderAll();
         },
 
-        // ===== ANALYTICS =====
         renderAnalytics() {
             const host = document.getElementById('page-analytics');
             host.innerHTML = `
@@ -3050,7 +3031,6 @@ JAVASCRIPT — Full Refactored Application
               <div class="chart-card"><div class="chart-header">By Status</div><div class="chart-wrap"><canvas id="c-status"></canvas></div></div>
               <div class="chart-card"><div class="chart-header">By Brand</div><div class="chart-wrap"><canvas id="c-brand"></canvas></div></div>
             </div>`;
-            // destroy old charts
             Object.values(state.charts).forEach(c => { try { c.destroy(); } catch (_) {} });
             state.charts = {};
             const css = getComputedStyle(document.documentElement);
@@ -3102,7 +3082,6 @@ JAVASCRIPT — Full Refactored Application
             });
         },
 
-        // ===== NOTIFICATIONS =====
         checkAlerts() {
             state.notifications = [];
             const maint = state.assets.all.filter(d => (d.status || '').includes('صيان'));
@@ -3149,14 +3128,12 @@ JAVASCRIPT — Full Refactored Application
             ui.closeNotifPanel();
         },
 
-        // ===== THEME =====
         toggleTheme() {
             state.ui.theme = state.ui.theme === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', state.ui.theme);
             if (state.ui.tab === 'analytics') setTimeout(ui.renderAnalytics, 100);
         },
 
-        // ===== MODALS =====
         closeModal(id) {
             document.getElementById(id)?.classList.remove('open');
         },
@@ -3165,7 +3142,6 @@ JAVASCRIPT — Full Refactored Application
             state.pendingDeleteId = null;
         },
 
-        // ===== IMAGE HYDRATION (auth + blob) =====
         hydrateImages(root) {
             root = root || document;
             const list = [...root.querySelectorAll('img[data-src]')].filter(i => !i.dataset.hy);
@@ -3365,7 +3341,6 @@ JAVASCRIPT — Full Refactored Application
                     else throw new Error('Add failed: no ID returned');
                 }
 
-                // photo upload
                 if (state.uploadedPhoto && itemId) {
                     try {
                         if (isEdit) await assets.deleteAttachments(itemId, digest);
@@ -3391,7 +3366,7 @@ JAVASCRIPT — Full Refactored Application
                 const r = await sp.request(
                     `${CONFIG.SITE}/_api/web/lists(guid'${CONFIG.LIST_ID}')/items(${itemId})/AttachmentFiles`
                 );
-                const files = r?.value || [];
+                const files = r?.d?.results || r?.value || [];
                 for (const f of files) {
                     await sp.request(
                         `${CONFIG.SITE}/_api/web/lists(guid'${CONFIG.LIST_ID}')/items(${itemId})/AttachmentFiles/getbyfilename('${encodeURIComponent(f.FileName)}')`, {
@@ -3441,7 +3416,6 @@ JAVASCRIPT — Full Refactored Application
             });
         },
 
-        // ===== DETAIL =====
         openDetail(id) {
             const d = state.assets.all.find(x => x.id === id);
             if (!d) return;
@@ -3478,7 +3452,6 @@ JAVASCRIPT — Full Refactored Application
             setTimeout(() => ui.hydrateImages(document.getElementById('modal-detail-body')), 100);
         },
 
-        // ===== DELETE =====
         askDelete(id, name) {
             state.pendingDeleteId = id;
             document.getElementById('confirm-delete-msg').textContent =
@@ -3504,7 +3477,6 @@ JAVASCRIPT — Full Refactored Application
             }
         },
 
-        // ===== PRINT =====
         printAsset(id) {
             const d = state.assets.all.find(x => x.id === id);
             if (!d) return;
@@ -3540,7 +3512,7 @@ JAVASCRIPT — Full Refactored Application
             const w = window.open(url, '_blank');
             if (w) w.addEventListener('afterprint', () => URL.revokeObjectURL(url));
             else URL.revokeObjectURL(url);
-        },
+        }
     };
 
     // ============================================================
@@ -3588,7 +3560,6 @@ JAVASCRIPT — Full Refactored Application
             else URL.revokeObjectURL(url);
         },
 
-        // ===== SCANNER =====
         async openScanner() {
             const modal = document.getElementById('modal-scan');
             modal.classList.add('open');
@@ -3674,7 +3645,6 @@ JAVASCRIPT — Full Refactored Application
     // INITIALIZATION
     // ============================================================
     window.onload = async () => {
-        // init MSAL
         const ok = await auth.init();
         if (!ok) return;
 
@@ -3706,10 +3676,8 @@ JAVASCRIPT — Full Refactored Application
             }
         }
 
-        // show login screen by default
         document.getElementById('login-screen').style.display = 'flex';
 
-        // live clock
         setInterval(() => {
             const tm = document.getElementById('live-time');
             if (tm && !tm.textContent.includes('Sync') && !tm.textContent.includes('Error')) {
@@ -3717,7 +3685,6 @@ JAVASCRIPT — Full Refactored Application
             }
         }, 60000);
 
-        // click outside modals to close
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal-overlay')) {
                 ui.closeModal(e.target.id);
@@ -3730,24 +3697,20 @@ JAVASCRIPT — Full Refactored Application
             }
         });
 
-        // auto-refresh every 3 minutes
         setInterval(() => {
             if (document.getElementById('dashboard')?.style.display !== 'none') {
                 app.loadAll();
             }
         }, 180000);
 
-        // image hydration observer
         let hyT;
         new MutationObserver(() => {
             clearTimeout(hyT);
             hyT = setTimeout(() => ui.hydrateImages(), 80);
         }).observe(document.documentElement, { childList: true, subtree: true });
 
-        // cleanup blob URLs on unload
         window.addEventListener('beforeunload', () => ui.revokeBlobUrls());
 
-        // set initial theme
         document.documentElement.setAttribute('data-theme', state.ui.theme);
 
         console.log('🚀 Swag Inventory Dashboard initialized');
