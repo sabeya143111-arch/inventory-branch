@@ -12,7 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#080A0E;--surface:#0E1117;--surface2:#151B24;--surface3:#1C2433;--border:#1E2A3A;--border2:#243040;--text:#F6F9FF;--muted:#4A6080;--muted2:#6A8090;--accent:#00D9FF;--accent2:#0099CC;--green:#00FF88;--red:#FF3366;--amber:#FFB020;--purple:#8B5CF6;--gold:#D4A84B;--card-glass:rgba(14,17,23,0.70)}
+:root{--bg:#080A0E;--surface:#0E1117;--surface2:#151B24;--surface3:#1C2433;--border:#1E2A3A;--border2:#243040;--text:#F6F9FF;--muted:#8DA2BF;--muted2:#AEC0D6;--accent:#00D9FF;--accent2:#0099CC;--green:#00FF88;--red:#FF3366;--amber:#FFB020;--purple:#8B5CF6;--gold:#D4A84B;--card-glass:rgba(14,17,23,0.70)}
 [data-theme="light"]{--bg:#F4F6FB;--surface:#FFFFFF;--surface2:#F0F3F9;--surface3:#E4E9F2;--border:#DCE3EF;--border2:#C9D3E3;--text:#16202E;--muted:#6A7A92;--muted2:#4A5A72;--accent:#0091B5;--accent2:#006C88;--green:#00A35A;--red:#D6224A;--amber:#C77F00;--purple:#6D44C9;--gold:#A9821F;--card-glass:rgba(255,255,255,0.82)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Space Grotesk','Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;font-size:16px;font-weight:500}
@@ -318,12 +318,6 @@ tr:hover td{background:rgba(0,217,255,.02)}
   <div class="login-card">
     <div class="login-logo-wrap"><div class="swag-logo-big"></div></div>
     <div class="login-brand" data-i18n="brand">Swag Group</div>
-    <div class="login-title-wrap">
-      <svg class="hw-svg" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
-        <path id="hw-path" d="M 950 90 C 1250 300, 1050 480, 600 520 C 250 520, 150 480, 150 300 C 150 120, 350 80, 600 80 C 850 80, 950 180, 950 180" fill="none" stroke="#D4A84B" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <div class="login-title" data-i18n="loginTitle" data-i18n-html="1">Inventory<br>Control Center</div>
-    </div>
     <div class="login-divider"></div>
     <div class="login-sub" data-i18n="loginSub">Sign in with your Microsoft account to access the inventory management dashboard.</div>
     <button class="login-btn" id="login-btn" onclick="doLogin()">
