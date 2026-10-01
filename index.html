@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,13 +9,14 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23714B67'/%3E%3Cpath d='M32 14 50 23v19L32 51 14 42V23z' fill='none' stroke='%23fff' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M14 23l18 9 18-9M32 32v19' fill='none' stroke='%2301A9B0' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E"/>
 <style>
 :root{--bg:#080A0E;--surface:#0E1117;--surface2:#151B24;--surface3:#1C2433;--border:#1E2A3A;--border2:#243040;--text:#F6F9FF;--muted:#8DA2BF;--muted2:#AEC0D6;--accent:#00D9FF;--accent2:#0099CC;--green:#00FF88;--red:#FF3366;--amber:#FFB020;--purple:#8B5CF6;--gold:#D4A84B;--card-glass:rgba(14,17,23,0.70)}
 [data-theme="light"]{--bg:#F4F6FB;--surface:#FFFFFF;--surface2:#F0F3F9;--surface3:#E4E9F2;--border:#DCE3EF;--border2:#C9D3E3;--text:#16202E;--muted:#6A7A92;--muted2:#4A5A72;--accent:#0091B5;--accent2:#006C88;--green:#00A35A;--red:#D6224A;--amber:#C77F00;--purple:#6D44C9;--gold:#A9821F;--card-glass:rgba(255,255,255,0.82)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Space Grotesk','Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;font-size:16px;font-weight:500}
+body{font-family:'Roboto','Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;font-size:16px;font-weight:500}
 body::before{content:'';position:fixed;top:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(0,217,255,.04),transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.04),transparent 70%);pointer-events:none;z-index:0}
 
@@ -25,18 +26,18 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 @keyframes loginFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .login-logo{width:70px;height:70px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 12px 30px rgba(0,217,255,.3)}
 .login-logo svg{width:36px;height:36px;stroke:#080A0E;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.login-brand{font-family:'Space Mono','Cairo',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.login-brand{font-family:'Roboto','Cairo',sans-serif;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
 .login-title{font-size:26px;font-weight:300;margin-bottom:8px}
 .login-divider{width:40px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto 24px}
 .login-sub{font-size:14px;color:var(--muted2);margin-bottom:34px;line-height:1.7}
-.login-btn{width:100%;padding:15px;background:rgba(0,217,255,.05);border:1px solid rgba(0,217,255,.2);border-radius:9999px;color:var(--text);font-family:'Space Grotesk','Cairo',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s}
+.login-btn{width:100%;padding:15px;background:rgba(0,217,255,.05);border:1px solid rgba(0,217,255,.2);border-radius:9999px;color:var(--text);font-family:'Roboto','Cairo',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s}
 .login-btn:hover{background:rgba(0,217,255,.1);border-color:rgba(0,217,255,.45);box-shadow:0 0 24px rgba(0,217,255,.12)}
 [data-theme="light"] .login-logo svg{stroke:#fff}
 
 /* HEADER */
 .header{background:var(--card-glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
 .header-left{display:flex;align-items:center;gap:16px}
-.header-brand{font-family:'Space Mono','Cairo',monospace;font-size:13px;font-weight:700;letter-spacing:.5px}
+.header-brand{font-family:'Roboto','Cairo',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px}
 .header-sep{width:1px;height:20px;background:var(--border2)}
 .header-sub{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:livePulse 2s infinite;box-shadow:0 0 8px var(--green)}
@@ -44,19 +45,19 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .user-chip{background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:6px 14px 6px 10px;font-size:13px;color:var(--muted2);display:flex;align-items:center;gap:8px}
 .user-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#080A0E}
-.hdr-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;color:var(--muted2);font-size:12px;font-family:'Space Grotesk','Cairo',sans-serif;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+.hdr-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;color:var(--muted2);font-size:12px;font-family:'Roboto','Cairo',sans-serif;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
 .hdr-btn:hover{border-color:var(--accent);color:var(--accent)}
 .hdr-btn.danger:hover{border-color:var(--red);color:var(--red)}
 
 /* NOTIFICATION */
-.notif-bell{position:relative;cursor:pointer;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;display:flex;align-items:center;gap:6px;color:var(--muted2);font-size:12px;font-family:'Space Grotesk','Cairo',sans-serif;transition:all .15s}
+.notif-bell{position:relative;cursor:pointer;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;display:flex;align-items:center;gap:6px;color:var(--muted2);font-size:12px;font-family:'Roboto','Cairo',sans-serif;transition:all .15s}
 .notif-bell:hover{border-color:var(--amber);color:var(--amber)}
-.notif-count{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px;font-family:'Space Mono','Cairo',monospace;min-width:16px;text-align:center;display:none}
+.notif-count{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px;font-family:'Roboto','Cairo',sans-serif;min-width:16px;text-align:center;display:none}
 .notif-count.show{display:block}
 .notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:340px;background:var(--surface);border:1px solid var(--border2);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.4);z-index:200;display:none;overflow:hidden}
 .notif-panel.open{display:block;animation:panelIn .2s ease}
 @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.notif-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;font-family:'Space Mono','Cairo',monospace}
+.notif-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;font-family:'Roboto','Cairo',sans-serif}
 .notif-item{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;font-size:12px;cursor:pointer;transition:background .15s}
 .notif-item:hover{background:var(--surface2)}
 .notif-dot2{width:8px;height:8px;border-radius:50%;flex:none;margin-top:4px}
@@ -70,7 +71,7 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .nav::-webkit-scrollbar{display:none}
 .nav-item{padding:14px 18px;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:7px}
 .nav-item:hover{color:var(--text)}.nav-item.active{color:var(--accent);border-bottom-color:var(--accent)}
-.nav-badge{background:var(--surface3);border-radius:10px;padding:1px 7px;font-size:11px;font-family:'Space Mono','Cairo',monospace;color:var(--muted2)}
+.nav-badge{background:var(--surface3);border-radius:10px;padding:1px 7px;font-size:11px;font-family:'Roboto','Cairo',sans-serif;color:var(--muted2)}
 .nav-item.active .nav-badge{background:rgba(0,217,255,.1);color:var(--accent)}
 
 /* MAIN */
@@ -81,7 +82,7 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
 
 /* BUTTONS */
-.btn{padding:10px 18px;border-radius:10px;font-family:'Space Grotesk','Cairo',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;border:none}
+.btn{padding:10px 18px;border-radius:10px;font-family:'Roboto','Cairo',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;border:none}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#080A0E;box-shadow:0 4px 15px rgba(0,217,255,.2)}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,217,255,.35)}
 .btn-ghost{background:var(--surface2);border:1px solid var(--border2);color:var(--muted2)}
@@ -99,7 +100,7 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .stat-card.c1::after{background:var(--accent)}.stat-card.c2::after{background:var(--amber)}.stat-card.c3::after{background:var(--purple)}.stat-card.c4::after{background:var(--green)}.stat-card.c5::after{background:var(--gold)}.stat-card.c6::after{background:var(--red)}
 .stat-card:hover{transform:translateY(-3px);border-color:var(--border2)}
 .stat-icon{font-size:20px;margin-bottom:14px}
-.stat-num{font-family:'Space Mono','Cairo',monospace;font-size:34px;font-weight:800;line-height:1;margin-bottom:6px}
+.stat-num{font-family:'Roboto','Cairo',sans-serif;font-size:34px;font-weight:800;line-height:1;margin-bottom:6px}
 .c1 .stat-num{color:var(--accent)}.c2 .stat-num{color:var(--amber)}.c3 .stat-num{color:var(--purple)}.c4 .stat-num{color:var(--green)}.c5 .stat-num{color:var(--gold)}.c6 .stat-num{color:var(--red)}
 .stat-label{font-size:13px;color:var(--muted);font-weight:700;letter-spacing:.3px}
 
@@ -107,18 +108,18 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px}
 .table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .table-title{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
-.table-count{background:var(--surface3);border-radius:20px;padding:2px 10px;font-size:11px;font-family:'Space Mono','Cairo',monospace;color:var(--muted2)}
+.table-count{background:var(--surface3);border-radius:20px;padding:2px 10px;font-size:11px;font-family:'Roboto','Cairo',sans-serif;color:var(--muted2)}
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:600px}
 thead{background:var(--surface2)}
-th{padding:11px 16px;text-align:left;font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;font-family:'Space Mono','Cairo',monospace}
+th{padding:11px 16px;text-align:left;font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;font-family:'Roboto','Cairo',sans-serif}
 td{padding:12px 16px;font-size:14.5px;border-top:1px solid var(--border);vertical-align:middle;font-weight:600}
 [data-theme="dark"] td{color:#FFFFFF !important}
 [data-theme="dark"] th{color:#AEBED2}
 tr:hover td{background:rgba(0,217,255,.02)}
 
 /* BADGES */
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Space Mono','Cairo',monospace}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Roboto','Cairo',sans-serif}
 .b-dot{width:4px;height:4px;border-radius:50%}
 .b-use{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.2)}.b-use .b-dot{background:var(--green)}
 .b-stop{background:rgba(255,51,102,.1);color:var(--red);border:1px solid rgba(255,51,102,.2)}.b-stop .b-dot{background:var(--red)}
@@ -126,15 +127,15 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .b-store{background:rgba(96,165,250,.1);color:#60A5FA;border:1px solid rgba(96,165,250,.2)}.b-store .b-dot{background:#60A5FA}
 .b-avail{background:rgba(0,217,255,.1);color:var(--accent);border:1px solid rgba(0,217,255,.2)}.b-avail .b-dot{background:var(--accent)}
 .b-def{background:var(--surface3);color:var(--muted);border:1px solid var(--border)}
-.id-tag{font-family:'Space Mono','Cairo',monospace;font-size:11px;color:var(--muted2);background:var(--surface2);padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
-.view-btn{background:transparent;border:1px solid var(--border2);border-radius:7px;padding:5px 11px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Space Grotesk','Cairo',sans-serif}
+.id-tag{font-family:'Roboto','Cairo',sans-serif;font-size:11px;color:var(--muted2);background:var(--surface2);padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
+.view-btn{background:transparent;border:1px solid var(--border2);border-radius:7px;padding:5px 11px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Roboto','Cairo',sans-serif}
 .view-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* FILTERS */
 .filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end}
 .flt-group{display:flex;flex-direction:column;gap:5px}
-.flt-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-family:'Space Mono','Cairo',monospace}
-.flt-input,.flt-select{background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:'Space Grotesk','Cairo',sans-serif;font-size:14px;font-weight:600;padding:8px 12px;outline:none;min-width:130px;transition:border-color .15s}
+.flt-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-family:'Roboto','Cairo',sans-serif}
+.flt-input,.flt-select{background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:'Roboto','Cairo',sans-serif;font-size:14px;font-weight:600;padding:8px 12px;outline:none;min-width:130px;transition:border-color .15s}
 .flt-input:focus,.flt-select:focus{border-color:var(--accent)}
 .flt-select option{background:var(--surface2)}
 .adv-filter-panel{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:18px;margin-bottom:16px;display:none}
@@ -145,10 +146,10 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .branch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:20px}
 .branch-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .branch-card:hover{transform:translateY(-4px);border-color:rgba(0,217,255,.4);box-shadow:0 20px 40px rgba(0,0,0,.3)}
-.brand-badge{font-family:'Space Mono','Cairo',monospace;font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;color:#fff;display:inline-block}
+.brand-badge{font-family:'Roboto','Cairo',sans-serif;font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;color:#fff;display:inline-block}
 .branch-card h3{font-size:20px;font-weight:800;margin:12px 0 4px}
 .branch-qty{position:absolute;top:16px;right:18px;text-align:right}
-.branch-qty b{font-family:'Space Mono','Cairo',monospace;font-size:28px;font-weight:700;color:var(--accent);display:block;line-height:1}
+.branch-qty b{font-family:'Roboto','Cairo',sans-serif;font-size:28px;font-weight:700;color:var(--accent);display:block;line-height:1}
 .branch-qty span{font-size:10px;color:var(--muted)}
 .branch-footer{border-top:1px dashed var(--border);padding-top:12px;margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .cat-chips{display:flex;gap:5px;flex-wrap:wrap}
@@ -162,21 +163,21 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .asset-card:hover{transform:translateY(-3px);border-color:rgba(0,217,255,.4);box-shadow:0 15px 35px rgba(0,0,0,.25)}
 .asset-thumb{height:130px;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .asset-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.asset-qty-pill{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.65);color:#fff;font-family:'Space Mono','Cairo',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;backdrop-filter:blur(4px);z-index:2}
+.asset-qty-pill{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.65);color:#fff;font-family:'Roboto','Cairo',sans-serif;font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;backdrop-filter:blur(4px);z-index:2}
 .asset-body{padding:12px 14px 14px}
 .asset-body h5{font-size:17px;font-weight:800;margin-bottom:3px}
-.asset-model{font-family:'Space Mono','Cairo',monospace;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.asset-model{font-family:'Roboto','Cairo',sans-serif;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .asset-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .color-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.2);flex:none}
 
 /* CHARTS */
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px}
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}
-.chart-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;font-family:'Space Mono','Cairo',monospace}
+.chart-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;font-family:'Roboto','Cairo',sans-serif}
 .chart-wrap{position:relative;height:200px}
 .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .kpi-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
-.kpi-val{font-family:'Space Mono','Cairo',monospace;font-size:26px;font-weight:700;color:var(--accent);line-height:1}
+.kpi-val{font-family:'Roboto','Cairo',sans-serif;font-size:26px;font-weight:700;color:var(--accent);line-height:1}
 .kpi-lbl{font-size:11px;color:var(--muted);margin-top:8px;font-weight:700}
 [data-theme="dark"] .kpi-lbl{color:#B7C3D4}
 
@@ -190,14 +191,14 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .modal-info-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
 .modal-info-row:last-child{border:none}
 .modal-info-label{color:var(--muted);font-weight:700}
-.modal-info-val{font-weight:700;font-size:15px;font-family:'Space Mono','Cairo',monospace;text-align:right;max-width:60%}
+.modal-info-val{font-weight:700;font-size:15px;font-family:'Roboto','Cairo',sans-serif;text-align:right;max-width:60%}
 [data-theme="dark"] .modal-info-val{color:#fff !important}
 .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
-.modal-input,.modal-select,.modal-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Space Grotesk','Cairo',sans-serif;font-size:15px;font-weight:600;padding:11px 14px;outline:none;margin-bottom:14px;transition:border-color .15s}
+.modal-input,.modal-select,.modal-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Roboto','Cairo',sans-serif;font-size:15px;font-weight:600;padding:11px 14px;outline:none;margin-bottom:14px;transition:border-color .15s}
 .modal-input:focus,.modal-select:focus,.modal-textarea:focus{border-color:var(--accent)}
 .modal-textarea{resize:none;height:80px}
 .modal-select option{background:var(--surface2)}
-.modal-label{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:'Space Mono','Cairo',monospace}
+.modal-label{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:'Roboto','Cairo',sans-serif}
 .modal-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .modal-grid2 .modal-input,.modal-grid2 .modal-select{margin-bottom:0}
 
@@ -222,7 +223,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 @keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 .toast.success{border-color:rgba(0,255,136,.3)}.toast.error{border-color:rgba(255,51,102,.3)}.toast.info{border-color:rgba(0,217,255,.3)}.toast.warn{border-color:rgba(255,176,32,.3)}
 .pagination{display:flex;gap:6px;justify-content:center;margin-top:14px;align-items:center}
-.pg-btn{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--muted);font-size:12px;padding:6px 12px;cursor:pointer;font-family:'Space Mono','Cairo',monospace;transition:all .15s}
+.pg-btn{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--muted);font-size:12px;padding:6px 12px;cursor:pointer;font-family:'Roboto','Cairo',sans-serif;transition:all .15s}
 .pg-btn.active{background:var(--accent);border-color:var(--accent);color:#080A0E;font-weight:700}
 .pg-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
 .bdetail-header{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 24px;margin-bottom:20px;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
@@ -230,18 +231,18 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .bdetail-header h2{font-size:25px;font-weight:800;margin:8px 0 4px}
 .mini-stats{display:flex;gap:24px;flex-wrap:wrap}
 .ms-item{text-align:center}
-.ms-item b{font-family:'Space Mono','Cairo',monospace;font-size:24px;font-weight:800;color:var(--accent);display:block}
+.ms-item b{font-family:'Roboto','Cairo',sans-serif;font-size:24px;font-weight:800;color:var(--accent);display:block}
 .ms-item span{font-size:11px;color:var(--muted)}
 .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .pill{background:var(--surface);border:1px solid var(--border);color:var(--muted2);font-size:12px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:all .15s}
 .pill:hover{border-color:var(--accent)}.pill.active{background:var(--accent);border-color:var(--accent);color:#04222a}
-.pill .n{font-family:'Space Mono','Cairo',monospace;opacity:.6;margin-left:5px;font-size:11px}
+.pill .n{font-family:'Roboto','Cairo',sans-serif;opacity:.6;margin-left:5px;font-size:11px}
 .cat-section{margin-bottom:24px}
 .cat-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .cat-dot{width:10px;height:10px;border-radius:3px;flex:none}
 .cat-bar h4{font-size:14px;font-weight:700;margin:0}
-.cat-bar .meta{font-family:'Space Mono','Cairo',monospace;font-size:12px;color:var(--muted);margin-left:auto}
-.back-btn{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);font-size:13px;font-weight:500;padding:8px 14px;border-radius:10px;cursor:pointer;margin-bottom:16px;transition:all .15s;font-family:'Space Grotesk','Cairo',sans-serif}
+.cat-bar .meta{font-family:'Roboto','Cairo',sans-serif;font-size:12px;color:var(--muted);margin-left:auto}
+.back-btn{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);font-size:13px;font-weight:500;padding:8px 14px;border-radius:10px;cursor:pointer;margin-bottom:16px;transition:all .15s;font-family:'Roboto','Cairo',sans-serif}
 .back-btn:hover{border-color:var(--accent);color:var(--accent)}
 .photo-thumb{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--border)}
 .confirm-overlay{position:fixed;inset:0;background:rgba(8,10,14,.9);backdrop-filter:blur(6px);z-index:300;display:none;align-items:center;justify-content:center}
@@ -307,6 +308,198 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .magnet-particle{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--accent);opacity:.35;pointer-events:none;z-index:0;box-shadow:0 0 6px var(--accent);transition:transform .6s cubic-bezier(.34,1.56,.64,1),opacity .4s ease}
 .login-btn:hover .magnet-particle{opacity:1}
 @media (prefers-reduced-motion: reduce){.login-title{animation:none;opacity:1}.hw-svg path{animation:none;stroke-dashoffset:0}}
+
+/* =====================================================================
+   ODOO THEME  (Odoo 16/17 web-client look)
+   ===================================================================== */
+:root,[data-theme="light"]{
+  --bg:#F9FAFB;--surface:#FFFFFF;--surface2:#F3F4F6;--surface3:#E7E9ED;
+  --border:#E7E9ED;--border2:#D8DADD;--text:#374151;--muted:#6B7280;--muted2:#4B5563;
+  --accent:#714B67;--accent2:#5E3F56;--link:#017E84;
+  --green:#28A745;--red:#D44C59;--amber:#E99D00;--purple:#017E84;--gold:#B98D2F;
+  --navbar:#714B67;--navbar-hover:rgba(0,0,0,.12);--card-glass:#FFFFFF;
+}
+[data-theme="dark"]{
+  --bg:#1E2029;--surface:#262A36;--surface2:#2E3240;--surface3:#3A3F50;
+  --border:#3A3F50;--border2:#4A5065;--text:#E4E6EB;--muted:#9AA0AE;--muted2:#C0C5D0;
+  --accent:#A3779B;--accent2:#8C6585;--link:#01A9B0;
+  --green:#3DBE5A;--red:#E06C77;--amber:#F0B429;--purple:#01A9B0;--gold:#D4AF5A;
+  --navbar:#3B2B38;--navbar-hover:rgba(255,255,255,.08);--card-glass:#262A36;
+}
+body{font-family:'Roboto','Cairo',sans-serif;font-size:14px;font-weight:400;color:var(--text);background:var(--bg)}
+body::before,body::after{display:none}
+.fa{line-height:1}
+
+/* ---------- Navbar ---------- */
+.header{background:var(--navbar);backdrop-filter:none;border-bottom:none;height:46px;padding:0 12px;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.header-left{gap:12px}
+.o-apps{color:#fff;font-size:18px;padding:8px 10px;border-radius:4px;cursor:pointer}
+.o-apps:hover{background:var(--navbar-hover)}
+.o-app-name{color:#fff;font-size:16px;font-weight:500;letter-spacing:.2px}
+.header-sep{background:rgba(255,255,255,.25)}
+.header-sub{color:rgba(255,255,255,.8);font-size:12px}
+.live-dot{background:#7FE0A0;box-shadow:none}
+.hdr-btn,.notif-bell{background:transparent;border:none;color:#fff;border-radius:4px;padding:7px 10px;font-size:13px;font-weight:400}
+.hdr-btn:hover,.notif-bell:hover,.hdr-btn.danger:hover{background:var(--navbar-hover);color:#fff;border:none}
+.user-chip{background:transparent;border:none;color:#fff;font-size:13px;padding:4px 8px}
+.user-avatar{border-radius:4px;background:#017E84;color:#fff;width:24px;height:24px;font-size:12px;font-weight:500}
+.header #global-search{background:#fff;color:#374151;border:none;border-radius:4px;height:30px !important;font-size:13px;font-weight:400}
+.notif-count{background:#D44C59;border-radius:10px;font-family:'Roboto',sans-serif}
+.notif-panel{border-radius:4px;border:1px solid var(--border2);box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.notif-header{font-weight:500;font-size:14px}
+.notif-item{font-size:13px}
+
+/* ---------- Control panel / menu ---------- */
+.nav{background:var(--surface);border-bottom:1px solid var(--border2);padding:0 16px}
+.nav-item{font-size:14px;font-weight:400;color:var(--text);padding:12px 14px;border-bottom:2px solid transparent}
+.nav-item:hover{color:var(--accent);background:var(--surface2)}
+.nav-item.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+.nav-badge{background:var(--surface3);color:var(--muted2);font-size:11px;border-radius:10px;font-weight:500}
+.nav-item.active .nav-badge{background:var(--accent);color:#fff}
+.nav-badge:empty{display:none}
+.main{padding:16px 20px}
+.topbar{margin-bottom:16px}
+.topbar > div:first-child > div:last-child{font-size:20px !important;font-weight:500 !important}
+.topbar > div:first-child > div:first-child{color:var(--muted) !important;letter-spacing:.5px !important;font-size:12px !important}
+
+/* ---------- Buttons ---------- */
+.btn{border-radius:4px;padding:6px 14px;font-size:14px;font-weight:500;box-shadow:none;gap:6px;line-height:1.5}
+.btn:hover{transform:none !important}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:none}
+.btn-primary:hover{background:var(--accent2);box-shadow:none}
+.btn-ghost,.btn-warn{background:var(--surface3);border:none;color:var(--text)}
+.btn-ghost:hover,.btn-warn:hover{background:var(--border2);color:var(--text);border:none}
+.btn-danger{background:var(--red);border:none;color:#fff}
+.btn-danger:hover{background:#B93C48;border:none}
+.view-btn{border:none !important;background:transparent;color:var(--link);font-size:13px;font-weight:500;padding:4px 6px;border-radius:4px}
+.view-btn:hover{background:var(--surface2);color:var(--link)}
+.back-btn{background:transparent;border:none;color:var(--link);padding:4px 0;font-size:14px}
+.back-btn:hover{color:var(--accent);border:none;text-decoration:underline}
+
+/* ---------- Stat cards (dashboard kanban) ---------- */
+.stats-grid{gap:12px}
+.stat-card{border-radius:4px;border:1px solid var(--border2);padding:14px 16px 14px 18px;display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center}
+.stat-card:hover{transform:none;box-shadow:0 4px 12px rgba(0,0,0,.08);border-color:var(--border2)}
+.stat-card::after{top:0;bottom:0;left:0;right:auto;width:3px;height:auto}
+.stat-icon{grid-row:1/3;width:42px;height:42px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0}
+.c1 .stat-icon{background:rgba(113,75,103,.12);color:var(--accent)}
+.c2 .stat-icon{background:rgba(233,157,0,.14);color:var(--amber)}
+.c3 .stat-icon{background:rgba(1,126,132,.12);color:var(--purple)}
+.c4 .stat-icon{background:rgba(40,167,69,.12);color:var(--green)}
+.c5 .stat-icon{background:rgba(185,141,47,.14);color:var(--gold)}
+.c6 .stat-icon{background:rgba(212,76,89,.12);color:var(--red)}
+.stat-num{font-family:'Roboto',sans-serif;font-size:24px;font-weight:500;margin:0}
+.stat-label{font-size:13px;font-weight:400;color:var(--muted);letter-spacing:0}
+.kpi-box{border-radius:4px;border:1px solid var(--border2);padding:12px 16px}
+.kpi-val{font-size:22px;font-weight:500;color:var(--accent)}
+.kpi-lbl,[data-theme="dark"] .kpi-lbl{font-size:13px;font-weight:400;color:var(--muted)}
+
+/* ---------- List view ---------- */
+.table-card{border-radius:4px;border:1px solid var(--border2);box-shadow:none}
+.table-header{padding:10px 14px;border-bottom:1px solid var(--border2)}
+.table-title{font-size:15px;font-weight:500}
+.table-count{background:var(--surface3);color:var(--muted2);font-weight:500}
+thead{background:var(--surface)}
+th,[data-theme="dark"] th{padding:9px 12px;font-size:13px;font-weight:700;color:var(--text);text-transform:none;letter-spacing:0;border-bottom:1px solid var(--border2)}
+td,[data-theme="dark"] td{padding:8px 12px;font-size:13.5px;font-weight:400;color:var(--text) !important;border-top:1px solid var(--border)}
+tr:hover td{background:var(--surface2)}
+.id-tag{background:transparent;border:none;padding:0;color:var(--muted);font-size:13px}
+.photo-thumb{width:40px;height:40px;border-radius:4px}
+
+/* ---------- Badges (Odoo pills) ---------- */
+.badge{border-radius:10rem;font-size:12px;font-weight:500;padding:2px 9px;border:none !important;font-family:'Roboto','Cairo',sans-serif}
+.b-dot{display:none}
+.b-use{background:rgba(40,167,69,.14);color:#1E7B34}
+.b-stop{background:rgba(212,76,89,.14);color:#B02A37}
+.b-fix{background:rgba(233,157,0,.16);color:#9A6700}
+.b-store{background:rgba(91,155,213,.16);color:#2B6CB0}
+.b-avail{background:rgba(1,126,132,.14);color:#017E84}
+.b-def{background:var(--surface3);color:var(--muted2)}
+[data-theme="dark"] .b-use{color:#6FDC8C}[data-theme="dark"] .b-stop{color:#F19BA3}
+[data-theme="dark"] .b-fix{color:#F5C55B}[data-theme="dark"] .b-store{color:#8FBCE6}[data-theme="dark"] .b-avail{color:#4FD1D7}
+
+/* ---------- Search / filters ---------- */
+.flt-label{font-size:12px;font-weight:500;color:var(--muted2);text-transform:none;letter-spacing:0}
+.flt-input,.flt-select{border-radius:4px;border:1px solid var(--border2);font-size:14px;font-weight:400;padding:6px 10px;background:var(--surface)}
+.flt-input:focus,.flt-select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(113,75,103,.15)}
+.adv-filter-panel{border-radius:4px;border:1px solid var(--border2)}
+.pill{border-radius:10rem;font-size:13px;padding:4px 12px;border:1px solid var(--border2);background:var(--surface);color:var(--text)}
+.pill:hover{border-color:var(--accent);color:var(--accent)}
+.pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ---------- Kanban cards ---------- */
+.branch-card,.asset-card{border-radius:4px;border:1px solid var(--border2);box-shadow:none}
+.branch-card:hover,.asset-card:hover{transform:none;border-color:var(--border2);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.branch-card{padding:14px 16px}
+.branch-card h3{font-size:16px;font-weight:500;margin:10px 0 4px}
+.branch-qty b{font-size:22px;font-weight:500;color:var(--accent)}
+.brand-badge{border-radius:10rem;font-size:12px;font-weight:500;padding:2px 10px}
+.barcode{display:none}
+.branch-footer{border-top:1px solid var(--border);margin-top:10px;padding-top:10px}
+.cat-chip{border-radius:10rem;font-size:12px;font-weight:400;background:var(--surface3);border:none;color:var(--muted2)}
+.asset-thumb{background:var(--surface2);height:120px}
+.asset-qty-pill{background:var(--accent);border-radius:10rem;backdrop-filter:none;font-family:'Roboto',sans-serif;font-weight:500}
+.asset-body h5{font-size:15px;font-weight:500}
+.asset-model{font-size:12px;font-weight:400}
+.bdetail-header{border-radius:4px;border:1px solid var(--border2);padding:16px 20px}
+.bdetail-header h2{font-size:22px;font-weight:500}
+.ms-item b{font-size:20px;font-weight:500;color:var(--accent)}
+.cat-bar h4{font-size:15px;font-weight:500}
+.chart-card{border-radius:4px;border:1px solid var(--border2)}
+.chart-header{font-size:14px;font-weight:500;color:var(--text);text-transform:none;letter-spacing:0}
+
+/* ---------- Dialogs ---------- */
+.modal-overlay,.confirm-overlay{background:rgba(0,0,0,.5);backdrop-filter:none}
+.modal{border-radius:4px;border:none;padding:20px 24px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:none}
+.modal-title{margin:-20px -24px 18px;padding:14px 24px;border-bottom:1px solid var(--border2);font-size:18px;font-weight:500}
+.modal-title .fa{color:var(--accent)}
+.modal-footer{margin:20px -24px -20px;padding:12px 24px;border-top:1px solid var(--border2);justify-content:flex-start}
+.modal-label{font-size:14px;font-weight:700;color:var(--text);text-transform:none;letter-spacing:0;margin-bottom:2px}
+.modal-input,.modal-select{background:transparent;border:none;border-bottom:1px solid var(--border2);border-radius:0;padding:6px 2px;font-size:14px;font-weight:400}
+.modal-input:focus,.modal-select:focus{border-bottom-color:var(--accent)}
+.modal-textarea{border-radius:4px;font-size:14px;font-weight:400;background:var(--surface)}
+.modal-info{background:transparent;padding:0;border-radius:0}
+.modal-info-row{padding:7px 0}
+.modal-info-label{font-weight:700;color:var(--text);font-size:14px}
+.modal-info-val,[data-theme="dark"] .modal-info-val{font-family:'Roboto','Cairo',sans-serif;font-weight:400;font-size:14px;color:var(--text) !important}
+.photo-upload-area{border-radius:4px;border:1px dashed var(--border2)}
+.confirm-box{border-radius:4px;animation:none}
+
+/* ---------- Pager ---------- */
+.pg-btn{border-radius:4px;font-family:'Roboto',sans-serif;font-size:13px}
+.pg-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.pg-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+
+/* ---------- Notifications (top-right like Odoo) ---------- */
+.toast-wrap{top:58px;bottom:auto;right:16px}
+.toast{border-radius:4px;border:none;border-left:4px solid var(--link);box-shadow:0 4px 14px rgba(0,0,0,.15);font-size:14px;animation:toastIn .2s ease}
+.toast.success{border-left-color:var(--green)}.toast.error{border-left-color:var(--red)}
+.toast.warn{border-left-color:var(--amber)}.toast.info{border-left-color:var(--link)}
+.toast-ico{font-size:16px}
+.toast.success .toast-ico{color:var(--green)}.toast.error .toast-ico{color:var(--red)}
+.toast.warn .toast-ico{color:var(--amber)}.toast.info .toast-ico{color:var(--link)}
+.spin{border-top-color:var(--accent)}
+
+/* ---------- Login (Odoo web/login) ---------- */
+#login-three,.logo-particle,.magnet-particle,.login-divider{display:none !important}
+.login-screen{background:var(--bg)}
+.login-card{background:var(--surface);backdrop-filter:none;border:1px solid var(--border2);border-radius:4px;padding:36px 32px 32px;max-width:380px;box-shadow:0 8px 24px rgba(0,0,0,.08) !important;animation:none}
+.login-logo-wrap{padding:0;margin:0 auto 18px}
+[data-theme="light"] .swag-logo-big{filter:invert(1)}
+.login-brand{font-family:'Roboto','Cairo',sans-serif;color:var(--muted);letter-spacing:.5px;font-size:13px;text-transform:none;margin-bottom:6px}
+.login-sub{font-size:14px;color:var(--muted2);margin-bottom:22px}
+.login-btn{border-radius:4px;background:var(--accent);border:none;color:#fff;font-size:14px;font-weight:500;padding:10px}
+.login-btn:hover{background:var(--accent2);border:none;box-shadow:none}
+.login-btn::before,.login-btn::after{display:none}
+.login-card .hdr-btn{color:var(--text);background:var(--surface3)}
+.login-card .hdr-btn:hover{background:var(--border2);color:var(--text)}
+
+@media(max-width:760px){
+  .header{padding:6px 10px}
+  .o-app-name{font-size:15px}
+  .header #global-search{background:#fff}
+  .hdr-btn{background:rgba(255,255,255,.1)}
+}
 </style>
 </head>
 <body>
@@ -328,7 +521,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
     </button>
     <div style="margin-top:20px;display:flex;gap:8px;justify-content:center">
       <button class="hdr-btn" onclick="toggleLang()" id="login-lang-btn">العربية</button>
-      <button class="hdr-btn" onclick="toggleTheme()">🌙</button>
+      <button class="hdr-btn theme-btn" onclick="toggleTheme()"><i class="fa fa-moon-o"></i></button>
     </div>
   </div>
 </div>
@@ -337,7 +530,9 @@ tr:hover td{background:rgba(0,217,255,.02)}
 <div id="dashboard" style="display:none">
   <div class="header">
     <div class="header-left">
-      <div style="background:#fff;border-radius:8px;padding:5px 10px;display:flex;align-items:center"><div class="header-logo"></div></div>
+      <i class="fa fa-th o-apps" title="Apps"></i>
+      <div style="background:#fff;border-radius:4px;padding:4px 8px;display:flex;align-items:center"><div class="header-logo"></div></div>
+      <span class="o-app-name">Inventory</span>
       <div class="header-sep"></div>
       <div class="header-sub"><div class="live-dot"></div><span id="live-time">Live</span></div>
     </div>
@@ -349,21 +544,21 @@ tr:hover td{background:rgba(0,217,255,.02)}
       <input id="global-search" class="flt-input" data-i18n-ph="search" placeholder="Search assets…" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
       <div style="position:relative">
         <div class="notif-bell" onclick="toggleNotifPanel()">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <i class="fa fa-bell"></i>
           Alerts<span class="notif-count" id="notif-count">0</span>
         </div>
         <div class="notif-panel" id="notif-panel">
           <div class="notif-header">
-            <span>🔔 Alerts</span>
+            <span><i class="fa fa-bell"></i> Alerts</span>
             <button style="font-size:10px;padding:3px 8px;border-radius:6px;cursor:pointer;background:var(--surface3);border:1px solid var(--border);color:var(--muted2)" onclick="clearAllNotifs()">Clear All</button>
           </div>
           <div id="notif-list"><div class="notif-empty">No alerts right now</div></div>
         </div>
       </div>
-      <button class="hdr-btn" onclick="loadAll(true)"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg> <span data-i18n="refresh">Refresh</span></button>
-      <button class="hdr-btn" onclick="openScanner()"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> <span data-i18n="scan">Scan</span></button>
-      <button class="hdr-btn" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> <span data-i18n="export">Export</span></button>
-      <button class="hdr-btn" onclick="toggleTheme()">🌙</button>
+      <button class="hdr-btn" onclick="loadAll(true)"><i class="fa fa-refresh"></i> <span data-i18n="refresh">Refresh</span></button>
+      <button class="hdr-btn" onclick="openScanner()"><i class="fa fa-barcode"></i> <span data-i18n="scan">Scan</span></button>
+      <button class="hdr-btn" onclick="exportExcel()"><i class="fa fa-download"></i> <span data-i18n="export">Export</span></button>
+      <button class="hdr-btn theme-btn" onclick="toggleTheme()"><i class="fa fa-moon-o"></i></button>
       <button class="hdr-btn" id="lang-btn" onclick="toggleLang()">العربية</button>
       <button class="hdr-btn danger" onclick="signOut()"><span data-i18n="signout">Sign out</span></button>
     </div>
@@ -383,7 +578,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 <!-- MODAL: DETAIL -->
 <div class="modal-overlay" id="modal-detail">
   <div class="modal">
-    <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg> <span data-i18n="d_title">Asset Details</span></div>
+    <div class="modal-title"><i class="fa fa-cubes"></i> <span data-i18n="d_title">Asset Details</span></div>
     <div id="modal-detail-body"></div>
     <div class="modal-footer" id="modal-detail-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Close</button>
@@ -394,7 +589,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 <!-- MODAL: ADD/EDIT ASSET -->
 <div class="modal-overlay" id="modal-add">
   <div class="modal">
-    <div class="modal-title" id="add-modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add New Asset</div>
+    <div class="modal-title" id="add-modal-title"><i class="fa fa-plus"></i> Add New Asset</div>
     <input type="hidden" id="edit-asset-id" value=""/>
     <div class="modal-label" data-i18n="a_branch">Branch *</div>
     <select class="modal-select" id="add-branch"><option value="">Select Branch</option></select>
@@ -440,18 +635,18 @@ tr:hover td{background:rgba(0,217,255,.02)}
       <input type="file" accept="image/*" id="photo-file-input" onchange="handlePhotoSelect(event)"/>
       <img id="photo-preview" class="photo-preview"/>
       <div id="photo-placeholder">
-        <svg class="ico" viewBox="0 0 24 24" style="width:28px;height:28px;stroke:var(--muted);margin-bottom:8px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <i class="fa fa-picture-o" style="font-size:30px;color:var(--muted);display:block;margin-bottom:8px"></i>
         <div style="font-size:12px;color:var(--muted)" data-i18n="a_upload">Click or drag to upload photo</div>
       </div>
     </div>
     <input type="file" accept="image/*" capture="environment" id="photo-cam-input" onchange="handlePhotoSelect(event)" style="display:none"/>
-    <button type="button" class="btn btn-ghost" style="width:100%;margin-top:8px;justify-content:center" onclick="document.getElementById('photo-cam-input').click()"><svg class="ico" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> <span data-i18n="takePhoto">Take Photo</span></button>
+    <button type="button" class="btn btn-ghost" style="width:100%;margin-top:8px;justify-content:center" onclick="document.getElementById('photo-cam-input').click()"><i class="fa fa-camera"></i> <span data-i18n="takePhoto">Take Photo</span></button>
     <div class="modal-label" data-i18n="a_notes">Notes</div>
     <textarea class="modal-textarea" id="add-notes" data-i18n-ph="a_notesPh" placeholder="Optional notes..."></textarea>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-add')">Cancel</button>
       <button class="btn btn-primary" id="add-submit-btn" onclick="submitAsset()">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        <i class="fa fa-plus"></i>
         <span id="add-submit-label" data-i18n="addAsset">Add Asset</span>
       </button>
     </div>
@@ -461,7 +656,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 <!-- MODAL: SCAN QR -->
 <div class="modal-overlay" id="modal-scan">
   <div class="modal" style="max-width:400px;text-align:center">
-    <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> <span data-i18n="scan">Scan Asset QR</span></div>
+    <div class="modal-title" style="justify-content:center"><i class="fa fa-barcode"></i> <span data-i18n="scan">Scan Asset QR</span></div>
     <div id="qr-reader" style="width:100%;border-radius:12px;overflow:hidden;background:#000;min-height:240px"></div>
     <div id="scan-status" style="font-size:14px;color:var(--muted2);margin-top:12px;line-height:1.6">Point the camera at an asset QR code.</div>
     <div class="modal-footer" style="justify-content:center">
@@ -473,7 +668,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 <!-- MODAL: SHOW QR -->
 <div class="modal-overlay" id="modal-qr">
   <div class="modal" style="max-width:380px;text-align:center">
-    <div class="modal-title" style="justify-content:center"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3M17 17h3M14 17h.01M17 14h.01"/></svg> QR Code</div>
+    <div class="modal-title" style="justify-content:center"><i class="fa fa-qrcode"></i> QR Code</div>
     <div class="qr-container">
       <div id="qr-box" style="display:flex;justify-content:center;padding:6px"></div>
       <div class="qr-asset-name" id="qr-name"></div>
@@ -481,8 +676,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
     </div>
     <div class="modal-footer" style="justify-content:center">
       <button class="btn btn-ghost" onclick="closeModal('modal-qr')">Close</button>
-      <button class="btn btn-primary" onclick="downloadQR()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> Download</button>
-      <button class="btn btn-ghost" onclick="printQR()"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></svg> ${t('print')}</button>
+      <button class="btn btn-primary" onclick="downloadQR()"><i class="fa fa-download"></i> Download</button>
+      <button class="btn btn-ghost" onclick="printQR()"><i class="fa fa-print"></i> <span data-i18n="print">Print</span></button>
     </div>
   </div>
 </div>
@@ -490,7 +685,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 <!-- CONFIRM DELETE -->
 <div class="modal-overlay" id="modal-request">
   <div class="modal" style="max-width:420px">
-    <div class="modal-title"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span data-i18n="request">Request</span></div>
+    <div class="modal-title"><i class="fa fa-exchange"></i> <span data-i18n="request">Request</span></div>
     <input type="hidden" id="req-asset-id">
     <div id="req-asset-name" style="font-weight:700;margin-bottom:12px"></div>
     <div class="modal-label" data-i18n="toBranch">Requesting branch (yours)</div>
@@ -505,7 +700,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 </div>
 <div class="confirm-overlay" id="confirm-delete">
   <div class="confirm-box">
-    <div style="font-size:40px;margin-bottom:12px">🗑️</div>
+    <div style="font-size:36px;margin-bottom:12px;color:var(--red)"><i class="fa fa-trash-o"></i></div>
     <h3>Delete Asset?</h3>
     <p id="confirm-delete-msg">This action cannot be undone.</p>
     <div class="confirm-btns">
@@ -549,14 +744,14 @@ const BRAND_COLOR = {
   'جولد':'#c9a227','gold':'#c9a227','اوتفيت':'#7c5cff','أوتفيت':'#7c5cff','outfit':'#7c5cff'
 };
 const CAT_COLORS = {
-  'كمبيوتر':'#3fb9c4','لابتوب':'#60A5FA','شاشة':'#8B5CF6','طابعة':'#FFB020',
+  'كمبيوتر':'#3fb9c4','لابتوب':'#60A5FA','شاشة':'#714B67','طابعة':'#E99D00',
   'كاميرات':'#f87171','كراسي':'#D4A84B','أثاث':'#b07a3a','شبكات':'#34d399','أخرى':'#8a97a8'
 };
 const COLOR_HEX = {
   'أسود':'#1c1c1e','اسود':'#1c1c1e','رمادي':'#8a8f98','أبيض':'#f3f4f6','ابيض':'#f3f4f6',
   'فضي':'#cfd4d9','بني':'#6b4a2b','ذهبي':'#c9a227','أزرق':'#2f6fed','ازرق':'#2f6fed',
   'أحمر':'#d6473e','احمر':'#d6473e','أخضر':'#1f9e6a','اخضر':'#1f9e6a',
-  'سماوي':'#0ec7e8','وردي':'#e879a0','بنفسجي':'#8B5CF6','برتقالي':'#f97316','اصفر':'#eab308'
+  'سماوي':'#0ec7e8','وردي':'#e879a0','بنفسجي':'#714B67','برتقالي':'#f97316','اصفر':'#eab308'
 };
 
 const SCOPES = [
@@ -574,6 +769,7 @@ let msalInstance = null, accessToken = null, currentUser = null;
 let allAssets = [], allAssetsRaw = [];
 let myAccess = { role: 'none', branches: [], all: false };
 let BRANCH_KEY = null; // auto-detected
+let HAS_QTY_FIELD = false; // true once a 'Quantity' column exists in the list
 let LIST_ETYPE = null;
 let currentTab = 'overview';
 let sortState = { key: null, dir: 1 };
@@ -586,7 +782,7 @@ let pendingDeleteId = null;
 let uploadedPhotoBase64 = null;
 let notifications = [];
 let advFiltersOpen = false;
-let currentTheme = 'dark';
+let currentTheme = 'light';
 
 // FIX: blob URL cache with revoke support
 const _imgCache = {};
@@ -608,7 +804,19 @@ const fmtDate = d => {
   try { return new Date(d).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }); }
   catch (_) { return d; }
 };
-const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// Debounced re-render that keeps focus + cursor in the input being typed in
+const _deb = {};
+function debounceRender(key, fn, focusId) {
+  clearTimeout(_deb[key]);
+  _deb[key] = setTimeout(() => {
+    fn();
+    if (!focusId) return;
+    const el = document.getElementById(focusId);
+    if (el) { el.focus(); try { const l = el.value.length; el.setSelectionRange(l, l); } catch (_) {} }
+  }, 300);
+}
 const optionsHtml = (arr, sel) => arr.map(o => `<option value="${esc(o)}"${o===sel?' selected':''}>${esc(o)}</option>`).join('');
 
 function catColor(c) {
@@ -655,6 +863,7 @@ async function getToken() {
     if (!currentUser) setUser(accounts[0]);
   } catch (e) {
     await msalInstance.acquireTokenRedirect({ scopes: SCOPES });
+    throw new Error('Session expired — redirecting to sign in');
   }
 }
 
@@ -722,13 +931,16 @@ function mapItem(it) {
   const branch = BRANCH_KEY ? (it[BRANCH_KEY] || 'غير محدد').toString().trim() : 'غير محدد';
   const brand = (branch.split(/[-–]/)[0] || '').trim() || '—';
 
-  // FIX: Quantity from dedicated field first, then fallback
-  let qty = 1;
-  if (it.Quantity !== undefined && it.Quantity !== null) {
+  // Quantity: dedicated column if it exists. Legacy fallback reads SerialNumber
+  // ONLY when it is a plain number (so a real serial like 'SN-48213' never becomes qty 48213).
+  let qty = 1, serialNumber = '';
+  if (HAS_QTY_FIELD) {
     qty = parseInt(it.Quantity, 10) || 1;
-  } else if (it.SerialNumber) {
-    const parsed = parseInt(String(it.SerialNumber).replace(/\D/g, ''), 10);
-    qty = Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+    serialNumber = it.SerialNumber || '';
+  } else {
+    const sn = String(it.SerialNumber ?? '').trim();
+    if (/^\d+$/.test(sn) && parseInt(sn, 10) > 0) qty = parseInt(sn, 10);
+    else serialNumber = sn;
   }
 
   // Photo handling
@@ -760,7 +972,7 @@ function mapItem(it) {
     status: it.Status || '',
     color: it.Color || '',
     qty,
-    serialNumber: it.SerialNumber || '',  // FIX: store actual serial number too
+    serialNumber,
     notes: it.ConditionNotes || '',
     purchaseDate: it.PurchaseDate || '',
     amount: Number(it.PurchasePrice) || 0,
@@ -777,6 +989,13 @@ function mapItem(it) {
 // LIVE CHOICE SYNC — pull dropdown options straight from SharePoint
 // so new options added to a Choice column appear automatically.
 // ============================================================
+async function detectQtyField() {
+  try {
+    const res = await spFetch(`${CONFIG.SITE}/_api/web/lists(guid'${CONFIG.LIST_ID}')/fields?$select=InternalName&$filter=InternalName eq 'Quantity'`);
+    HAS_QTY_FIELD = (res.value || []).length > 0;
+  } catch (_) { HAS_QTY_FIELD = false; }
+}
+
 async function loadChoices() {
   try {
     const url = `${CONFIG.SITE}/_api/web/lists(guid'${CONFIG.LIST_ID}')/fields`
@@ -805,6 +1024,7 @@ async function loadAll(showToast = false) {
     setLive('Syncing...');
     await getToken();
     await loadAccess();
+    await detectQtyField();
 
     let items = [], url = `${CONFIG.SITE}/_api/web/lists(guid'${CONFIG.LIST_ID}')/items?$top=500&$orderby=ID desc`;
     while (url) {
@@ -825,7 +1045,6 @@ async function loadAll(showToast = false) {
     allAssets = filterByAccess(allAssetsRaw);
     await loadRequests();
     await loadChoices();
-    checkAlerts();
     applyAccessUI();
 
     if (showToast) toast(`✓ ${allAssets.length} assets loaded`, 'success');
@@ -913,16 +1132,16 @@ window.addEventListener('beforeunload', revokeOldBlobUrls);
 // ============================================================
 function checkAlerts() {
   notifications = [];
-  if (typeof REQ_PENDING !== 'undefined' && REQ_PENDING) notifications.push({ title:`${REQ_PENDING} ${t('n_requests')}`, sub:'', color:'#00D9FF', tab:'requests' });
+  if (typeof REQ_PENDING !== 'undefined' && REQ_PENDING) notifications.push({ title:`${REQ_PENDING} ${t('n_requests')}`, sub:'', color:'#017E84', tab:'requests' });
   const damaged = allAssets.filter(d => { const v=(d.status||'').toLowerCase(); return v.includes('تالف') || v.includes('متوقف'); });
-  if (damaged.length) notifications.push({ title:`${damaged.length} ${t('assets')} ${t('n_damaged')}`, sub:'', color:'#FF3366', tab:'all' });
+  if (damaged.length) notifications.push({ title:`${damaged.length} ${t('assets')} ${t('n_damaged')}`, sub:'', color:'#D44C59', tab:'all' });
   const maint = allAssets.filter(d => (d.status || '').includes('صيان'));
-  if (maint.length) notifications.push({ title:`${maint.length} ${t('assets')} ${t('n_maint')}`, sub:'يحتاج صيانة', color:'#FFB020', tab:'all' });
+  if (maint.length) notifications.push({ title:`${maint.length} ${t('assets')} ${t('n_maint')}`, sub:'يحتاج صيانة', color:'#E99D00', tab:'all' });
   const noStatus = allAssets.filter(d => !d.status || !String(d.status).trim());
   if (noStatus.length) notifications.push({ title:`${noStatus.length} ${t('assets')} ${t('n_nostatus')}`, sub:'', color:'#60A5FA', tab:'attention' });
   const noPhoto = allAssets.filter(d => !d.photo);
-  if (noPhoto.length) notifications.push({ title:`${noPhoto.length} ${t('assets')} ${t('n_nophoto')}`, sub:'', color:'#8B5CF6', tab:'attention' });
-  if (typeof openRequestIds !== 'undefined' && openRequestIds.size) notifications.push({ title:`${openRequestIds.size} ${t('n_reserved')}`, sub:'', color:'#34D399', tab:'requests' });
+  if (noPhoto.length) notifications.push({ title:`${noPhoto.length} ${t('assets')} ${t('n_nophoto')}`, sub:'', color:'#714B67', tab:'attention' });
+  if (typeof openRequestIds !== 'undefined' && openRequestIds.size) notifications.push({ title:`${openRequestIds.size} ${t('n_reserved')}`, sub:'', color:'#28A745', tab:'requests' });
   renderNotifPanel();
 }
 
@@ -987,7 +1206,8 @@ async function loadAccess() {
     if (row) {
       const role = String(row.Role || 'viewer').toLowerCase();
       const br = String(row.Branches || '').trim();
-      const all = br === '*' || br.toLowerCase() === 'all' || role === 'admin' || br === '';
+      // Only explicit '*' / 'all' (or admin) means every branch. Blank = no branches.
+      const all = br === '*' || br.toLowerCase() === 'all' || role === 'admin';
       myAccess = { role, branches: all ? [] : br.split(',').map(x => x.trim()).filter(Boolean), all };
       return;
     }
@@ -1015,7 +1235,7 @@ function applyAccessUI() {
       blk = document.createElement('div'); blk.id = 'access-block';
       blk.style.cssText = 'position:fixed;inset:0;z-index:150;display:grid;place-items:center;background:var(--bg);padding:24px;text-align:center';
       blk.innerHTML = `<div style="max-width:440px">
-        <div style="font-size:52px">🔒</div>
+        <div style="font-size:48px;color:var(--muted)"><i class="fa fa-lock"></i></div>
         <h2 style="font-size:26px;font-weight:800;margin:12px 0">No access yet</h2>
         <p style="color:var(--muted2);font-size:16px;line-height:1.8">Your account <b>${esc(currentUser && currentUser.email || '')}</b> has not been granted access. Ask the administrator to add you.</p>
         <button class="btn btn-primary" style="margin-top:18px;font-size:15px" onclick="signOut()">Sign out</button>
@@ -1137,12 +1357,12 @@ let LANG='en';
 const T={
   en:{overview:'Overview',branches:'Branches',all:'All Assets',analytics:'Analytics',access:'Access',requests:'Requests',attention:'Needs Attention',
     refresh:'Refresh',scan:'Scan',export:'Export',signout:'Sign out',request:'Request',reserved:'Reserved',
-    incoming:'Incoming requests',myReq:'My requests',approve:'Approve',reject:'Reject',pending:'Pending',approved:'Approved',rejected:'Rejected',
+    incoming:'Incoming requests',myReq:'My requests',approve:'Approve',reject:'Reject',pending:'Pending',approved:'Approved',rejected:'Rejected',completed:'Transferred',alreadyReserved:'This item already has an open request',sameBranch:'Item is already in that branch',
     toBranch:'Requesting branch (yours)',note:'Note (optional)',send:'Send request',close:'Close',reqSent:'Request sent',noReq:'No requests yet',
     attTitle:'Items that need attention',noPhoto:'Missing photo',noPrice:'Missing price',noStatus:'Missing status',dupes:'Possible duplicates (same item in 2+ branches)',allGood:'Everything looks good!',langBtn:'العربية',brand:'Swag Group',loginTitle:'Inventory<br>Control Center',loginSub:'Sign in with your Microsoft account to access the inventory management dashboard.',loginBtn:'Continue with Microsoft',dashboard:'DASHBOARD',o_title:'Asset Overview',registry:'REGISTRY',all_title:'All Assets',br_eyebrow:'BRANCHES',all_branches_title:'All Branches',an_eyebrow:'ANALYTICS',an_title:'Asset Distribution',addAsset:'Add Asset',advFilters:'Advanced Filters',clear:'✕ Clear',view:'View',edit:'Edit',del:'Del',qr:'QR',print:'Print',delete:'Delete',s_branches:'Branches',s_types:'Asset Types',s_units:'Total Units',s_inuse:'In Use',s_value:'Total Value (SAR)',s_cats:'Categories',k_maint:'Under Maintenance',k_damaged:'Damaged',k_storage:'In Storage',k_util:'Utilization Rate',topBranches:'Top Branches by Units',viewAll:'View All →',recent:'Recent Assets',th_photo:'Photo',th_asset:'Asset',th_branch:'Branch',th_cat:'Category',th_qty:'Qty',th_status:'Status',th_model:'Model',th_color:'Color',th_amount:'Amount',th_actions:'Actions',th_id:'#',f_search:'Search',f_branch:'Branch',f_cat:'Category',f_status:'Status',f_allbranches:'All Branches',f_allcats:'All Categories',f_allstatus:'All Status',f_datefrom:'Date From',f_dateto:'Date To',f_amtmin:'Amount Min (SAR)',f_amtmax:'Amount Max (SAR)',f_color:'Color',d_branch:'Branch',d_cat:'Category',d_model:'Model',d_status:'Status',d_color:'Color',d_qty:'Quantity',d_serial:'Serial Number',d_amount:'Amount',d_total:'Total Value',d_invoice:'Invoice',d_pdate:'Purchase Date',d_created:'Created',d_name:'Asset Name',d_notes:'Notes',d_title:'Asset Details',a_addtitle:'Add New Asset',a_edittitle:'Edit Asset',a_branch:'Branch *',a_selbranch:'Select Branch',a_name:'Asset Name *',a_cat:'Category *',a_selcat:'Select Category',a_model:'Model',a_qty:'Quantity *',a_status:'Status',a_color:'Color',a_amount:'Purchase Amount (SAR)',a_invoice:'Invoice #',a_photo:'Photo',a_notes:'Notes',a_upload:'Click or drag to upload photo',a_namePh:'e.g. Cashier Computer',a_notesPh:'Optional notes...',save:'Save Changes',assets:'assets',n_maint:'need maintenance',n_damaged:'stopped / damaged',n_nostatus:'missing status',n_nophoto:'missing photo',n_requests:'new incoming requests',n_reserved:'items reserved',n_allgood:'✅ All good!',takePhoto:'Take Photo',c_branch:'Units by Branch',c_cat:'By Category',c_status:'By Status',c_brand:'By Brand'},
   ar:{overview:'نظرة عامة',branches:'الفروع',all:'كل الأصول',analytics:'التحليلات',access:'الصلاحيات',requests:'الطلبات',attention:'بحاجة لمراجعة',
     refresh:'تحديث',scan:'مسح',export:'تصدير',signout:'خروج',request:'طلب',reserved:'محجوز',
-    incoming:'الطلبات الواردة',myReq:'طلباتي',approve:'موافقة',reject:'رفض',pending:'قيد الانتظار',approved:'تمت الموافقة',rejected:'مرفوض',
+    incoming:'الطلبات الواردة',myReq:'طلباتي',approve:'موافقة',reject:'رفض',pending:'قيد الانتظار',approved:'تمت الموافقة',rejected:'مرفوض',completed:'تم النقل',alreadyReserved:'يوجد طلب مفتوح على هذه القطعة',sameBranch:'القطعة موجودة في هذا الفرع بالفعل',
     toBranch:'الفرع الطالب (فرعك)',note:'ملاحظة (اختياري)',send:'إرسال الطلب',close:'إغلاق',reqSent:'تم إرسال الطلب',noReq:'لا توجد طلبات',
     attTitle:'قطع بحاجة لمراجعة',noPhoto:'بدون صورة',noPrice:'بدون سعر',noStatus:'بدون حالة',dupes:'تكرار محتمل (نفس القطعة في فرعين أو أكثر)',allGood:'كل شيء على ما يرام!',langBtn:'EN',brand:'مجموعة سواج',loginTitle:'مركز التحكم<br>بالمخزون',loginSub:'سجّل الدخول بحساب مايكروسوفت للوصول إلى لوحة إدارة المخزون.',loginBtn:'المتابعة عبر مايكروسوفت',dashboard:'لوحة',o_title:'نظرة عامة على الأصول',registry:'السجل',all_title:'كل الأصول',br_eyebrow:'الفروع',all_branches_title:'كل الفروع',an_eyebrow:'التحليلات',an_title:'توزيع الأصول',addAsset:'إضافة أصل',advFilters:'فلاتر متقدمة',clear:'✕ مسح',view:'عرض',edit:'تعديل',del:'حذف',qr:'QR',print:'طباعة',delete:'حذف',s_branches:'الفروع',s_types:'أنواع الأصول',s_units:'إجمالي الوحدات',s_inuse:'قيد الاستخدام',s_value:'القيمة الإجمالية (ريال)',s_cats:'الفئات',k_maint:'تحت الصيانة',k_damaged:'تالف',k_storage:'في المخزن',k_util:'معدل الاستخدام',topBranches:'أعلى الفروع بالوحدات',viewAll:'عرض الكل →',recent:'أحدث الأصول',th_photo:'صورة',th_asset:'الأصل',th_branch:'الفرع',th_cat:'الفئة',th_qty:'الكمية',th_status:'الحالة',th_model:'الموديل',th_color:'اللون',th_amount:'المبلغ',th_actions:'إجراءات',th_id:'#',f_search:'بحث',f_branch:'الفرع',f_cat:'الفئة',f_status:'الحالة',f_allbranches:'كل الفروع',f_allcats:'كل الفئات',f_allstatus:'كل الحالات',f_datefrom:'من تاريخ',f_dateto:'إلى تاريخ',f_amtmin:'أقل مبلغ (ريال)',f_amtmax:'أعلى مبلغ (ريال)',f_color:'اللون',d_branch:'الفرع',d_cat:'الفئة',d_model:'الموديل',d_status:'الحالة',d_color:'اللون',d_qty:'الكمية',d_serial:'الرقم التسلسلي',d_amount:'المبلغ',d_total:'القيمة الإجمالية',d_invoice:'الفاتورة',d_pdate:'تاريخ الشراء',d_created:'تاريخ الإضافة',d_name:'اسم الأصل',d_notes:'ملاحظات',d_title:'تفاصيل الأصل',a_addtitle:'إضافة أصل جديد',a_edittitle:'تعديل الأصل',a_branch:'الفرع *',a_selbranch:'اختر الفرع',a_name:'اسم الأصل *',a_cat:'الفئة *',a_selcat:'اختر الفئة',a_model:'الموديل',a_qty:'الكمية *',a_status:'الحالة',a_color:'اللون',a_amount:'مبلغ الشراء (ريال)',a_invoice:'رقم الفاتورة',a_photo:'صورة',a_notes:'ملاحظات',a_upload:'اضغط أو اسحب لرفع صورة',a_namePh:'مثال: كمبيوتر الكاشير',a_notesPh:'ملاحظات اختيارية...',save:'حفظ التغييرات',assets:'أصول',n_maint:'بحاجة لصيانة',n_damaged:'متوقفة / تالفة',n_nostatus:'بدون حالة',n_nophoto:'بدون صورة',n_requests:'طلبات واردة جديدة',n_reserved:'قطع محجوزة',n_allgood:'✅ كل شيء على ما يرام',takePhoto:'التقاط صورة',c_branch:'الوحدات حسب الفرع',c_cat:'حسب الفئة',c_status:'حسب الحالة',c_brand:'حسب الماركة'}
 };
@@ -1175,6 +1395,7 @@ async function loadRequests(){
 function isReserved(id){ return openRequestIds.has(parseInt(id,10)); }
 function openRequest(id){
   const d=allAssetsRaw.find(x=>x.id===id); if(!d)return;
+  if(isReserved(id)){ toast(t('alreadyReserved'),'warn'); return; }
   document.getElementById('req-asset-id').value=id;
   document.getElementById('req-asset-name').textContent=d.name+' — '+d.branch+' (x'+d.qty+')';
   const mine=myAccess.branches&&myAccess.branches.length?myAccess.branches:[];
@@ -1192,6 +1413,9 @@ async function submitRequest(){
   const to=document.getElementById('req-to-branch').value;
   const note=document.getElementById('req-note').value||'';
   const who=currentUser?currentUser.email:'';
+  if(!to){ toast('Select a branch','error'); return; }
+  if(to===d.branch){ toast(t('sameBranch'),'error'); return; }
+  if(isReserved(id)){ toast(t('alreadyReserved'),'warn'); return; }
   try{
     await getToken();
     const items=await getRequestItems();
@@ -1203,16 +1427,35 @@ async function submitRequest(){
     else{ const tx=await r.text(); toast('Failed: '+tx.slice(0,120),'error'); }
   }catch(e){ toast(e.message,'error'); }
 }
+function canActOnRequest(r){
+  if(!canEdit()) return false;
+  return myAccess.all || myBranchesForRequests().includes(String(r.FromBranch||''));
+}
 async function setRequestStatus(reqId,status){
+  const req=(REQUESTS||[]).find(r=>r.ID===reqId);
+  if(!req){ toast('Request not found','error'); return; }
+  if(!canActOnRequest(req)){ toast('You do not have permission to approve/reject','error'); return; }
+  if(String(req.Status)!=='Pending'){ toast('Request already handled','warn'); return; }
   try{
     await getToken(); const digest=await _digest(); const et=await getEntityTypeT(REQUESTS_LIST);
+    // Approve = actually transfer the asset to the requesting branch, then close the request
+    if(status==='Approved'){
+      if(!BRANCH_KEY){ toast('Branch column not detected — cannot transfer','error'); return; }
+      const assetId=parseInt(req.AssetId,10);
+      if(!confirm(`Transfer "${req.AssetName}" from ${req.FromBranch} to ${req.ToBranch}?`)) return;
+      const aet=await getEntityType();
+      const ab={"__metadata":{"type":aet}}; ab[BRANCH_KEY]=req.ToBranch;
+      const ar=await fetch(`${CONFIG.SITE}/_api/web/lists(guid'${CONFIG.LIST_ID}')/items(${assetId})`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},body:JSON.stringify(ab)});
+      if(!(ar.ok||ar.status===204)){ const tx=await ar.text(); toast('Transfer failed: '+tx.slice(0,120),'error'); return; }
+      status='Completed';
+    }
     const r=await fetch(`${CONFIG.SITE}/_api/web/lists/getbytitle('${REQUESTS_LIST}')/items(${reqId})`,{method:'POST',headers:{'Accept':'application/json;odata=verbose','Content-Type':'application/json;odata=verbose','Authorization':`Bearer ${accessToken}`,'X-RequestDigest':digest,'IF-MATCH':'*','X-HTTP-Method':'MERGE'},body:JSON.stringify({"__metadata":{"type":et},Status:status})});
-    if(r.ok||r.status===204){ toast(status,'success'); await loadRequests(); buildNav(); renderRequests(); }
+    if(r.ok||r.status===204){ toast(t(status.toLowerCase()),'success'); if(status==='Completed'){ await loadAll(); } else { await loadRequests(); buildNav(); checkAlerts(); } if(currentTab==='requests') renderRequests(); }
     else{ const tx=await r.text(); toast('Failed: '+tx.slice(0,120),'error'); }
   }catch(e){ toast(e.message,'error'); }
 }
 function reqBadge(st){
-  const m={Pending:'b-fix',Approved:'b-use',Rejected:'b-stop'};
+  const m={Pending:'b-fix',Approved:'b-use',Completed:'b-use',Rejected:'b-stop'};
   return `<span class="badge ${m[st]||'b-def'}"><span class="b-dot"></span>${esc(t(st.toLowerCase())||st)}</span>`;
 }
 function renderRequests(){
@@ -1244,9 +1487,9 @@ function renderRequests(){
       ${actions||''}
     </div>`;
   host.innerHTML=`<div style="margin-bottom:14px"><h2 style="font-size:24px;font-weight:800">${t('requests')}</h2></div>
-    <div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:6px 0 10px;font-family:'Space Mono','Cairo',monospace">${t('incoming')}</div>
-    ${incoming.length?incoming.map(r=>card(r, String(r.Status)==='Pending'?`<div style="display:flex;gap:6px"><button class="btn btn-primary" style="padding:7px 12px" onclick="setRequestStatus(${r.ID},'Approved')">${t('approve')}</button><button class="btn btn-danger" style="padding:7px 12px" onclick="setRequestStatus(${r.ID},'Rejected')">${t('reject')}</button></div>`:'')).join(''):`<div class="empty" style="padding:24px;color:var(--muted)">${t('noReq')}</div>`}
-    <div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:22px 0 10px;font-family:'Space Mono','Cairo',monospace">${t('myReq')}</div>
+    <div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:6px 0 10px;font-family:'Roboto','Cairo',sans-serif">${t('incoming')}</div>
+    ${incoming.length?incoming.map(r=>card(r, String(r.Status)==='Pending'&&canActOnRequest(r)?`<div style="display:flex;gap:6px"><button class="btn btn-primary" style="padding:7px 12px" onclick="setRequestStatus(${r.ID},'Approved')">${t('approve')}</button><button class="btn btn-danger" style="padding:7px 12px" onclick="setRequestStatus(${r.ID},'Rejected')">${t('reject')}</button></div>`:'')).join(''):`<div class="empty" style="padding:24px;color:var(--muted)">${t('noReq')}</div>`}
+    <div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:22px 0 10px;font-family:'Roboto','Cairo',sans-serif">${t('myReq')}</div>
     ${myReq.length?myReq.map(r=>card(r,'')).join(''):`<div class="empty" style="padding:24px;color:var(--muted)">${t('noReq')}</div>`}`;
 }
 
@@ -1263,7 +1506,7 @@ function renderAttention(){
   const sec=(title,arr,extra)=>`<div style="margin-bottom:22px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
         <h4 style="font-size:16px;font-weight:800;margin:0">${title}</h4>
-        <span style="font-family:'Space Mono','Cairo',monospace;font-size:12px;color:var(--muted);background:var(--surface3);padding:1px 9px;border-radius:10px">${arr.length}</span>
+        <span style="font-family:'Roboto','Cairo',sans-serif;font-size:12px;color:var(--muted);background:var(--surface3);padding:1px 9px;border-radius:10px">${arr.length}</span>
       </div>
       ${arr.length?(extra||arr.map(d=>`<div class="table-card" style="padding:10px 14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer" onclick="openDetail(${d.id})"><span style="font-weight:700">${esc(d.name)}</span><span style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</span></div>`).join('')):`<div style="color:var(--muted);font-size:13px">${t('allGood')}</div>`}
     </div>`;
@@ -1271,7 +1514,7 @@ function renderAttention(){
       <div style="font-weight:800;margin-bottom:6px">${esc(arr[0].name)}</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px">${arr.map(d=>`<span class="cat-chip" style="cursor:pointer" onclick="openDetail(${d.id})">${esc(d.branch)} · #${d.id}</span>`).join('')}</div>
     </div>`).join('');
-  host.innerHTML=`<div style="margin-bottom:16px"><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono','Cairo',monospace;text-transform:uppercase;margin-bottom:5px">QUALITY</div><h2 style="font-size:22px;font-weight:800">${t('attTitle')}</h2></div>
+  host.innerHTML=`<div style="margin-bottom:16px"><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Cairo',sans-serif;text-transform:uppercase;margin-bottom:5px">QUALITY</div><h2 style="font-size:22px;font-weight:800">${t('attTitle')}</h2></div>
     ${sec(t('noPhoto'),noPhoto)}
     ${sec(t('noPrice'),noPrice)}
     ${sec(t('noStatus'),noStatus)}
@@ -1300,12 +1543,12 @@ document.addEventListener('click', function(e){
 }, true);
 
 const NAV = [
-  ['overview','Overview','<svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>'],
-  ['branches','Branches','<svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg>'],
-  ['all','All Assets','<svg class="ico" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg>'],
-  ['requests','Requests','<svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'],
-  ['attention','Needs Attention','<svg class="ico" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>'],
-  ['analytics','Analytics','<svg class="ico" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>']
+  ['overview','Overview','<i class="fa fa-tachometer"></i>'],
+  ['branches','Branches','<i class="fa fa-building-o"></i>'],
+  ['all','All Assets','<i class="fa fa-list"></i>'],
+  ['requests','Requests','<i class="fa fa-exchange"></i>'],
+  ['attention','Needs Attention','<i class="fa fa-exclamation-triangle"></i>'],
+  ['analytics','Analytics','<i class="fa fa-line-chart"></i>']
 ];
 
 function buildNav() {
@@ -1317,7 +1560,7 @@ function buildNav() {
     return `<div class="nav-item${currentTab===id?' active':''}" onclick="switchTab('${id}')">${svg} ${t(id)}<span class="nav-badge">${cnt}</span></div>`;
   }).join('');
   if (isAdmin()) {
-    const svg = '<svg class="ico" viewBox="0 0 24 24"><path d="M12 1l9 4v6c0 5-3.8 9.4-9 11-5.2-1.6-9-6-9-11V5z"/><path d="M9 12l2 2 4-4"/></svg>';
+    const svg = '<i class="fa fa-shield"></i>';
     html += `<div class="nav-item${currentTab==='access'?' active':''}" onclick="switchTab('access')">${svg} ${t('access')}</div>`;
   }
   document.getElementById('nav-bar').innerHTML = html;
@@ -1362,19 +1605,19 @@ function renderOverview() {
 
   document.getElementById('page-overview').innerHTML = `
     <div class="topbar">
-      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono','Cairo',monospace;text-transform:uppercase;margin-bottom:5px">${t('dashboard')}</div><div style="font-size:20px;font-weight:700">${t('o_title')}</div></div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Cairo',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('dashboard')}</div><div style="font-size:20px;font-weight:700">${t('o_title')}</div></div>
       <div class="topbar-actions">
-        <button class="btn btn-ghost" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> ${t('export')}</button>
-        <button class="btn btn-primary" data-edit-only onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> ${t('addAsset')}</button>
+        <button class="btn btn-ghost" onclick="exportExcel()"><i class="fa fa-download"></i> ${t('export')}</button>
+        <button class="btn btn-primary" data-edit-only onclick="openAddAsset()"><i class="fa fa-plus"></i> ${t('addAsset')}</button>
       </div>
     </div>
     <div class="stats-grid">
-      <div class="stat-card c1" onclick="switchTab('branches')"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18"/></svg></div><div class="stat-num" id="s-br">0</div><div class="stat-label">${t('s_branches')}</div></div>
-      <div class="stat-card c2" onclick="switchTab('all')"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/></svg></div><div class="stat-num" id="s-ty">0</div><div class="stat-label">${t('s_types')}</div></div>
-      <div class="stat-card c3"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4zM4 7v10l8 4 8-4V7"/></svg></div><div class="stat-num" id="s-un">0</div><div class="stat-label">${t('s_units')}</div></div>
-      <div class="stat-card c4"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div><div class="stat-num" id="s-iu">0</div><div class="stat-label">${t('s_inuse')}</div></div>
-      <div class="stat-card c5"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9h4a2 2 0 0 1 0 4H9"/></svg></div><div class="stat-num" id="s-va">0</div><div class="stat-label">${t('s_value')}</div></div>
-      <div class="stat-card c6"><div class="stat-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div><div class="stat-num" id="s-ca">0</div><div class="stat-label">${t('s_cats')}</div></div>
+      <div class="stat-card c1" onclick="switchTab('branches')"><div class="stat-icon"><i class="fa fa-building-o"></i></div><div class="stat-num" id="s-br">0</div><div class="stat-label">${t('s_branches')}</div></div>
+      <div class="stat-card c2" onclick="switchTab('all')"><div class="stat-icon"><i class="fa fa-tags"></i></div><div class="stat-num" id="s-ty">0</div><div class="stat-label">${t('s_types')}</div></div>
+      <div class="stat-card c3"><div class="stat-icon"><i class="fa fa-cubes"></i></div><div class="stat-num" id="s-un">0</div><div class="stat-label">${t('s_units')}</div></div>
+      <div class="stat-card c4"><div class="stat-icon"><i class="fa fa-check-circle"></i></div><div class="stat-num" id="s-iu">0</div><div class="stat-label">${t('s_inuse')}</div></div>
+      <div class="stat-card c5"><div class="stat-icon"><i class="fa fa-money"></i></div><div class="stat-num" id="s-va">0</div><div class="stat-label">${t('s_value')}</div></div>
+      <div class="stat-card c6"><div class="stat-icon"><i class="fa fa-th-list"></i></div><div class="stat-num" id="s-ca">0</div><div class="stat-label">${t('s_cats')}</div></div>
     </div>
     <div class="kpi-strip">
       <div class="kpi-box"><div class="kpi-val">${allAssets.filter(d => (d.status||'').includes('صيان')).reduce((s,d)=>s+d.qty,0)}</div><div class="kpi-lbl">${t('k_maint')}</div></div>
@@ -1397,7 +1640,7 @@ function renderOverview() {
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
-          <td style="font-family:'Space Mono','Cairo',monospace">${d.qty}</td>
+          <td style="font-family:'Roboto','Cairo',sans-serif">${d.qty}</td>
           <td>${statusBadge(d.status)}</td>
           <td><button class="view-btn" onclick="openDetail(${d.id})">${t('view')}</button></td>
         </tr>`).join('')}</tbody>
@@ -1430,13 +1673,13 @@ function statusBadge(s) {
 // ============================================================
 function renderBranchCard(name, a) {
   const cats = Object.entries(a.cats).sort((x, y) => y[1] - x[1]).slice(0, 3);
-  return `<div class="branch-card" onclick="openBranch('${esc(name)}')">
+  return `<div class="branch-card" data-b="${esc(name)}" onclick="openBranch(this.dataset.b)">
     <div class="branch-qty"><b>${a.units}</b><span>units</span></div>
     <span class="brand-badge" style="background:${brandColor(a.brand)}">${esc(a.brand)}</span>
     <h3>${esc(name)}</h3>${barcode(name)}
     <div class="branch-footer">
       <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(c)} · ${k}</span>`).join('')}</div>
-      <span style="font-family:'Space Mono','Cairo',monospace;font-size:11px;color:var(--muted)">${a.types} types</span>
+      <span style="font-family:'Roboto','Cairo',sans-serif;font-size:11px;color:var(--muted)">${a.types} types</span>
     </div>
   </div>`;
 }
@@ -1452,10 +1695,10 @@ function renderBranches() {
     .filter(n => !branchSearchQ || n.toLowerCase().includes(branchSearchQ.toLowerCase()));
   host.innerHTML = `
     <div class="topbar">
-      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono','Cairo',monospace;text-transform:uppercase;margin-bottom:5px">${t('br_eyebrow')}</div><div style="font-size:20px;font-weight:700">${t('all_branches_title')}</div></div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Cairo',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('br_eyebrow')}</div><div style="font-size:20px;font-weight:700">${t('all_branches_title')}</div></div>
       <div class="filter-row" style="margin:0">
-        <input class="flt-input" placeholder="Search branches…" oninput="branchSearchQ=this.value;renderBranches()" value="${esc(branchSearchQ)}" style="min-width:200px"/>
-        <button class="btn btn-primary" data-edit-only onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> ${t('addAsset')}</button>
+        <input class="flt-input" id="br-search" placeholder="Search branches…" oninput="branchSearchQ=this.value;debounceRender('br',renderBranches,'br-search')" value="${esc(branchSearchQ)}" style="min-width:200px"/>
+        <button class="btn btn-primary" data-edit-only onclick="openAddAsset()"><i class="fa fa-plus"></i> ${t('addAsset')}</button>
       </div>
     </div>
     <div class="branch-grid">${names.map(n => renderBranchCard(n, agg[n])).join('') || '<div class="empty">No branches found</div>'}</div>`;
@@ -1482,7 +1725,7 @@ function renderBranchDetail(host) {
 
   host.innerHTML = `
     <button class="back-btn" onclick="activeBranch=null;renderBranches()">
-      <svg class="ico" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> All Branches
+      <i class="fa fa-chevron-left"></i> All Branches
     </button>
     <div class="bdetail-header">
       <div class="l">
@@ -1498,11 +1741,11 @@ function renderBranchDetail(host) {
       </div>
     </div>
     <div class="filter-row" style="margin-bottom:14px">
-      <input class="flt-input" placeholder="Search assets…" oninput="assetSearchQ=this.value;renderBranchDetail(document.getElementById('page-branches'))" value="${esc(assetSearchQ)}" style="min-width:220px"/>
+      <input class="flt-input" id="bd-search" placeholder="Search assets…" oninput="assetSearchQ=this.value;debounceRender('bd',()=>renderBranchDetail(document.getElementById('page-branches')),'bd-search')" value="${esc(assetSearchQ)}" style="min-width:220px"/>
     </div>
     <div class="pills">${catList.map(c => {
       const n = c === 'All' ? all.length : all.filter(d => d.category===c).length;
-      return `<button class="pill${activeCat===c?' active':''}" onclick="activeCat='${esc(c)}';renderBranchDetail(document.getElementById('page-branches'))">${esc(c)}<span class="n">${n}</span></button>`;
+      return `<button class="pill${activeCat===c?' active':''}" data-c="${esc(c)}" onclick="activeCat=this.dataset.c;renderBranchDetail(document.getElementById('page-branches'))">${esc(c)}<span class="n">${n}</span></button>`;
     }).join('')}</div>
     ${Object.keys(groups).length ? Object.entries(groups).map(([cat, arr]) => {
       const u = arr.reduce((s, d) => s+d.qty, 0);
@@ -1518,18 +1761,20 @@ function renderBranchDetail(host) {
 // ============================================================
 function assetIcon(cat, name) {
   const n = (name||'') + (cat||'');
-  if (n.includes('كاشير')||n.includes('كمبيوتر')) return '<path d="M3 5h18v11H3z"/><path d="M8 21h8M12 16v5"/>';
-  if (n.includes('لابتوب')) return '<path d="M4 5h16v10H4z"/><path d="M2 19h20l-2-2H4z"/>';
-  if (n.includes('شاشة')) return '<path d="M3 4h18v12H3z"/><path d="M9 20h6M12 16v4"/>';
-  if (n.includes('طابعة')) return '<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>';
-  if (n.includes('كرسي')) return '<path d="M6 18v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6"/><path d="M6 21v-3M18 21v-3M4 12h16"/>';
-  if (n.includes('كاميرا')) return '<path d="M2 7h13l3 3v7H2z"/><circle cx="9" cy="13" r="3"/><path d="M18 9l4-2v9l-4-2"/>';
-  if (n.includes('طاولة')||n.includes('أثاث')) return '<path d="M3 7h18M5 7v13M19 7v13M3 13h18"/>';
-  return '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/>';
+  if (n.includes('لابتوب')) return 'fa-laptop';
+  if (n.includes('كاشير')||n.includes('كمبيوتر')||n.includes('شاشة')) return 'fa-desktop';
+  if (n.includes('طابعة')) return 'fa-print';
+  if (n.includes('كرسي')||n.includes('كراسي')) return 'fa-wheelchair-alt';
+  if (n.includes('كاميرا')||n.includes('كاميرات')) return 'fa-video-camera';
+  if (n.includes('جوال')||n.includes('هاتف')) return 'fa-mobile';
+  if (n.includes('طاولة')||n.includes('طاولات')||n.includes('أثاث')||n.includes('اثاث')||n.includes('مكتب')) return 'fa-archive';
+  if (n.includes('الكترونيات')) return 'fa-plug';
+  if (n.includes('ديكور')) return 'fa-paint-brush';
+  return 'fa-cube';
 }
 
 function renderAssetCard(d) {
-  const ic = `<svg viewBox="0 0 24 24" style="width:44px;height:44px;stroke:var(--muted);fill:none;stroke-width:1.5">${assetIcon(d.category,d.name)}</svg>`;
+  const ic = `<i class="fa ${assetIcon(d.category,d.name)}" style="font-size:42px;color:var(--muted)"></i>`;
   const imgHtml = d.photo
     ? `<img src="${BLANK}" alt="" class="sp-img" data-src="${esc(d.photo)}" data-fb="${encodeURIComponent('<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">'+ic+'</div>')}" style="width:100%;height:100%;object-fit:cover"/>`
     : `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">${ic}</div>`;
@@ -1556,8 +1801,7 @@ function renderAssetCard(d) {
 // FIX: filter state stored in _filterState object, not DOM reads
 // FIX: search debounced to prevent rebuild on every keypress
 // ============================================================
-function renderAll() {
-  const host = document.getElementById('page-all');
+function getFilteredRows() {
   let rows = allAssets.slice();
 
   const { q, branch: sc, cat: scat, status: sst, dateFrom, dateTo, amtMin, amtMax, color: colorFlt } = _filterState;
@@ -1577,6 +1821,13 @@ function renderAll() {
     const v = i => k==='id'?i.id:k==='name'?i.name:k==='branch'?i.branch:k==='cat'?i.category:k==='qty'?i.qty:k==='amount'?i.amount:i.status;
     rows.sort((a, b) => (v(a)<v(b)?-1:v(a)>v(b)?1:0) * dir);
   }
+  return rows;
+}
+
+function renderAll() {
+  const host = document.getElementById('page-all');
+  const rows = getFilteredRows();
+  const { q, branch: sc, cat: scat, status: sst, dateFrom, dateTo, amtMin, amtMax, color: colorFlt } = _filterState;
 
   const total = Math.ceil(rows.length / PAGE_SIZE);
   const sliced = rows.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
@@ -1585,12 +1836,12 @@ function renderAll() {
 
   host.innerHTML = `
     <div class="topbar">
-      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono','Cairo',monospace;text-transform:uppercase;margin-bottom:5px">${t('registry')}</div><div style="font-size:20px;font-weight:700">${t('all_title')}</div></div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Cairo',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('registry')}</div><div style="font-size:20px;font-weight:700">${t('all_title')}</div></div>
       <div class="topbar-actions">
-        <button class="btn btn-ghost" onclick="toggleAdvFilters()"><svg class="ico" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg> ${t('advFilters')}</button>
+        <button class="btn btn-ghost" onclick="toggleAdvFilters()"><i class="fa fa-filter"></i> ${t('advFilters')}</button>
         <button class="btn btn-ghost" onclick="clearAllFilters()">${t('clear')}</button>
-        <button class="btn btn-ghost" onclick="exportExcel()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg> ${t('export')}</button>
-        <button class="btn btn-primary" data-edit-only onclick="openAddAsset()"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> ${t('addAsset')}</button>
+        <button class="btn btn-ghost" onclick="exportExcel()"><i class="fa fa-download"></i> ${t('export')}</button>
+        <button class="btn btn-primary" data-edit-only onclick="openAddAsset()"><i class="fa fa-plus"></i> ${t('addAsset')}</button>
       </div>
     </div>
     <div class="filter-row">
@@ -1617,16 +1868,16 @@ function renderAll() {
         </select></div>
     </div>
     <div class="adv-filter-panel${advFiltersOpen?' open':''}" id="adv-filter-panel">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'Space Mono','Cairo',monospace">${t('advFilters')}</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'Roboto','Cairo',sans-serif">${t('advFilters')}</div>
       <div class="adv-filter-grid">
-        <div class="flt-group"><div class="flt-label">${t('f_datefrom')}</div><input type="date" class="flt-input" id="adv-date-from" onchange="_filterState.dateFrom=this.value;currentPage=1;renderAll()" value="${dateFrom}"/></div>
-        <div class="flt-group"><div class="flt-label">${t('f_dateto')}</div><input type="date" class="flt-input" id="adv-date-to" onchange="_filterState.dateTo=this.value;currentPage=1;renderAll()" value="${dateTo}"/></div>
-        <div class="flt-group"><div class="flt-label">${t('f_amtmin')}</div><input type="number" class="flt-input" id="adv-amt-min" placeholder="0" oninput="_filterState.amtMin=this.value;currentPage=1;renderAll()" value="${amtMin}"/></div>
-        <div class="flt-group"><div class="flt-label">${t('f_amtmax')}</div><input type="number" class="flt-input" id="adv-amt-max" placeholder="99999" oninput="_filterState.amtMax=this.value;currentPage=1;renderAll()" value="${amtMax}"/></div>
-        <div class="flt-group"><div class="flt-label">${t('f_color')}</div><input class="flt-input" id="adv-color" placeholder="ابيض, اسود…" oninput="_filterState.color=this.value;currentPage=1;renderAll()" value="${colorFlt}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('f_datefrom')}</div><input type="date" class="flt-input" id="adv-date-from" onchange="_filterState.dateFrom=this.value;currentPage=1;renderAll()" value="${esc(dateFrom)}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('f_dateto')}</div><input type="date" class="flt-input" id="adv-date-to" onchange="_filterState.dateTo=this.value;currentPage=1;renderAll()" value="${esc(dateTo)}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('f_amtmin')}</div><input type="number" class="flt-input" id="adv-amt-min" placeholder="0" oninput="_filterState.amtMin=this.value;currentPage=1;debounceRender('amin',renderAll,'adv-amt-min')" value="${esc(amtMin)}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('f_amtmax')}</div><input type="number" class="flt-input" id="adv-amt-max" placeholder="99999" oninput="_filterState.amtMax=this.value;currentPage=1;debounceRender('amax',renderAll,'adv-amt-max')" value="${esc(amtMax)}"/></div>
+        <div class="flt-group"><div class="flt-label">${t('f_color')}</div><input class="flt-input" id="adv-color" placeholder="ابيض, اسود…" oninput="_filterState.color=this.value;currentPage=1;debounceRender('clr',renderAll,'adv-color')" value="${esc(colorFlt)}"/></div>
       </div>
     </div>
-    <div style="font-size:11px;color:var(--muted);font-family:'Space Mono','Cairo',monospace;margin-bottom:10px">${rows.length} result${rows.length!==1?'s':''} found</div>
+    <div style="font-size:11px;color:var(--muted);font-family:'Roboto','Cairo',sans-serif;margin-bottom:10px">${rows.length} result${rows.length!==1?'s':''} found</div>
     <div class="table-card">
       <div class="tbl-wrap"><table>
         <thead><tr>
@@ -1648,16 +1899,16 @@ function renderAll() {
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
-          <td style="font-family:'Space Mono','Cairo',monospace;font-size:11px;color:var(--muted2)">${esc(d.model||'—')}</td>
-          <td style="font-family:'Space Mono','Cairo',monospace;font-weight:700">${d.qty}</td>
+          <td style="font-family:'Roboto','Cairo',sans-serif;font-size:11px;color:var(--muted2)">${esc(d.model||'—')}</td>
+          <td style="font-family:'Roboto','Cairo',sans-serif;font-weight:700">${d.qty}</td>
           <td>${statusBadge(d.status)}</td>
           <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'—')}</td>
-          <td style="font-family:'Space Mono','Cairo',monospace;font-size:12px">${fmtMoney(d.amount)}</td>
+          <td style="font-family:'Roboto','Cairo',sans-serif;font-size:12px">${fmtMoney(d.amount)}</td>
           <td>
             <div style="display:flex;gap:4px;flex-wrap:wrap">
               <button class="view-btn" onclick="openDetail(${d.id})">${t('view')}</button>
               <button class="view-btn" data-edit-only style="border-color:rgba(0,217,255,.3);color:var(--accent)" onclick="openEditAsset(${d.id})">${t('edit')}</button>
-              <button class="view-btn" data-edit-only style="border-color:rgba(255,51,102,.3);color:var(--red)" onclick="askDeleteAsset(${d.id},'${esc(d.name)}')">${t('del')}</button>
+              <button class="view-btn" data-edit-only style="border-color:rgba(255,51,102,.3);color:var(--red)" onclick="askDeleteAsset(${d.id})">${t('del')}</button>
               <button class="view-btn" style="border-color:rgba(139,92,246,.3);color:var(--purple)" onclick="openQR(${d.id})">${t('qr')}</button>
             </div>
           </td>
@@ -1700,9 +1951,11 @@ function buildPagination(total) {
   if (total <= 1) return '';
   let h = '';
   if (currentPage > 1) h += `<button class="pg-btn" onclick="goPg(${currentPage-1})">←</button>`;
-  const max = Math.min(total, 7);
-  for (let i = 1; i <= max; i++) h += `<button class="pg-btn${i===currentPage?' active':''}" onclick="goPg(${i})">${i}</button>`;
-  if (total > 7) h += `<span style="color:var(--muted);font-size:11px">... ${total}</span>`;
+  const from = Math.max(1, Math.min(currentPage - 3, total - 6));
+  const to = Math.min(total, from + 6);
+  if (from > 1) h += `<button class="pg-btn" onclick="goPg(1)">1</button>${from > 2 ? '<span style="color:var(--muted);font-size:11px">…</span>' : ''}`;
+  for (let i = from; i <= to; i++) h += `<button class="pg-btn${i===currentPage?' active':''}" onclick="goPg(${i})">${i}</button>`;
+  if (to < total) h += `${to < total - 1 ? '<span style="color:var(--muted);font-size:11px">…</span>' : ''}<button class="pg-btn" onclick="goPg(${total})">${total}</button>`;
   if (currentPage < total) h += `<button class="pg-btn" onclick="goPg(${currentPage+1})">→</button>`;
   return h;
 }
@@ -1714,7 +1967,7 @@ function clearAllFilters() { _filterState = { q:'',branch:'',cat:'',status:'',da
 // ============================================================
 function renderAnalytics() {
   document.getElementById('page-analytics').innerHTML = `
-    <div class="topbar"><div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Space Mono','Cairo',monospace;text-transform:uppercase;margin-bottom:5px">${t('an_eyebrow')}</div><div style="font-size:20px;font-weight:700">${t('an_title')}</div></div></div>
+    <div class="topbar"><div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Cairo',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('an_eyebrow')}</div><div style="font-size:20px;font-weight:700">${t('an_title')}</div></div></div>
     <div class="charts-grid">
       <div class="chart-card"><div class="chart-header">${t('c_branch')}</div><div class="chart-wrap"><canvas id="c-branch"></canvas></div></div>
       <div class="chart-card"><div class="chart-header">${t('c_cat')}</div><div class="chart-wrap"><canvas id="c-cat"></canvas></div></div>
@@ -1726,14 +1979,14 @@ function renderAnalytics() {
   const css = getComputedStyle(document.documentElement);
   const txt = css.getPropertyValue('--muted2').trim();
   const grid = css.getPropertyValue('--border').trim();
-  Chart.defaults.color = txt; Chart.defaults.font.family = "'Space Grotesk','Cairo'";
+  Chart.defaults.color = txt; Chart.defaults.font.family = "'Roboto','Cairo'";
   const agg = getBranchAgg(), bn = Object.keys(agg);
   chartInstances.branch = new Chart(document.getElementById('c-branch'), { type:'bar', data:{labels:bn,datasets:[{data:bn.map(b=>agg[b].units),backgroundColor:bn.map(b=>brandColor(agg[b].brand)),borderRadius:6}]}, options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false} });
   const cats = {}; allAssets.forEach(d => cats[d.category] = (cats[d.category]||0)+d.qty); const ck = Object.keys(cats);
   chartInstances.cat = new Chart(document.getElementById('c-cat'), { type:'doughnut', data:{labels:ck,datasets:[{data:ck.map(c=>cats[c]),backgroundColor:ck.map(catColor),borderWidth:0}]}, options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false} });
   const st = {}; allAssets.forEach(d => { const k = d.status||'غير محدد'; st[k]=(st[k]||0)+d.qty; }); const sk = Object.keys(st);
-  const stc = {'قيد الاستخدام':'#00FF88','متاح':'#00D9FF','تالف':'#FF3366','يحتاج صيانة':'#FFB020','مخزن':'#60A5FA'};
-  chartInstances.status = new Chart(document.getElementById('c-status'), { type:'doughnut', data:{labels:sk,datasets:[{data:sk.map(k=>st[k]),backgroundColor:sk.map(k=>stc[k]||'#8B5CF6'),borderWidth:0}]}, options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false} });
+  const stc = {'قيد الاستخدام':'#28A745','متاح':'#017E84','تالف':'#D44C59','يحتاج صيانة':'#E99D00','مخزن':'#60A5FA'};
+  chartInstances.status = new Chart(document.getElementById('c-status'), { type:'doughnut', data:{labels:sk,datasets:[{data:sk.map(k=>st[k]),backgroundColor:sk.map(k=>stc[k]||'#714B67'),borderWidth:0}]}, options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},cutout:'60%',maintainAspectRatio:false} });
   const br = {}; allAssets.forEach(d => br[d.brand]=(br[d.brand]||0)+d.qty); const bk = Object.keys(br);
   chartInstances.brand = new Chart(document.getElementById('c-brand'), { type:'bar', data:{labels:bk,datasets:[{data:bk.map(b=>br[b]),backgroundColor:bk.map(brandColor),borderRadius:6}]}, options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false} });
 }
@@ -1746,12 +1999,12 @@ function openDetail(id) {
   const rows = [
     [t('d_branch'),d.branch],[t('d_cat'),d.category],[t('d_model'),d.model||'—'],
     [t('d_status'),d.status||'—'],[t('d_color'),d.color||'—'],[t('d_qty'),d.qty],
-    [t('d_serial'),d.serialNumber||'—'],
+    ...(d.serialNumber ? [[t('d_serial'),d.serialNumber]] : []),
     [t('d_amount'),fmtMoney(d.amount)],[t('d_total'),fmtMoney(d.amount*d.qty)],
     [t('d_invoice'),d.invoice||'—'],[t('d_pdate'),fmtDate(d.purchaseDate)],[t('d_created'),fmtDate(d.created)]
   ];
   document.getElementById('modal-detail-body').innerHTML = `
-    ${isReserved(id)?`<div style="background:rgba(255,176,32,.12);border:1px solid rgba(255,176,32,.3);color:var(--amber);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-weight:700;font-size:13px">\u26A0 ${t('reserved')}</div>`:''}
+    ${isReserved(id)?`<div style="background:rgba(255,176,32,.12);border:1px solid rgba(255,176,32,.3);color:var(--amber);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-weight:700;font-size:13px"><i class="fa fa-exclamation-triangle"></i> ${t('reserved')}</div>`:''}
     ${d.photo ? `<img src="${BLANK}" data-src="${esc(d.photo)}" style="width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:16px"/>` : ''}
     <div class="modal-info">
       <div class="modal-info-row"><span class="modal-info-label">${t('d_name')}</span><span class="modal-info-val">${esc(d.name)}</span></div>
@@ -1761,11 +2014,11 @@ function openDetail(id) {
   hydrateImages(document.getElementById('modal-detail-body'));
   document.getElementById('modal-detail-footer').innerHTML = `
     <button class="btn btn-ghost" onclick="closeModal('modal-detail')">${t('close')}</button>
-    <button class="btn btn-primary" onclick="openRequest(${id})"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${t('request')}</button>
-    <button class="btn btn-warn" data-edit-only onclick="closeModal('modal-detail');openEditAsset(${id})"><svg class="ico" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> ${t('edit')}</button>
-    <button class="btn btn-ghost" onclick="openQR(${id})"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3M17 17h3M14 17h.01M17 14h.01"/></svg> ${t('qr')}</button>
-    <button class="btn btn-ghost" onclick="printAsset(${id})"><svg class="ico" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></svg> Print</button>
-    <button class="btn btn-danger" data-edit-only onclick="closeModal('modal-detail');askDeleteAsset(${id},'${esc(d.name)}')"><svg class="ico" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg> ${t('delete')}</button>`;
+    <button class="btn btn-primary" onclick="openRequest(${id})"><i class="fa fa-exchange"></i> ${t('request')}</button>
+    <button class="btn btn-warn" data-edit-only onclick="closeModal('modal-detail');openEditAsset(${id})"><i class="fa fa-pencil"></i> ${t('edit')}</button>
+    <button class="btn btn-ghost" onclick="openQR(${id})"><i class="fa fa-qrcode"></i> ${t('qr')}</button>
+    <button class="btn btn-ghost" onclick="printAsset(${id})"><i class="fa fa-print"></i> Print</button>
+    <button class="btn btn-danger" data-edit-only onclick="closeModal('modal-detail');askDeleteAsset(${id})"><i class="fa fa-trash"></i> ${t('delete')}</button>`;
   document.getElementById('modal-detail').classList.add('open');
   applyRoleUI();
 }
@@ -1787,7 +2040,7 @@ function openAddAsset() {
   if(!canEdit()){toast('You do not have permission to add','error');return;}
   uploadedPhotoBase64 = null; resetPhotoPreview();
   document.getElementById('edit-asset-id').value = '';
-  document.getElementById('add-modal-title').innerHTML = '<svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> '+t('a_addtitle'); applyI18n();
+  document.getElementById('add-modal-title').innerHTML = '<i class="fa fa-plus"></i> '+t('a_addtitle'); applyI18n();
   document.getElementById('add-submit-label').textContent = t('addAsset');
   ['add-name','add-model','add-invoice','add-notes'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('add-qty').value = '1';
@@ -1803,7 +2056,7 @@ function openEditAsset(id) {
   const d = allAssets.find(x => x.id === id); if (!d) return;
   uploadedPhotoBase64 = null; resetPhotoPreview();
   document.getElementById('edit-asset-id').value = id;
-  document.getElementById('add-modal-title').innerHTML = '<svg class="ico" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> '+t('a_edittitle')+' #' + id;
+  document.getElementById('add-modal-title').innerHTML = '<i class="fa fa-pencil"></i> '+t('a_edittitle')+' #' + id;
   document.getElementById('add-submit-label').textContent = t('save');
   populateBranchSelect();
   setTimeout(() => {
@@ -1823,9 +2076,10 @@ function openEditAsset(id) {
       prev.src = _imgCache[d.photo] || BLANK;
       if (_imgCache[d.photo]) { prev.style.display = 'block'; if (ph) ph.style.display = 'none'; }
       else {
-        // load with auth
+        // set data-src FIRST, then hydrate (observer does not watch attribute changes)
+        prev.dataset.src = d.photo; delete prev.dataset.hy;
+        prev.style.display = 'block'; if (ph) ph.style.display = 'none';
         hydrateImages(document.getElementById('photo-drop'));
-        prev.dataset.src = d.photo; prev.style.display = 'block'; if (ph) ph.style.display = 'none';
       }
     }
   }, 50);
@@ -1854,7 +2108,7 @@ function resetPhotoPreview() {
   const prev = document.getElementById('photo-preview');
   const ph = document.getElementById('photo-placeholder');
   const fi = document.getElementById('photo-file-input');
-  if (prev) { prev.src=''; prev.style.display='none'; }
+  if (prev) { prev.src=''; prev.style.display='none'; delete prev.dataset.src; delete prev.dataset.hy; }
   if (ph) ph.style.display = 'block';
   if (fi) fi.value = '';
 }
@@ -1885,13 +2139,14 @@ async function submitAsset() {
       AssetType: category,
       Status: document.getElementById('add-status').value,
       Color: document.getElementById('add-color').value,
-      SerialNumber: String(qty),     // qty is stored in the SerialNumber column (الكمية) — list has no 'Quantity' field
+      // qty goes to the 'Quantity' column when it exists; otherwise legacy SerialNumber storage
       Model: document.getElementById('add-model').value,
       PurchasePrice: parseFloat(document.getElementById('add-amount').value) || 0,
       OrderNumber: document.getElementById('add-invoice').value,
       ConditionNotes: document.getElementById('add-notes').value,
     };
     if (BRANCH_KEY) body[BRANCH_KEY] = branch;
+    if (HAS_QTY_FIELD) body.Quantity = qty; else body.SerialNumber = String(qty);
 
     let itemId = editId;
     if (isEdit) {
@@ -1973,8 +2228,9 @@ async function setDevicePhoto(itemId, up, etype, digest) {
 // ============================================================
 // DELETE ASSET
 // ============================================================
-function askDeleteAsset(id, name) {
+function askDeleteAsset(id) {
   if(!canEdit()){toast('You do not have permission to delete','error');return;}
+  const name = (allAssets.find(x => x.id === id) || {}).name || ('#' + id);
   pendingDeleteId = id;
   document.getElementById('confirm-delete-msg').textContent = `"${name}" will be permanently removed from SharePoint. This cannot be undone.`;
   document.getElementById('confirm-delete').classList.add('open');
@@ -2091,7 +2347,8 @@ function printAsset(id) {
 // FIX: fmtDate safely handles undefined purchaseDate
 // ============================================================
 function exportExcel() {
-  const data = allAssets.map(d => ({
+  const src = currentTab === 'all' ? getFilteredRows() : allAssets;
+  const data = src.map(d => ({
     ID: d.id,
     Name: d.name,
     Branch: d.branch,
@@ -2119,9 +2376,19 @@ function exportExcel() {
 // ============================================================
 // THEME
 // ============================================================
+function applyThemeIcon() {
+  document.querySelectorAll('.theme-btn').forEach(b => b.innerHTML = currentTheme === 'dark' ? '<i class="fa fa-sun-o"></i>' : '<i class="fa fa-moon-o"></i>');
+}
+function initTheme() {
+  try { currentTheme = localStorage.getItem('inv_theme') || 'light'; } catch (_) { currentTheme = 'light'; }
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  applyThemeIcon();
+}
 function toggleTheme() {
   currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', currentTheme);
+  try { localStorage.setItem('inv_theme', currentTheme); } catch (_) {}
+  applyThemeIcon();
   if (currentTab === 'analytics') setTimeout(renderAnalytics, 100);
 }
 
@@ -2184,8 +2451,8 @@ document.addEventListener('keydown', e => {
 function toast(msg, type = 'info') {
   const wrap = document.getElementById('toast-wrap'); if (!wrap) return;
   const el = document.createElement('div'); el.className = `toast ${type}`;
-  const icons = { success:'✅', error:'❌', info:'ℹ️', warn:'⚠️' };  // FIX: clean warn icon
-  el.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${esc(msg)}</span>`;
+  const icons = { success:'fa-check-circle', error:'fa-times-circle', info:'fa-info-circle', warn:'fa-exclamation-triangle' };
+  el.innerHTML = `<i class="fa ${icons[type]||icons.info} toast-ico"></i><span>${esc(msg)}</span>`;
   wrap.appendChild(el);
   setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(), 300); }, 3500);
 }
@@ -2268,7 +2535,12 @@ function initLoginThree(){
 }
 
 window.onload = async () => {
-  initLoginThree(); initMagnetLogo(); initMagnetButton(); initHandwriting();
+  initTheme();
+  setInterval(() => {
+    const tm = document.getElementById('live-time');
+    if (tm && !tm.textContent.includes('Sync') && tm.textContent !== 'Error') tm.textContent = new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
+  }, 60000);
+
   await initMsal();
 
   if (!msalInstance) return;
@@ -2282,10 +2554,6 @@ window.onload = async () => {
     try { await getToken(); showDashboard(); await loadAll(); return; }
     catch (e) { console.log('Silent fail:', e); }
   }
-  setInterval(() => {
-    const tm = document.getElementById('live-time');
-    if (tm && !tm.textContent.includes('Sync')) tm.textContent = new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
-  }, 60000);
 };
 
 // language init
