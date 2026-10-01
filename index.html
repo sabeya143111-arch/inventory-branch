@@ -9,6 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23714B67'/%3E%3Cpath d='M32 14 50 23v19L32 51 14 42V23z' fill='none' stroke='%23fff' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M14 23l18 9 18-9M32 32v19' fill='none' stroke='%2301A9B0' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E"/>
@@ -283,7 +284,6 @@ tr:hover td{background:rgba(0,217,255,.02)}
 /* ===== ANIMATED LOGIN (maintenance-style) ===== */
 #login-three{position:fixed;inset:0;z-index:0;pointer-events:none}
 #login-three canvas{display:block}
-[data-theme="light"] #login-three{display:none}
 .login-screen{z-index:10}
 .login-card{box-shadow:0 0 90px rgba(255,60,80,.12),0 0 80px rgba(139,92,246,.08),0 40px 80px rgba(0,0,0,.45)}
 [data-theme="light"] .login-card{box-shadow:0 20px 60px rgba(20,40,80,.12),0 0 0 1px rgba(0,0,0,.02)}
@@ -327,7 +327,8 @@ tr:hover td{background:rgba(0,217,255,.02)}
   --navbar:#262A36;--navbar-hover:#2E3240;--card-glass:#262A36;
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:14px;font-weight:400;color:var(--text);background:var(--bg)}
-body::before,body::after{display:none}
+body::before{background:radial-gradient(circle,rgba(113,75,103,.08),transparent 70%)}
+body::after{background:radial-gradient(circle,rgba(1,126,132,.07),transparent 70%)}
 .fa{line-height:1}
 
 /* ---------- Navbar (Odoo 17/18: light bar, menus inline, icon systray) ---------- */
@@ -382,7 +383,7 @@ body::before,body::after{display:none}
 
 /* ---------- Buttons ---------- */
 .btn{border-radius:4px;padding:6px 14px;font-size:14px;font-weight:500;box-shadow:none;gap:6px;line-height:1.5}
-.btn:hover{transform:none !important}
+.btn:hover{transform:translateY(-1px)}
 .btn-primary{background:var(--accent);color:#fff;box-shadow:none}
 .btn-primary:hover{background:var(--accent2);box-shadow:none}
 .btn-ghost,.btn-warn{background:var(--surface3);border:none;color:var(--text)}
@@ -396,8 +397,8 @@ body::before,body::after{display:none}
 
 /* ---------- Stat cards (dashboard kanban) ---------- */
 .stats-grid{gap:12px}
-.stat-card{border-radius:6px;border:1px solid var(--border2);padding:14px 16px 14px 18px;display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center}
-.stat-card:hover{transform:none;box-shadow:0 4px 12px rgba(0,0,0,.08);border-color:var(--border2)}
+.stat-card{transition:transform .2s,box-shadow .2s;border-radius:6px;border:1px solid var(--border2);padding:14px 16px 14px 18px;display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 4px 12px rgba(0,0,0,.08);border-color:var(--border2)}
 .stat-card::after{top:0;bottom:0;left:0;right:auto;width:3px;height:auto}
 .stat-icon{grid-row:1/3;width:42px;height:42px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0}
 .c1 .stat-icon{background:rgba(113,75,103,.12);color:var(--accent)}
@@ -447,7 +448,7 @@ tr:hover td{background:var(--surface2)}
 
 /* ---------- Kanban cards ---------- */
 .branch-card,.asset-card{border-radius:6px;border:1px solid var(--border2);box-shadow:none}
-.branch-card:hover,.asset-card:hover{transform:none;border-color:var(--border2);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.branch-card:hover,.asset-card:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:0 4px 12px rgba(0,0,0,.1)}
 .branch-card{padding:14px 16px}
 .branch-card h3{font-size:16px;font-weight:500;margin:10px 0 4px}
 .branch-qty b{font-size:22px;font-weight:500;color:var(--accent)}
@@ -468,7 +469,7 @@ tr:hover td{background:var(--surface2)}
 
 /* ---------- Dialogs ---------- */
 .modal-overlay,.confirm-overlay{background:rgba(0,0,0,.5);backdrop-filter:none}
-.modal{border-radius:8px;border:none;padding:20px 24px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:none}
+.modal{border-radius:8px;border:none;padding:20px 24px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:modalIn .25s ease}
 .modal-title{margin:-20px -24px 18px;padding:14px 24px;border-bottom:1px solid var(--border2);font-size:18px;font-weight:500}
 .modal-title .fa{color:var(--accent)}
 .modal-footer{margin:20px -24px -20px;padding:12px 24px;border-top:1px solid var(--border2);justify-content:flex-start}
@@ -481,7 +482,7 @@ tr:hover td{background:var(--surface2)}
 .modal-info-label{font-weight:700;color:var(--text);font-size:14px}
 .modal-info-val,[data-theme="dark"] .modal-info-val{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-weight:400;font-size:14px;color:var(--text) !important}
 .photo-upload-area{border-radius:4px;border:1px dashed var(--border2)}
-.confirm-box{border-radius:4px;animation:none}
+.confirm-box{border-radius:6px;animation:modalIn .2s ease}
 
 /* ---------- Pager ---------- */
 .pg-btn{border-radius:4px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:13px}
@@ -499,16 +500,15 @@ tr:hover td{background:var(--surface2)}
 .spin{border-top-color:var(--accent)}
 
 /* ---------- Login (Odoo web/login) ---------- */
-#login-three,.logo-particle,.magnet-particle,.login-divider{display:none !important}
-.login-screen{background:var(--bg)}
-.login-card{background:var(--surface);backdrop-filter:none;border:1px solid var(--border2);border-radius:8px;padding:36px 32px 32px;max-width:380px;box-shadow:0 8px 24px rgba(0,0,0,.08) !important;animation:none}
+.login-divider{display:none !important}
+.login-card{background:var(--surface);backdrop-filter:none;border:1px solid var(--border2);border-radius:8px;padding:36px 32px 32px;max-width:380px;box-shadow:0 8px 24px rgba(0,0,0,.08) !important;animation:loginFade .6s ease}
 .login-logo-wrap{padding:0;margin:0 auto 18px}
 [data-theme="light"] .swag-logo-big{filter:invert(1)}
 .login-brand{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;color:var(--muted);letter-spacing:.5px;font-size:13px;text-transform:none;margin-bottom:6px}
 .login-sub{font-size:14px;color:var(--muted2);margin-bottom:22px}
 .login-btn{border-radius:4px;background:var(--accent);border:none;color:#fff;font-size:14px;font-weight:500;padding:10px}
 .login-btn:hover{background:var(--accent2);border:none;box-shadow:none}
-.login-btn::before,.login-btn::after{display:none}
+.login-btn::before,.login-btn::after{background:linear-gradient(to right,transparent,rgba(255,255,255,.9),transparent)}
 .login-card .hdr-btn{color:var(--text);background:var(--surface3)}
 .login-card .hdr-btn:hover{background:var(--border2);color:var(--text)}
 
@@ -2409,7 +2409,7 @@ function toggleTheme() {
   currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', currentTheme);
   try { localStorage.setItem('inv_theme', currentTheme); } catch (_) {}
-  applyThemeIcon();
+  applyThemeIcon(); syncLoginBlend();
   if (currentTab === 'analytics') setTimeout(renderAnalytics, 100);
 }
 
@@ -2528,13 +2528,18 @@ function initHandwriting(){
   const path=document.getElementById('hw-path'); if(!path) return;
   const len=path.getTotalLength(); path.style.setProperty('--hw-len',len); path.style.strokeDasharray=len;
 }
+function syncLoginBlend(){
+  if(typeof THREE==='undefined'||!window._loginMats) return;
+  const mode=currentTheme==='dark'?THREE.AdditiveBlending:THREE.NormalBlending;
+  window._loginMats.forEach(m=>{m.blending=mode;m.needsUpdate=true;});
+}
 function initLoginThree(){
   const mount=document.getElementById('login-three');
   if(!mount||typeof THREE==='undefined'||mount.dataset.init) return; mount.dataset.init='1';
   const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-  renderer.setSize(window.innerWidth,window.innerHeight); renderer.setClearColor(0x000000,1);
+  renderer.setSize(window.innerWidth,window.innerHeight); renderer.setClearColor(0x000000,0);
   mount.appendChild(renderer.domElement);
   const curve=new THREE.QuadraticBezierCurve3(new THREE.Vector3(-15,-4,0),new THREE.Vector3(2,3,0),new THREE.Vector3(18,0.8,0));
   const tubeGeometry=new THREE.TubeGeometry(curve,200,0.8,32,false);
@@ -2546,6 +2551,7 @@ function initLoginThree(){
   const glowFrag='uniform float time; varying vec2 vUv; void main(){ vec3 c1=vec3(1.0,0.3,0.2); vec3 c2=vec3(0.6,0.2,0.8); vec3 col=mix(c1,c2,vUv.x); float glow=1.0-abs(vUv.y-0.5)*2.0; glow=pow(glow,4.0); float fade=1.0; if(vUv.x>0.85){ fade=1.0-smoothstep(0.85,1.0,vUv.x);} float pulse=sin(time*1.5)*0.05+0.95; gl_FragColor=vec4(col*glow*pulse*fade, glow*fade*0.3); }';
   const glowMaterial=new THREE.ShaderMaterial({vertexShader,fragmentShader:glowFrag,uniforms:{time:{value:0}},transparent:true,blending:THREE.AdditiveBlending,side:THREE.DoubleSide});
   const glowLayer=new THREE.Mesh(glowGeometry,glowMaterial); scene.add(glowLayer);
+  window._loginMats=[material,glowMaterial]; syncLoginBlend();
   camera.position.z=7; camera.position.y=-0.8;
   function animate(){ requestAnimationFrame(animate); if(document.hidden) return;
     const t=Date.now()*0.001; material.uniforms.time.value=t; glowMaterial.uniforms.time.value=t;
@@ -2561,7 +2567,7 @@ window.onload = async () => {
     const tm = document.getElementById('live-time');
     if (tm && !tm.textContent.includes('Sync') && tm.textContent !== 'Error') tm.textContent = new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
   }, 60000);
-
+  initLoginThree(); initMagnetLogo(); initMagnetButton(); initHandwriting();
   await initMsal();
 
   if (!msalInstance) return;
