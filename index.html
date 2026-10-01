@@ -9,14 +9,14 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23714B67'/%3E%3Cpath d='M32 14 50 23v19L32 51 14 42V23z' fill='none' stroke='%23fff' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M14 23l18 9 18-9M32 32v19' fill='none' stroke='%2301A9B0' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E"/>
 <style>
 :root{--bg:#080A0E;--surface:#0E1117;--surface2:#151B24;--surface3:#1C2433;--border:#1E2A3A;--border2:#243040;--text:#F6F9FF;--muted:#8DA2BF;--muted2:#AEC0D6;--accent:#00D9FF;--accent2:#0099CC;--green:#00FF88;--red:#FF3366;--amber:#FFB020;--purple:#8B5CF6;--gold:#D4A84B;--card-glass:rgba(14,17,23,0.70)}
 [data-theme="light"]{--bg:#F4F6FB;--surface:#FFFFFF;--surface2:#F0F3F9;--surface3:#E4E9F2;--border:#DCE3EF;--border2:#C9D3E3;--text:#16202E;--muted:#6A7A92;--muted2:#4A5A72;--accent:#0091B5;--accent2:#006C88;--green:#00A35A;--red:#D6224A;--amber:#C77F00;--purple:#6D44C9;--gold:#A9821F;--card-glass:rgba(255,255,255,0.82)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Roboto','Noto Sans Arabic',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;font-size:16px;font-weight:500}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;font-size:16px;font-weight:500}
 body::before{content:'';position:fixed;top:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(0,217,255,.04),transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.04),transparent 70%);pointer-events:none;z-index:0}
 
@@ -26,18 +26,18 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 @keyframes loginFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .login-logo{width:70px;height:70px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 12px 30px rgba(0,217,255,.3)}
 .login-logo svg{width:36px;height:36px;stroke:#080A0E;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.login-brand{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.login-brand{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
 .login-title{font-size:26px;font-weight:300;margin-bottom:8px}
 .login-divider{width:40px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto 24px}
 .login-sub{font-size:14px;color:var(--muted2);margin-bottom:34px;line-height:1.7}
-.login-btn{width:100%;padding:15px;background:rgba(0,217,255,.05);border:1px solid rgba(0,217,255,.2);border-radius:9999px;color:var(--text);font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s}
+.login-btn{width:100%;padding:15px;background:rgba(0,217,255,.05);border:1px solid rgba(0,217,255,.2);border-radius:9999px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .3s}
 .login-btn:hover{background:rgba(0,217,255,.1);border-color:rgba(0,217,255,.45);box-shadow:0 0 24px rgba(0,217,255,.12)}
 [data-theme="light"] .login-logo svg{stroke:#fff}
 
 /* HEADER */
 .header{background:var(--card-glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
 .header-left{display:flex;align-items:center;gap:16px}
-.header-brand{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px}
+.header-brand{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px}
 .header-sep{width:1px;height:20px;background:var(--border2)}
 .header-sub{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:livePulse 2s infinite;box-shadow:0 0 8px var(--green)}
@@ -45,19 +45,19 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .user-chip{background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:6px 14px 6px 10px;font-size:13px;color:var(--muted2);display:flex;align-items:center;gap:8px}
 .user-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#080A0E}
-.hdr-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;color:var(--muted2);font-size:12px;font-family:'Roboto','Noto Sans Arabic',sans-serif;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+.hdr-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;color:var(--muted2);font-size:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
 .hdr-btn:hover{border-color:var(--accent);color:var(--accent)}
 .hdr-btn.danger:hover{border-color:var(--red);color:var(--red)}
 
 /* NOTIFICATION */
-.notif-bell{position:relative;cursor:pointer;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;display:flex;align-items:center;gap:6px;color:var(--muted2);font-size:12px;font-family:'Roboto','Noto Sans Arabic',sans-serif;transition:all .15s}
+.notif-bell{position:relative;cursor:pointer;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;display:flex;align-items:center;gap:6px;color:var(--muted2);font-size:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;transition:all .15s}
 .notif-bell:hover{border-color:var(--amber);color:var(--amber)}
-.notif-count{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px;font-family:'Roboto','Noto Sans Arabic',sans-serif;min-width:16px;text-align:center;display:none}
+.notif-count{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;min-width:16px;text-align:center;display:none}
 .notif-count.show{display:block}
 .notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:340px;background:var(--surface);border:1px solid var(--border2);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.4);z-index:200;display:none;overflow:hidden}
 .notif-panel.open{display:block;animation:panelIn .2s ease}
 @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.notif-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;font-family:'Roboto','Noto Sans Arabic',sans-serif}
+.notif-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif}
 .notif-item{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;font-size:12px;cursor:pointer;transition:background .15s}
 .notif-item:hover{background:var(--surface2)}
 .notif-dot2{width:8px;height:8px;border-radius:50%;flex:none;margin-top:4px}
@@ -71,7 +71,7 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .nav::-webkit-scrollbar{display:none}
 .nav-item{padding:14px 18px;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:7px}
 .nav-item:hover{color:var(--text)}.nav-item.active{color:var(--accent);border-bottom-color:var(--accent)}
-.nav-badge{background:var(--surface3);border-radius:10px;padding:1px 7px;font-size:11px;font-family:'Roboto','Noto Sans Arabic',sans-serif;color:var(--muted2)}
+.nav-badge{background:var(--surface3);border-radius:10px;padding:1px 7px;font-size:11px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;color:var(--muted2)}
 .nav-item.active .nav-badge{background:rgba(0,217,255,.1);color:var(--accent)}
 
 /* MAIN */
@@ -82,7 +82,7 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
 
 /* BUTTONS */
-.btn{padding:10px 18px;border-radius:10px;font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;border:none}
+.btn{padding:10px 18px;border-radius:10px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;border:none}
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#080A0E;box-shadow:0 4px 15px rgba(0,217,255,.2)}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,217,255,.35)}
 .btn-ghost{background:var(--surface2);border:1px solid var(--border2);color:var(--muted2)}
@@ -100,7 +100,7 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .stat-card.c1::after{background:var(--accent)}.stat-card.c2::after{background:var(--amber)}.stat-card.c3::after{background:var(--purple)}.stat-card.c4::after{background:var(--green)}.stat-card.c5::after{background:var(--gold)}.stat-card.c6::after{background:var(--red)}
 .stat-card:hover{transform:translateY(-3px);border-color:var(--border2)}
 .stat-icon{font-size:20px;margin-bottom:14px}
-.stat-num{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:34px;font-weight:800;line-height:1;margin-bottom:6px}
+.stat-num{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:34px;font-weight:800;line-height:1;margin-bottom:6px}
 .c1 .stat-num{color:var(--accent)}.c2 .stat-num{color:var(--amber)}.c3 .stat-num{color:var(--purple)}.c4 .stat-num{color:var(--green)}.c5 .stat-num{color:var(--gold)}.c6 .stat-num{color:var(--red)}
 .stat-label{font-size:13px;color:var(--muted);font-weight:700;letter-spacing:.3px}
 
@@ -108,18 +108,18 @@ body::after{content:'';position:fixed;bottom:-200px;right:-200px;width:600px;hei
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px}
 .table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .table-title{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
-.table-count{background:var(--surface3);border-radius:20px;padding:2px 10px;font-size:11px;font-family:'Roboto','Noto Sans Arabic',sans-serif;color:var(--muted2)}
+.table-count{background:var(--surface3);border-radius:20px;padding:2px 10px;font-size:11px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;color:var(--muted2)}
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:600px}
 thead{background:var(--surface2)}
-th{padding:11px 16px;text-align:left;font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;font-family:'Roboto','Noto Sans Arabic',sans-serif}
+th{padding:11px 16px;text-align:left;font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif}
 td{padding:12px 16px;font-size:14.5px;border-top:1px solid var(--border);vertical-align:middle;font-weight:600}
 [data-theme="dark"] td{color:#FFFFFF !important}
 [data-theme="dark"] th{color:#AEBED2}
 tr:hover td{background:rgba(0,217,255,.02)}
 
 /* BADGES */
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;font-family:'Roboto','Noto Sans Arabic',sans-serif}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif}
 .b-dot{width:4px;height:4px;border-radius:50%}
 .b-use{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.2)}.b-use .b-dot{background:var(--green)}
 .b-stop{background:rgba(255,51,102,.1);color:var(--red);border:1px solid rgba(255,51,102,.2)}.b-stop .b-dot{background:var(--red)}
@@ -127,15 +127,15 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .b-store{background:rgba(96,165,250,.1);color:#60A5FA;border:1px solid rgba(96,165,250,.2)}.b-store .b-dot{background:#60A5FA}
 .b-avail{background:rgba(0,217,255,.1);color:var(--accent);border:1px solid rgba(0,217,255,.2)}.b-avail .b-dot{background:var(--accent)}
 .b-def{background:var(--surface3);color:var(--muted);border:1px solid var(--border)}
-.id-tag{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:11px;color:var(--muted2);background:var(--surface2);padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
-.view-btn{background:transparent;border:1px solid var(--border2);border-radius:7px;padding:5px 11px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'Roboto','Noto Sans Arabic',sans-serif}
+.id-tag{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:11px;color:var(--muted2);background:var(--surface2);padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
+.view-btn{background:transparent;border:1px solid var(--border2);border-radius:7px;padding:5px 11px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif}
 .view-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* FILTERS */
 .filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end}
 .flt-group{display:flex;flex-direction:column;gap:5px}
-.flt-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-family:'Roboto','Noto Sans Arabic',sans-serif}
-.flt-input,.flt-select{background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:14px;font-weight:600;padding:8px 12px;outline:none;min-width:130px;transition:border-color .15s}
+.flt-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif}
+.flt-input,.flt-select{background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:14px;font-weight:600;padding:8px 12px;outline:none;min-width:130px;transition:border-color .15s}
 .flt-input:focus,.flt-select:focus{border-color:var(--accent)}
 .flt-select option{background:var(--surface2)}
 .adv-filter-panel{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:18px;margin-bottom:16px;display:none}
@@ -146,10 +146,10 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .branch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:20px}
 .branch-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .branch-card:hover{transform:translateY(-4px);border-color:rgba(0,217,255,.4);box-shadow:0 20px 40px rgba(0,0,0,.3)}
-.brand-badge{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;color:#fff;display:inline-block}
+.brand-badge{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;color:#fff;display:inline-block}
 .branch-card h3{font-size:20px;font-weight:800;margin:12px 0 4px}
 .branch-qty{position:absolute;top:16px;right:18px;text-align:right}
-.branch-qty b{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:28px;font-weight:700;color:var(--accent);display:block;line-height:1}
+.branch-qty b{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:28px;font-weight:700;color:var(--accent);display:block;line-height:1}
 .branch-qty span{font-size:10px;color:var(--muted)}
 .branch-footer{border-top:1px dashed var(--border);padding-top:12px;margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .cat-chips{display:flex;gap:5px;flex-wrap:wrap}
@@ -163,21 +163,21 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .asset-card:hover{transform:translateY(-3px);border-color:rgba(0,217,255,.4);box-shadow:0 15px 35px rgba(0,0,0,.25)}
 .asset-thumb{height:130px;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .asset-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.asset-qty-pill{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.65);color:#fff;font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;backdrop-filter:blur(4px);z-index:2}
+.asset-qty-pill{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.65);color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px;backdrop-filter:blur(4px);z-index:2}
 .asset-body{padding:12px 14px 14px}
 .asset-body h5{font-size:17px;font-weight:800;margin-bottom:3px}
-.asset-model{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.asset-model{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .asset-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .color-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.2);flex:none}
 
 /* CHARTS */
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px}
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}
-.chart-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;font-family:'Roboto','Noto Sans Arabic',sans-serif}
+.chart-header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif}
 .chart-wrap{position:relative;height:200px}
 .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .kpi-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
-.kpi-val{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:26px;font-weight:700;color:var(--accent);line-height:1}
+.kpi-val{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:26px;font-weight:700;color:var(--accent);line-height:1}
 .kpi-lbl{font-size:11px;color:var(--muted);margin-top:8px;font-weight:700}
 [data-theme="dark"] .kpi-lbl{color:#B7C3D4}
 
@@ -191,14 +191,14 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .modal-info-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
 .modal-info-row:last-child{border:none}
 .modal-info-label{color:var(--muted);font-weight:700}
-.modal-info-val{font-weight:700;font-size:15px;font-family:'Roboto','Noto Sans Arabic',sans-serif;text-align:right;max-width:60%}
+.modal-info-val{font-weight:700;font-size:15px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;text-align:right;max-width:60%}
 [data-theme="dark"] .modal-info-val{color:#fff !important}
 .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
-.modal-input,.modal-select,.modal-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:15px;font-weight:600;padding:11px 14px;outline:none;margin-bottom:14px;transition:border-color .15s}
+.modal-input,.modal-select,.modal-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:15px;font-weight:600;padding:11px 14px;outline:none;margin-bottom:14px;transition:border-color .15s}
 .modal-input:focus,.modal-select:focus,.modal-textarea:focus{border-color:var(--accent)}
 .modal-textarea{resize:none;height:80px}
 .modal-select option{background:var(--surface2)}
-.modal-label{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:'Roboto','Noto Sans Arabic',sans-serif}
+.modal-label{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif}
 .modal-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .modal-grid2 .modal-input,.modal-grid2 .modal-select{margin-bottom:0}
 
@@ -223,7 +223,7 @@ tr:hover td{background:rgba(0,217,255,.02)}
 @keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 .toast.success{border-color:rgba(0,255,136,.3)}.toast.error{border-color:rgba(255,51,102,.3)}.toast.info{border-color:rgba(0,217,255,.3)}.toast.warn{border-color:rgba(255,176,32,.3)}
 .pagination{display:flex;gap:6px;justify-content:center;margin-top:14px;align-items:center}
-.pg-btn{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--muted);font-size:12px;padding:6px 12px;cursor:pointer;font-family:'Roboto','Noto Sans Arabic',sans-serif;transition:all .15s}
+.pg-btn{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--muted);font-size:12px;padding:6px 12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;transition:all .15s}
 .pg-btn.active{background:var(--accent);border-color:var(--accent);color:#080A0E;font-weight:700}
 .pg-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
 .bdetail-header{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 24px;margin-bottom:20px;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
@@ -231,18 +231,18 @@ tr:hover td{background:rgba(0,217,255,.02)}
 .bdetail-header h2{font-size:25px;font-weight:800;margin:8px 0 4px}
 .mini-stats{display:flex;gap:24px;flex-wrap:wrap}
 .ms-item{text-align:center}
-.ms-item b{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:24px;font-weight:800;color:var(--accent);display:block}
+.ms-item b{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:24px;font-weight:800;color:var(--accent);display:block}
 .ms-item span{font-size:11px;color:var(--muted)}
 .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .pill{background:var(--surface);border:1px solid var(--border);color:var(--muted2);font-size:12px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:all .15s}
 .pill:hover{border-color:var(--accent)}.pill.active{background:var(--accent);border-color:var(--accent);color:#04222a}
-.pill .n{font-family:'Roboto','Noto Sans Arabic',sans-serif;opacity:.6;margin-left:5px;font-size:11px}
+.pill .n{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;opacity:.6;margin-left:5px;font-size:11px}
 .cat-section{margin-bottom:24px}
 .cat-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .cat-dot{width:10px;height:10px;border-radius:3px;flex:none}
 .cat-bar h4{font-size:14px;font-weight:700;margin:0}
-.cat-bar .meta{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:12px;color:var(--muted);margin-left:auto}
-.back-btn{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);font-size:13px;font-weight:500;padding:8px 14px;border-radius:10px;cursor:pointer;margin-bottom:16px;transition:all .15s;font-family:'Roboto','Noto Sans Arabic',sans-serif}
+.cat-bar .meta{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:12px;color:var(--muted);margin-left:auto}
+.back-btn{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);color:var(--muted2);font-size:13px;font-weight:500;padding:8px 14px;border-radius:10px;cursor:pointer;margin-bottom:16px;transition:all .15s;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif}
 .back-btn:hover{border-color:var(--accent);color:var(--accent)}
 .photo-thumb{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--border)}
 .confirm-overlay{position:fixed;inset:0;background:rgba(8,10,14,.9);backdrop-filter:blur(6px);z-index:300;display:none;align-items:center;justify-content:center}
@@ -317,50 +317,68 @@ tr:hover td{background:rgba(0,217,255,.02)}
   --border:#E7E9ED;--border2:#D8DADD;--text:#374151;--muted:#6B7280;--muted2:#4B5563;
   --accent:#714B67;--accent2:#5E3F56;--link:#017E84;
   --green:#28A745;--red:#D44C59;--amber:#E99D00;--purple:#017E84;--gold:#B98D2F;
-  --navbar:#714B67;--navbar-hover:rgba(0,0,0,.12);--card-glass:#FFFFFF;
+  --navbar:#FFFFFF;--navbar-hover:#F3F4F6;--card-glass:#FFFFFF;
 }
 [data-theme="dark"]{
   --bg:#1E2029;--surface:#262A36;--surface2:#2E3240;--surface3:#3A3F50;
   --border:#3A3F50;--border2:#4A5065;--text:#E4E6EB;--muted:#9AA0AE;--muted2:#C0C5D0;
   --accent:#A3779B;--accent2:#8C6585;--link:#01A9B0;
   --green:#3DBE5A;--red:#E06C77;--amber:#F0B429;--purple:#01A9B0;--gold:#D4AF5A;
-  --navbar:#3B2B38;--navbar-hover:rgba(255,255,255,.08);--card-glass:#262A36;
+  --navbar:#262A36;--navbar-hover:#2E3240;--card-glass:#262A36;
 }
-body{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:14px;font-weight:400;color:var(--text);background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:14px;font-weight:400;color:var(--text);background:var(--bg)}
 body::before,body::after{display:none}
 .fa{line-height:1}
 
-/* ---------- Navbar ---------- */
-.header{background:var(--navbar);backdrop-filter:none;border-bottom:none;height:46px;padding:0 12px;box-shadow:0 1px 2px rgba(0,0,0,.15)}
-.header-left{gap:12px}
-.o-apps{color:#fff;font-size:18px;padding:8px 10px;border-radius:4px;cursor:pointer}
-.o-apps:hover{background:var(--navbar-hover)}
-.o-app-name{color:#fff;font-size:16px;font-weight:500;letter-spacing:.2px}
-.header-sep{background:rgba(255,255,255,.25)}
-.header-sub{color:rgba(255,255,255,.8);font-size:12px}
-.live-dot{background:#7FE0A0;box-shadow:none}
-.hdr-btn,.notif-bell{background:transparent;border:none;color:#fff;border-radius:4px;padding:7px 10px;font-size:13px;font-weight:400}
-.hdr-btn:hover,.notif-bell:hover,.hdr-btn.danger:hover{background:var(--navbar-hover);color:#fff;border:none}
-.user-chip{background:transparent;border:none;color:#fff;font-size:13px;padding:4px 8px}
-.user-avatar{border-radius:4px;background:#017E84;color:#fff;width:24px;height:24px;font-size:12px;font-weight:500}
-.header #global-search{background:#fff;color:#374151;border:none;border-radius:4px;height:30px !important;font-size:13px;font-weight:400}
-.notif-count{background:#D44C59;border-radius:10px;font-family:'Roboto',sans-serif}
-.notif-panel{border-radius:4px;border:1px solid var(--border2);box-shadow:0 6px 16px rgba(0,0,0,.15)}
-.notif-header{font-weight:500;font-size:14px}
-.notif-item{font-size:13px}
-
-/* ---------- Control panel / menu ---------- */
-.nav{background:var(--surface);border-bottom:1px solid var(--border2);padding:0 16px}
-.nav-item{font-size:14px;font-weight:400;color:var(--text);padding:12px 14px;border-bottom:2px solid transparent}
-.nav-item:hover{color:var(--accent);background:var(--surface2)}
-.nav-item.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
-.nav-badge{background:var(--surface3);color:var(--muted2);font-size:11px;border-radius:10px;font-weight:500}
+/* ---------- Navbar (Odoo 17/18: light bar, menus inline, icon systray) ---------- */
+.header{background:var(--navbar);color:var(--text);backdrop-filter:none;border-bottom:1px solid var(--border2);height:46px;padding:0 8px;box-shadow:none;gap:4px}
+.header-left{gap:6px;flex:none}
+.o-apps{color:var(--text);font-size:18px;padding:9px 10px;border-radius:4px;cursor:pointer}
+.o-apps:hover{background:var(--surface2)}
+.o-app-name{color:var(--text);font-size:16px;font-weight:600;padding:0 10px 0 4px}
+.header-sep{display:none}
+.header-sub{color:var(--muted);font-size:11px;padding:0 6px}
+.live-dot{background:var(--green);box-shadow:none;width:6px;height:6px}
+.header .nav{flex:1 1 auto;min-width:0;background:transparent;border:none;padding:0;height:46px;align-items:stretch}
+.nav-item{font-size:14px;font-weight:400;color:var(--text);padding:0 12px;border-bottom:none;display:flex;align-items:center;gap:6px}
+.nav-item .fa{display:none}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--surface3);color:var(--text);font-weight:500;border-bottom:none}
+.nav-badge{background:var(--accent);color:#fff;font-size:10px;border-radius:10px;font-weight:600;padding:1px 6px}
 .nav-item.active .nav-badge{background:var(--accent);color:#fff}
 .nav-badge:empty{display:none}
-.main{padding:16px 20px}
-.topbar{margin-bottom:16px}
-.topbar > div:first-child > div:last-child{font-size:20px !important;font-weight:500 !important}
-.topbar > div:first-child > div:first-child{color:var(--muted) !important;letter-spacing:.5px !important;font-size:12px !important}
+.header-right{flex:none;gap:2px;flex-wrap:nowrap}
+.hdr-btn,.notif-bell{background:transparent;border:none;color:var(--text);border-radius:4px;padding:0 10px;height:46px;font-size:14px;font-weight:400;display:flex;align-items:center}
+.hdr-btn .fa,.notif-bell .fa{font-size:16px}
+.hdr-btn span[data-i18n]{display:none}
+.hdr-btn:hover,.notif-bell:hover,.hdr-btn.danger:hover{background:var(--surface2);color:var(--text);border:none}
+#lang-btn{font-size:13px}
+.user-chip{order:99;background:transparent;border:none;padding:0 6px;cursor:default}
+#user-name{display:none}
+.user-avatar{border-radius:4px;background:#017E84;color:#fff;width:28px;height:28px;font-size:13px;font-weight:500}
+.header #global-search{background:var(--surface);color:var(--text);border:1px solid var(--border2);border-radius:4px;height:30px !important;font-size:13px;font-weight:400;margin-right:6px;min-width:0 !important;width:150px}
+@media(max-width:1350px){.header-sub{display:none}}
+.notif-count{top:6px;right:2px;background:var(--red);border-radius:10px;font-family:inherit}
+.notif-panel{border-radius:6px;border:1px solid var(--border2);box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.notif-header{font-weight:600;font-size:14px}
+.notif-item{font-size:13px}
+.header-left > div[style]{padding:2px 6px !important}
+
+/* ---------- Control panel (breadcrumb + New button + actions) ---------- */
+.main{padding:0 20px 20px;max-width:none}
+.page > .topbar:first-child{background:var(--surface);margin:0 -20px 16px;padding:10px 20px;border-bottom:1px solid var(--border2)}
+.topbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.topbar-actions{display:contents}
+.topbar > div:first-child{order:-1;margin-right:auto}
+.page > .topbar:first-child > div:first-child{margin-right:auto}
+.topbar .topbar-actions > .btn-primary{order:-2}
+.topbar .topbar-actions > .btn-ghost:first-child{margin-left:auto}
+.topbar > div:first-child > div:first-child{display:none}
+.topbar > div:first-child > div:last-child{font-size:18px !important;font-weight:500 !important;color:var(--text)}
+.topbar > .filter-row{order:1;margin:0 !important}
+.page > .back-btn:first-child{margin-top:12px}
+.page > .bdetail-header{margin-top:4px}
+.page > div:first-child:not(.topbar):not(.back-btn){margin-top:16px}
 
 /* ---------- Buttons ---------- */
 .btn{border-radius:4px;padding:6px 14px;font-size:14px;font-weight:500;box-shadow:none;gap:6px;line-height:1.5}
@@ -378,7 +396,7 @@ body::before,body::after{display:none}
 
 /* ---------- Stat cards (dashboard kanban) ---------- */
 .stats-grid{gap:12px}
-.stat-card{border-radius:4px;border:1px solid var(--border2);padding:14px 16px 14px 18px;display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center}
+.stat-card{border-radius:6px;border:1px solid var(--border2);padding:14px 16px 14px 18px;display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center}
 .stat-card:hover{transform:none;box-shadow:0 4px 12px rgba(0,0,0,.08);border-color:var(--border2)}
 .stat-card::after{top:0;bottom:0;left:0;right:auto;width:3px;height:auto}
 .stat-icon{grid-row:1/3;width:42px;height:42px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0}
@@ -388,14 +406,14 @@ body::before,body::after{display:none}
 .c4 .stat-icon{background:rgba(40,167,69,.12);color:var(--green)}
 .c5 .stat-icon{background:rgba(185,141,47,.14);color:var(--gold)}
 .c6 .stat-icon{background:rgba(212,76,89,.12);color:var(--red)}
-.stat-num{font-family:'Roboto',sans-serif;font-size:24px;font-weight:500;margin:0}
+.stat-num{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:24px;font-weight:500;margin:0}
 .stat-label{font-size:13px;font-weight:400;color:var(--muted);letter-spacing:0}
-.kpi-box{border-radius:4px;border:1px solid var(--border2);padding:12px 16px}
+.kpi-box{border-radius:6px;border:1px solid var(--border2);padding:12px 16px}
 .kpi-val{font-size:22px;font-weight:500;color:var(--accent)}
 .kpi-lbl,[data-theme="dark"] .kpi-lbl{font-size:13px;font-weight:400;color:var(--muted)}
 
 /* ---------- List view ---------- */
-.table-card{border-radius:4px;border:1px solid var(--border2);box-shadow:none}
+.table-card{border-radius:6px;border:1px solid var(--border2);box-shadow:none}
 .table-header{padding:10px 14px;border-bottom:1px solid var(--border2)}
 .table-title{font-size:15px;font-weight:500}
 .table-count{background:var(--surface3);color:var(--muted2);font-weight:500}
@@ -407,7 +425,7 @@ tr:hover td{background:var(--surface2)}
 .photo-thumb{width:40px;height:40px;border-radius:4px}
 
 /* ---------- Badges (Odoo pills) ---------- */
-.badge{border-radius:10rem;font-size:12px;font-weight:500;padding:2px 9px;border:none !important;font-family:'Roboto','Noto Sans Arabic',sans-serif}
+.badge{border-radius:10rem;font-size:12px;font-weight:500;padding:2px 9px;border:none !important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif}
 .b-dot{display:none}
 .b-use{background:rgba(40,167,69,.14);color:#1E7B34}
 .b-stop{background:rgba(212,76,89,.14);color:#B02A37}
@@ -428,7 +446,7 @@ tr:hover td{background:var(--surface2)}
 .pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
 
 /* ---------- Kanban cards ---------- */
-.branch-card,.asset-card{border-radius:4px;border:1px solid var(--border2);box-shadow:none}
+.branch-card,.asset-card{border-radius:6px;border:1px solid var(--border2);box-shadow:none}
 .branch-card:hover,.asset-card:hover{transform:none;border-color:var(--border2);box-shadow:0 4px 12px rgba(0,0,0,.1)}
 .branch-card{padding:14px 16px}
 .branch-card h3{font-size:16px;font-weight:500;margin:10px 0 4px}
@@ -438,19 +456,19 @@ tr:hover td{background:var(--surface2)}
 .branch-footer{border-top:1px solid var(--border);margin-top:10px;padding-top:10px}
 .cat-chip{border-radius:10rem;font-size:12px;font-weight:400;background:var(--surface3);border:none;color:var(--muted2)}
 .asset-thumb{background:var(--surface2);height:120px}
-.asset-qty-pill{background:var(--accent);border-radius:10rem;backdrop-filter:none;font-family:'Roboto',sans-serif;font-weight:500}
+.asset-qty-pill{background:var(--accent);border-radius:10rem;backdrop-filter:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-weight:500}
 .asset-body h5{font-size:15px;font-weight:500}
 .asset-model{font-size:12px;font-weight:400}
-.bdetail-header{border-radius:4px;border:1px solid var(--border2);padding:16px 20px}
+.bdetail-header{border-radius:6px;border:1px solid var(--border2);padding:16px 20px}
 .bdetail-header h2{font-size:22px;font-weight:500}
 .ms-item b{font-size:20px;font-weight:500;color:var(--accent)}
 .cat-bar h4{font-size:15px;font-weight:500}
-.chart-card{border-radius:4px;border:1px solid var(--border2)}
+.chart-card{border-radius:6px;border:1px solid var(--border2)}
 .chart-header{font-size:14px;font-weight:500;color:var(--text);text-transform:none;letter-spacing:0}
 
 /* ---------- Dialogs ---------- */
 .modal-overlay,.confirm-overlay{background:rgba(0,0,0,.5);backdrop-filter:none}
-.modal{border-radius:4px;border:none;padding:20px 24px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:none}
+.modal{border-radius:8px;border:none;padding:20px 24px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:none}
 .modal-title{margin:-20px -24px 18px;padding:14px 24px;border-bottom:1px solid var(--border2);font-size:18px;font-weight:500}
 .modal-title .fa{color:var(--accent)}
 .modal-footer{margin:20px -24px -20px;padding:12px 24px;border-top:1px solid var(--border2);justify-content:flex-start}
@@ -461,12 +479,12 @@ tr:hover td{background:var(--surface2)}
 .modal-info{background:transparent;padding:0;border-radius:0}
 .modal-info-row{padding:7px 0}
 .modal-info-label{font-weight:700;color:var(--text);font-size:14px}
-.modal-info-val,[data-theme="dark"] .modal-info-val{font-family:'Roboto','Noto Sans Arabic',sans-serif;font-weight:400;font-size:14px;color:var(--text) !important}
+.modal-info-val,[data-theme="dark"] .modal-info-val{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-weight:400;font-size:14px;color:var(--text) !important}
 .photo-upload-area{border-radius:4px;border:1px dashed var(--border2)}
 .confirm-box{border-radius:4px;animation:none}
 
 /* ---------- Pager ---------- */
-.pg-btn{border-radius:4px;font-family:'Roboto',sans-serif;font-size:13px}
+.pg-btn{border-radius:4px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:13px}
 .pg-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .pg-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
 
@@ -483,10 +501,10 @@ tr:hover td{background:var(--surface2)}
 /* ---------- Login (Odoo web/login) ---------- */
 #login-three,.logo-particle,.magnet-particle,.login-divider{display:none !important}
 .login-screen{background:var(--bg)}
-.login-card{background:var(--surface);backdrop-filter:none;border:1px solid var(--border2);border-radius:4px;padding:36px 32px 32px;max-width:380px;box-shadow:0 8px 24px rgba(0,0,0,.08) !important;animation:none}
+.login-card{background:var(--surface);backdrop-filter:none;border:1px solid var(--border2);border-radius:8px;padding:36px 32px 32px;max-width:380px;box-shadow:0 8px 24px rgba(0,0,0,.08) !important;animation:none}
 .login-logo-wrap{padding:0;margin:0 auto 18px}
 [data-theme="light"] .swag-logo-big{filter:invert(1)}
-.login-brand{font-family:'Roboto','Noto Sans Arabic',sans-serif;color:var(--muted);letter-spacing:.5px;font-size:13px;text-transform:none;margin-bottom:6px}
+.login-brand{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;color:var(--muted);letter-spacing:.5px;font-size:13px;text-transform:none;margin-bottom:6px}
 .login-sub{font-size:14px;color:var(--muted2);margin-bottom:22px}
 .login-btn{border-radius:4px;background:var(--accent);border:none;color:#fff;font-size:14px;font-weight:500;padding:10px}
 .login-btn:hover{background:var(--accent2);border:none;box-shadow:none}
@@ -494,12 +512,16 @@ tr:hover td{background:var(--surface2)}
 .login-card .hdr-btn{color:var(--text);background:var(--surface3)}
 .login-card .hdr-btn:hover{background:var(--border2);color:var(--text)}
 
-@media(max-width:760px){
-  .header{padding:6px 10px}
-  .o-app-name{font-size:15px}
-  .header #global-search{background:#fff}
-  .hdr-btn{background:rgba(255,255,255,.1)}
+@media(max-width:900px){
+  .header{height:auto !important;flex-wrap:wrap;padding:0 6px}
+  .header-left{flex:1 1 auto}
+  .header-right{flex-wrap:wrap}
+  .header .nav{order:3;flex:1 1 100%;overflow-x:auto;height:42px;border-top:1px solid var(--border)}
+  .hdr-btn,.notif-bell{height:42px;padding:0 9px}
+  #global-search{order:-1;flex:1 1 100% !important;margin:6px 0 !important}
+  .header-sub{display:none}
 }
+
 </style>
 </head>
 <body>
@@ -533,19 +555,18 @@ tr:hover td{background:var(--surface2)}
       <i class="fa fa-th o-apps" title="Apps"></i>
       <div style="background:#fff;border-radius:4px;padding:4px 8px;display:flex;align-items:center"><div class="header-logo"></div></div>
       <span class="o-app-name">Inventory</span>
-      <div class="header-sep"></div>
-      <div class="header-sub"><div class="live-dot"></div><span id="live-time">Live</span></div>
+      <div class="header-sub" title="Last sync"><div class="live-dot"></div><span id="live-time">Live</span></div>
     </div>
+    <div class="nav" id="nav-bar"></div>
     <div class="header-right">
-      <div class="user-chip">
+      <div class="user-chip" id="user-chip">
         <div class="user-avatar" id="user-initial">T</div>
         <span id="user-name">Loading...</span>
       </div>
-      <input id="global-search" class="flt-input" data-i18n-ph="search" placeholder="Search assets…" oninput="globalSearch(this.value)" style="min-width:160px;height:34px"/>
+      <input id="global-search" class="flt-input" data-i18n-ph="search" placeholder="Search assets…" oninput="globalSearch(this.value)"/>
       <div style="position:relative">
-        <div class="notif-bell" onclick="toggleNotifPanel()">
-          <i class="fa fa-bell"></i>
-          Alerts<span class="notif-count" id="notif-count">0</span>
+        <div class="notif-bell" title="Alerts" onclick="toggleNotifPanel()">
+          <i class="fa fa-bell"></i><span class="notif-count" id="notif-count">0</span>
         </div>
         <div class="notif-panel" id="notif-panel">
           <div class="notif-header">
@@ -555,15 +576,14 @@ tr:hover td{background:var(--surface2)}
           <div id="notif-list"><div class="notif-empty">No alerts right now</div></div>
         </div>
       </div>
-      <button class="hdr-btn" onclick="loadAll(true)"><i class="fa fa-refresh"></i> <span data-i18n="refresh">Refresh</span></button>
-      <button class="hdr-btn" onclick="openScanner()"><i class="fa fa-barcode"></i> <span data-i18n="scan">Scan</span></button>
-      <button class="hdr-btn" onclick="exportExcel()"><i class="fa fa-download"></i> <span data-i18n="export">Export</span></button>
-      <button class="hdr-btn theme-btn" onclick="toggleTheme()"><i class="fa fa-moon-o"></i></button>
+      <button class="hdr-btn" title="Refresh" onclick="loadAll(true)"><i class="fa fa-refresh"></i> <span data-i18n="refresh">Refresh</span></button>
+      <button class="hdr-btn" title="Scan" onclick="openScanner()"><i class="fa fa-barcode"></i> <span data-i18n="scan">Scan</span></button>
+      <button class="hdr-btn" title="Export" onclick="exportExcel()"><i class="fa fa-download"></i> <span data-i18n="export">Export</span></button>
+      <button class="hdr-btn theme-btn" title="Theme" onclick="toggleTheme()"><i class="fa fa-moon-o"></i></button>
       <button class="hdr-btn" id="lang-btn" onclick="toggleLang()">العربية</button>
-      <button class="hdr-btn danger" onclick="signOut()"><span data-i18n="signout">Sign out</span></button>
+      <button class="hdr-btn danger" title="Sign out" onclick="signOut()"><i class="fa fa-sign-out"></i> <span data-i18n="signout">Sign out</span></button>
     </div>
   </div>
-  <div class="nav" id="nav-bar"></div>
   <div class="main">
     <div class="page active" id="page-overview"></div>
     <div class="page" id="page-branches"></div>
@@ -871,6 +891,7 @@ function setUser(acc) {
   currentUser = { name: acc.name || acc.username, email: acc.username };
   document.getElementById('user-name').textContent = currentUser.name;
   document.getElementById('user-initial').textContent = (currentUser.name || '?').charAt(0).toUpperCase();
+  const uc = document.getElementById('user-chip'); if (uc) uc.title = currentUser.name + ' — ' + currentUser.email;
 }
 
 function showDashboard() {
@@ -1487,9 +1508,9 @@ function renderRequests(){
       ${actions||''}
     </div>`;
   host.innerHTML=`<div style="margin-bottom:14px"><h2 style="font-size:24px;font-weight:800">${t('requests')}</h2></div>
-    <div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:6px 0 10px;font-family:'Roboto','Noto Sans Arabic',sans-serif">${t('incoming')}</div>
+    <div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:6px 0 10px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif">${t('incoming')}</div>
     ${incoming.length?incoming.map(r=>card(r, String(r.Status)==='Pending'&&canActOnRequest(r)?`<div style="display:flex;gap:6px"><button class="btn btn-primary" style="padding:7px 12px" onclick="setRequestStatus(${r.ID},'Approved')">${t('approve')}</button><button class="btn btn-danger" style="padding:7px 12px" onclick="setRequestStatus(${r.ID},'Rejected')">${t('reject')}</button></div>`:'')).join(''):`<div class="empty" style="padding:24px;color:var(--muted)">${t('noReq')}</div>`}
-    <div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:22px 0 10px;font-family:'Roboto','Noto Sans Arabic',sans-serif">${t('myReq')}</div>
+    <div style="font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:22px 0 10px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif">${t('myReq')}</div>
     ${myReq.length?myReq.map(r=>card(r,'')).join(''):`<div class="empty" style="padding:24px;color:var(--muted)">${t('noReq')}</div>`}`;
 }
 
@@ -1506,7 +1527,7 @@ function renderAttention(){
   const sec=(title,arr,extra)=>`<div style="margin-bottom:22px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
         <h4 style="font-size:16px;font-weight:800;margin:0">${title}</h4>
-        <span style="font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:12px;color:var(--muted);background:var(--surface3);padding:1px 9px;border-radius:10px">${arr.length}</span>
+        <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:12px;color:var(--muted);background:var(--surface3);padding:1px 9px;border-radius:10px">${arr.length}</span>
       </div>
       ${arr.length?(extra||arr.map(d=>`<div class="table-card" style="padding:10px 14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer" onclick="openDetail(${d.id})"><span style="font-weight:700">${esc(d.name)}</span><span style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</span></div>`).join('')):`<div style="color:var(--muted);font-size:13px">${t('allGood')}</div>`}
     </div>`;
@@ -1514,7 +1535,7 @@ function renderAttention(){
       <div style="font-weight:800;margin-bottom:6px">${esc(arr[0].name)}</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px">${arr.map(d=>`<span class="cat-chip" style="cursor:pointer" onclick="openDetail(${d.id})">${esc(d.branch)} · #${d.id}</span>`).join('')}</div>
     </div>`).join('');
-  host.innerHTML=`<div style="margin-bottom:16px"><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">QUALITY</div><h2 style="font-size:22px;font-weight:800">${t('attTitle')}</h2></div>
+  host.innerHTML=`<div style="margin-bottom:16px"><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">QUALITY</div><h2 style="font-size:22px;font-weight:800">${t('attTitle')}</h2></div>
     ${sec(t('noPhoto'),noPhoto)}
     ${sec(t('noPrice'),noPrice)}
     ${sec(t('noStatus'),noStatus)}
@@ -1605,7 +1626,7 @@ function renderOverview() {
 
   document.getElementById('page-overview').innerHTML = `
     <div class="topbar">
-      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('dashboard')}</div><div style="font-size:20px;font-weight:700">${t('o_title')}</div></div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('dashboard')}</div><div style="font-size:20px;font-weight:700">${t('o_title')}</div></div>
       <div class="topbar-actions">
         <button class="btn btn-ghost" onclick="exportExcel()"><i class="fa fa-download"></i> ${t('export')}</button>
         <button class="btn btn-primary" data-edit-only onclick="openAddAsset()"><i class="fa fa-plus"></i> ${t('addAsset')}</button>
@@ -1640,7 +1661,7 @@ function renderOverview() {
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
-          <td style="font-family:'Roboto','Noto Sans Arabic',sans-serif">${d.qty}</td>
+          <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif">${d.qty}</td>
           <td>${statusBadge(d.status)}</td>
           <td><button class="view-btn" onclick="openDetail(${d.id})">${t('view')}</button></td>
         </tr>`).join('')}</tbody>
@@ -1679,7 +1700,7 @@ function renderBranchCard(name, a) {
     <h3>${esc(name)}</h3>${barcode(name)}
     <div class="branch-footer">
       <div class="cat-chips">${cats.map(([c,k])=>`<span class="cat-chip">${esc(c)} · ${k}</span>`).join('')}</div>
-      <span style="font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:11px;color:var(--muted)">${a.types} types</span>
+      <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:11px;color:var(--muted)">${a.types} types</span>
     </div>
   </div>`;
 }
@@ -1695,7 +1716,7 @@ function renderBranches() {
     .filter(n => !branchSearchQ || n.toLowerCase().includes(branchSearchQ.toLowerCase()));
   host.innerHTML = `
     <div class="topbar">
-      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('br_eyebrow')}</div><div style="font-size:20px;font-weight:700">${t('all_branches_title')}</div></div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('br_eyebrow')}</div><div style="font-size:20px;font-weight:700">${t('all_branches_title')}</div></div>
       <div class="filter-row" style="margin:0">
         <input class="flt-input" id="br-search" placeholder="Search branches…" oninput="branchSearchQ=this.value;debounceRender('br',renderBranches,'br-search')" value="${esc(branchSearchQ)}" style="min-width:200px"/>
         <button class="btn btn-primary" data-edit-only onclick="openAddAsset()"><i class="fa fa-plus"></i> ${t('addAsset')}</button>
@@ -1836,7 +1857,7 @@ function renderAll() {
 
   host.innerHTML = `
     <div class="topbar">
-      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('registry')}</div><div style="font-size:20px;font-weight:700">${t('all_title')}</div></div>
+      <div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('registry')}</div><div style="font-size:20px;font-weight:700">${t('all_title')}</div></div>
       <div class="topbar-actions">
         <button class="btn btn-ghost" onclick="toggleAdvFilters()"><i class="fa fa-filter"></i> ${t('advFilters')}</button>
         <button class="btn btn-ghost" onclick="clearAllFilters()">${t('clear')}</button>
@@ -1868,7 +1889,7 @@ function renderAll() {
         </select></div>
     </div>
     <div class="adv-filter-panel${advFiltersOpen?' open':''}" id="adv-filter-panel">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'Roboto','Noto Sans Arabic',sans-serif">${t('advFilters')}</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif">${t('advFilters')}</div>
       <div class="adv-filter-grid">
         <div class="flt-group"><div class="flt-label">${t('f_datefrom')}</div><input type="date" class="flt-input" id="adv-date-from" onchange="_filterState.dateFrom=this.value;currentPage=1;renderAll()" value="${esc(dateFrom)}"/></div>
         <div class="flt-group"><div class="flt-label">${t('f_dateto')}</div><input type="date" class="flt-input" id="adv-date-to" onchange="_filterState.dateTo=this.value;currentPage=1;renderAll()" value="${esc(dateTo)}"/></div>
@@ -1877,7 +1898,7 @@ function renderAll() {
         <div class="flt-group"><div class="flt-label">${t('f_color')}</div><input class="flt-input" id="adv-color" placeholder="ابيض, اسود…" oninput="_filterState.color=this.value;currentPage=1;debounceRender('clr',renderAll,'adv-color')" value="${esc(colorFlt)}"/></div>
       </div>
     </div>
-    <div style="font-size:11px;color:var(--muted);font-family:'Roboto','Noto Sans Arabic',sans-serif;margin-bottom:10px">${rows.length} result${rows.length!==1?'s':''} found</div>
+    <div style="font-size:11px;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;margin-bottom:10px">${rows.length} result${rows.length!==1?'s':''} found</div>
     <div class="table-card">
       <div class="tbl-wrap"><table>
         <thead><tr>
@@ -1899,11 +1920,11 @@ function renderAll() {
           <td style="font-weight:700">${esc(d.name)}</td>
           <td style="font-size:12px;color:var(--muted2)">${esc(d.branch)}</td>
           <td><span style="background:${catColor(d.category)}22;color:${catColor(d.category)};padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700">${esc(d.category)}</span></td>
-          <td style="font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:11px;color:var(--muted2)">${esc(d.model||'—')}</td>
-          <td style="font-family:'Roboto','Noto Sans Arabic',sans-serif;font-weight:700">${d.qty}</td>
+          <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:11px;color:var(--muted2)">${esc(d.model||'—')}</td>
+          <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-weight:700">${d.qty}</td>
           <td>${statusBadge(d.status)}</td>
           <td><span class="color-dot" style="display:inline-block;vertical-align:-2px;background:${colorHex(d.color)}"></span> ${esc(d.color||'—')}</td>
-          <td style="font-family:'Roboto','Noto Sans Arabic',sans-serif;font-size:12px">${fmtMoney(d.amount)}</td>
+          <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;font-size:12px">${fmtMoney(d.amount)}</td>
           <td>
             <div style="display:flex;gap:4px;flex-wrap:wrap">
               <button class="view-btn" onclick="openDetail(${d.id})">${t('view')}</button>
@@ -1967,7 +1988,7 @@ function clearAllFilters() { _filterState = { q:'',branch:'',cat:'',status:'',da
 // ============================================================
 function renderAnalytics() {
   document.getElementById('page-analytics').innerHTML = `
-    <div class="topbar"><div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:'Roboto','Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('an_eyebrow')}</div><div style="font-size:20px;font-weight:700">${t('an_title')}</div></div></div>
+    <div class="topbar"><div><div style="font-size:11px;letter-spacing:2px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif;text-transform:uppercase;margin-bottom:5px">${t('an_eyebrow')}</div><div style="font-size:20px;font-weight:700">${t('an_title')}</div></div></div>
     <div class="charts-grid">
       <div class="chart-card"><div class="chart-header">${t('c_branch')}</div><div class="chart-wrap"><canvas id="c-branch"></canvas></div></div>
       <div class="chart-card"><div class="chart-header">${t('c_cat')}</div><div class="chart-wrap"><canvas id="c-cat"></canvas></div></div>
@@ -1979,7 +2000,7 @@ function renderAnalytics() {
   const css = getComputedStyle(document.documentElement);
   const txt = css.getPropertyValue('--muted2').trim();
   const grid = css.getPropertyValue('--border').trim();
-  Chart.defaults.color = txt; Chart.defaults.font.family = "'Roboto','Noto Sans Arabic'";
+  Chart.defaults.color = txt; Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,'Segoe UI','Ubuntu','Noto Sans',Arial,'Noto Sans Arabic',sans-serif";
   const agg = getBranchAgg(), bn = Object.keys(agg);
   chartInstances.branch = new Chart(document.getElementById('c-branch'), { type:'bar', data:{labels:bn,datasets:[{data:bn.map(b=>agg[b].units),backgroundColor:bn.map(b=>brandColor(agg[b].brand)),borderRadius:6}]}, options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:grid}},y:{grid:{color:grid}}},maintainAspectRatio:false} });
   const cats = {}; allAssets.forEach(d => cats[d.category] = (cats[d.category]||0)+d.qty); const ck = Object.keys(cats);
