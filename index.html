@@ -1085,9 +1085,33 @@ async function loadAll(showToast = false) {
     }
   } catch (e) {
     console.error('loadAll error:', e);
+    // Signed in fine, but this Microsoft account has no permission on the SharePoint site/list
+    if (/SP 40[13]/.test(e.message || '')) { showNoSpAccess(); setLive('No access'); return; }
     setLive('Error');
     toast('Error: ' + e.message, 'error');
   }
+}
+
+function showNoSpAccess() {
+  let blk = document.getElementById('sp-block');
+  if (!blk) {
+    blk = document.createElement('div'); blk.id = 'sp-block';
+    blk.style.cssText = 'position:fixed;inset:46px 0 0 0;z-index:150;display:grid;place-items:center;background:var(--bg);padding:24px;text-align:center';
+    document.body.appendChild(blk);
+  }
+  const email = esc(currentUser && currentUser.email || '');
+  const ar = LANG === 'ar';
+  blk.innerHTML = `<div style="max-width:480px">
+    <div style="font-size:46px;color:var(--muted)"><i class="fa fa-lock"></i></div>
+    <h2 style="font-size:22px;font-weight:600;margin:12px 0">${ar ? 'لا توجد صلاحية على SharePoint' : 'No SharePoint permission'}</h2>
+    <p style="color:var(--muted2);font-size:15px;line-height:1.8">${ar
+      ? `تم تسجيل الدخول بالحساب <b>${email}</b> لكن هذا الحساب لا يملك صلاحية على موقع SharePoint الخاص بالمخزون. اطلب من المسؤول إضافتك إلى أعضاء الموقع (قراءة أو تعديل).`
+      : `You are signed in as <b>${email}</b>, but this account has no permission on the inventory SharePoint site. Ask the administrator to add you to the site (Visitors = read, Members = edit).`}</p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:18px">
+      <button class="btn btn-primary" onclick="location.reload()"><i class="fa fa-refresh"></i> ${ar ? 'إعادة المحاولة' : 'Try again'}</button>
+      <button class="btn btn-ghost" onclick="signOut()"><i class="fa fa-sign-out"></i> ${ar ? 'تسجيل الخروج' : 'Sign out'}</button>
+    </div></div>`;
+  blk.style.display = 'grid';
 }
 
 function setLive(t) { const el = document.getElementById('live-time'); if (el) el.textContent = t; }
